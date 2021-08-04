@@ -75,7 +75,7 @@ pipeline {
         stage('Docker push image'){
             steps{
                 script{
-                     docker.withRegistry('https://gcr.io', 'gcr:gcr-ci-project'){
+                     docker.withRegistry('https://gcr.io', 'gcr:gcr-credential'){
                         sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend' 
                      }
                 }
