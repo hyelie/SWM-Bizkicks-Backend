@@ -10,48 +10,66 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 
 @Controller
 public class KickboardCompanyApi {
 
+    @RequestMapping(value = "/manage/measuredrate-price", method=RequestMethod.GET, produces = "application/json; charset=utf8")
+    @ResponseBody
+    public Price price(){
+
+        Price price = new Price();
+        price.setPrice(15000);
+
+        return price;
+    }
+
     @RequestMapping(value = "/manage/products", produces = "application/json; charset=utf8")
     @ResponseBody
-    public List<Object> restTest() {
+    public ResponseEntity<Object> restTest() {
 
         List<Object> kickboardcompany = new ArrayList<>();
 
         KickboardCompany kickboardCompany1 = new KickboardCompany();
-        kickboardCompany1.setCompanyname("씽씽");
-        kickboardCompany1.setPricePerHour(10000L);
+        kickboardCompany1.setCompany_name("씽씽");
+        kickboardCompany1.setPrice_per_Hour(10000L);
         kickboardCompany1.setHelmet(false);
-        kickboardCompany1.setLicense(true);
+        kickboardCompany1.setInsurance(true);
 
         List<String> serviceLocation = new ArrayList<>();
         serviceLocation.add("관악구");
         serviceLocation.add("서초구");
         serviceLocation.add("강남구");
-        kickboardCompany1.setServicelocation(serviceLocation);
+        kickboardCompany1.setService_location(serviceLocation);
 
         KickboardCompany kickboardCompany2 = new KickboardCompany();
-        kickboardCompany2.setCompanyname("킥고잉");
-        kickboardCompany2.setPricePerHour(9000L);
+        kickboardCompany2.setCompany_name("킥고잉");
+        kickboardCompany2.setPrice_per_Hour(9000L);
         kickboardCompany2.setHelmet(true);
-        kickboardCompany2.setLicense(true);
+        kickboardCompany2.setInsurance(true);
 
         List<String> serviceLocation2 = new ArrayList<>();
         serviceLocation2.add("관악구");
         serviceLocation2.add("서초구");
         serviceLocation2.add("강남구");
-        kickboardCompany2.setServicelocation(serviceLocation2);
+        kickboardCompany2.setService_location(serviceLocation2);
 
         kickboardcompany.add(kickboardCompany1);
         kickboardcompany.add(kickboardCompany2);
 
-        return kickboardcompany;
+        JSONObject rj = new JSONObject();
+        rj.put("list", kickboardcompany);
+
+        return ResponseEntity.ok(rj.toString());
     }
 
     @RequestMapping(value = "/kickboard/location", produces = "application/json; charset=utf8")
@@ -110,15 +128,7 @@ public class KickboardCompanyApi {
 
     }
 
-    @RequestMapping(value = "/manage/measuredrate-price", produces = "application/json; charset=utf8")
-    @ResponseBody
-    public Price price(){
-
-        Price price = new Price();
-        price.setPrice(15000);
-
-        return price;
-    }
+    
 
     @RequestMapping(value = "/manage/alarms", produces = "application/json; charset=utf8")
     @ResponseBody
@@ -142,4 +152,27 @@ public class KickboardCompanyApi {
         return alarms;
     }
 
+    @RequestMapping(value = "/manage/alarms1", method=RequestMethod.GET, produces = "application/json; charset=utf8")
+    @ResponseBody
+    public ResponseEntity<Object> alarms1(){
+
+        JSONObject alarm1 = new JSONObject();
+        JSONObject alarm2 = new JSONObject();
+        JSONObject alarm3 = new JSONObject();
+
+        alarm1.put("cost", "150000");
+        alarm2.put("cost", "150000");
+        alarm3.put("time", "100");
+
+        JSONArray jal = new JSONArray();
+        jal.put(alarm1);
+        jal.put(alarm2);
+        jal.put(alarm3);
+
+        JSONObject alarm = new JSONObject();
+        alarm.put("list", jal);
+
+
+        return ResponseEntity.ok(alarm.toString());
+    }
 }

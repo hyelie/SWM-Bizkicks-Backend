@@ -8,13 +8,13 @@ import java.util.List;
 @Getter @Setter
 public class KickboardCompany {
 
-    String companyname;
+    String company_name;
 
-    Long pricePerHour;
+    Long price_per_Hour;
 
-    List<String> servicelocation;
+    List<String> service_location;
 
-    boolean license;
+    boolean insurance;
 
     boolean helmet;
 
