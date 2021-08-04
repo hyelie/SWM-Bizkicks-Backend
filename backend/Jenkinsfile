@@ -13,7 +13,6 @@ pipeline {
         stage('Spring Boot Clean & Build'){
             steps{
                 dir('backend'){
-                    sh "pwd"
                     sh "chmod +x gradlew;"
                     sh "./gradlew clean;"  
                     sh "./gradlew build -x test;"  
@@ -23,20 +22,25 @@ pipeline {
         
         stage('Gradle Junit Test') {
             steps {
+                dir('backend'){
                     sh "chmod +x gradlew; ./gradlew test"
+                }
             }
         }   // test를 이용해서 확인함.
         stage('JUnit Test Publish') {
             steps {
-                junit '**/build/test-results/test/*.xml'
+                dir('backend'){
+                    junit '**/build/test-results/test/*.xml'
+                }
             }
         }   // Junit 테스트 결과를 젠킨스 프로젝트 첫 화면에서 볼 수 있게 결과물을 출력한다. 이렇게 해주면 알아서 결과물을 보여준다.
 
         stage('SonarQube Analysis'){
             steps{
                 withSonarQubeEnv('sonar-server'){
-                    sh './gradlew sonarqube -Dsonar.projectKey=backend-spring -Dsonar.host.url=http://35.226.109.109:9000 -Dsonar.login=91854ccb098c5b0bba19d30c6636be69b8be2268'
-                    
+                    dir('backend'){
+                        sh './gradlew sonarqube -Dsonar.projectKey=backend-spring -Dsonar.host.url=http://35.226.109.109:9000 -Dsonar.login=91854ccb098c5b0bba19d30c6636be69b8be2268'
+                    }
                 }
             }
         }
@@ -63,22 +67,26 @@ pipeline {
         }
         stage('docker build'){
             steps{
-                sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend .'
+                dir('backend'){
+                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend .'
+                }
             }
         }
         stage('Docker push image'){
             steps{
                 script{
                      docker.withRegistry('https://gcr.io', 'gcr:gcr-ci-project'){
-                     sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend' 
+                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend' 
                      }
                 }
             }
         }     // gcr push
         stage('Clean'){
             steps{
-                sh "chmod +x gradlew;"
-                sh "./gradlew clean;"  
+                dir('backend'){
+                    sh "chmod +x gradlew;"
+                    sh "./gradlew clean;"  
+                }
             }
         }
     }
