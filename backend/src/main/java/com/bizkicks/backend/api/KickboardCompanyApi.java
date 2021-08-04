@@ -1,7 +1,11 @@
 package com.bizkicks.backend.api;
 
+import com.bizkicks.backend.entity.Alarms;
 import com.bizkicks.backend.entity.KickboardCompany;
 import com.bizkicks.backend.entity.KickboardLocation;
+import com.bizkicks.backend.entity.Price;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,10 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Controller
 public class KickboardCompanyApi {
 
-    @RequestMapping(value = "/restTest", produces = "application/json; charset=utf8")
+    @RequestMapping(value = "/manage/products", produces = "application/json; charset=utf8")
     @ResponseBody
     public List<Object> restTest() {
 
@@ -30,7 +36,20 @@ public class KickboardCompanyApi {
         serviceLocation.add("강남구");
         kickboardCompany1.setServicelocation(serviceLocation);
 
+        KickboardCompany kickboardCompany2 = new KickboardCompany();
+        kickboardCompany2.setCompanyname("킥고잉");
+        kickboardCompany2.setPricePerHour(9000L);
+        kickboardCompany2.setHelmet(true);
+        kickboardCompany2.setLicense(true);
+
+        List<String> serviceLocation2 = new ArrayList<>();
+        serviceLocation2.add("관악구");
+        serviceLocation2.add("서초구");
+        serviceLocation2.add("강남구");
+        kickboardCompany2.setServicelocation(serviceLocation2);
+
         kickboardcompany.add(kickboardCompany1);
+        kickboardcompany.add(kickboardCompany2);
 
         return kickboardcompany;
     }
@@ -89,6 +108,38 @@ public class KickboardCompanyApi {
 
         return kickboardlocation;
 
-
     }
+
+    @RequestMapping(value = "/manage/measuredrate-price", produces = "application/json; charset=utf8")
+    @ResponseBody
+    public Price price(){
+
+        Price price = new Price();
+        price.setPrice(15000);
+
+        return price;
+    }
+
+    @RequestMapping(value = "/manage/alarms", produces = "application/json; charset=utf8")
+    @ResponseBody
+    public List<Object> alarms(){
+
+        List<Object> alarms = new ArrayList<>();
+
+        Alarms alarm1 = new Alarms();
+        alarm1.setType("cost");
+        alarm1.setValue(15000);
+
+        Alarms alarm2 = new Alarms();
+        alarm2.setType("time");
+        alarm2.setValue(15);
+
+        alarms.add(alarm1);
+        alarms.add(alarm2);
+
+//        List<AlarmDto> collect = alarms.stream()
+//                .map(m -> new AlarmDto()))
+        return alarms;
+    }
+
 }
