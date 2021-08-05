@@ -24,9 +24,14 @@ public class KickboardCompanyApi {
         JSONObject alarm2 = new JSONObject();
         JSONObject alarm3 = new JSONObject();
 
-        alarm1.put("cost", "150000");
-        alarm2.put("cost", "150000");
-        alarm3.put("time", "100");
+        alarm1.put("type", "cost");
+        alarm1.put("value", 100000);
+
+        alarm2.put("type", "cost");
+        alarm2.put("value", 200000);
+
+        alarm3.put("type", "time");
+        alarm3.put("value", 150);
 
         JSONArray jal = new JSONArray();
         jal.put(alarm1);
