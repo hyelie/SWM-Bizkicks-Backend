@@ -2,6 +2,7 @@ package com.bizkicks.backend.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.AllArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class CustomerCompany {
 //    private Long id;
 
     @Id
-    @Column(name = "customer_company_name",length = 45, nullable = false)
+    @Column(name = "customer_company_name", length = 45, nullable = false)
     private String company_name;
 
     @Column(length = 45, nullable = false)
@@ -29,6 +30,7 @@ public class CustomerCompany {
     private List<Alarm> alarms = new ArrayList<>();
 
     public CustomerCompany(String company_code, String company_name){
+        System.out.println("entity contsructor : " + company_name);
         this.company_code = company_code;
         this.company_name = company_name;
     }

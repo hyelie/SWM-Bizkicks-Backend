@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@AllArgsConstructor
 public class Alarm {
 
     @Id @GeneratedValue

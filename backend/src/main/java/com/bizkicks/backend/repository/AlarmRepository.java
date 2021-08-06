@@ -1,6 +1,8 @@
 package com.bizkicks.backend.repository;
 
 import com.bizkicks.backend.entity.Alarm;
+import com.bizkicks.backend.entity.CustomerCompany;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -25,9 +27,14 @@ public class AlarmRepository {
     }
 
     public List<Alarm> findByCustomerCompanyName(String customerCompanyName){
-        return (List<Alarm>)em.createQuery("select a from Alarm a where a.customerCompany = abc" , Alarm.class)
-                //.setParameter("customer_company_name", customerCompanyName)
-                .getResultList();
+        System.out.println("repository : " + customerCompanyName);
+
+        CustomerCompany temp = new CustomerCompany(customerCompanyName, "asdfas");
+
+        List<Alarm> alarms = em.createQuery("select a from Alarm a where a.customerCompany =:customer_company_name" , Alarm.class)
+                                .setParameter("customer_company_name", temp)
+                                .getResultList();
+        return alarms;
     }
 
 }
