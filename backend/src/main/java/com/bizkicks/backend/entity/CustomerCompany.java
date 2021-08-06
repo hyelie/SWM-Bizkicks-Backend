@@ -11,18 +11,22 @@ import java.util.List;
 @Getter @Setter
 public class CustomerCompany {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_company_id")
-    private Long id;
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "customer_company_id")
+//    private Long id;
+
+    @Id
+    @Column(name = "customer_company_name",length = 45, nullable = false)
+    private String company_name;
 
     @Column(length = 45, nullable = false)
     private String company_code;
 
-    @Column(length = 45, nullable = false)
-    private String company_name;
-
     @OneToMany(mappedBy = "customerCompany")
     private List<ContractRelation> contractRelations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customerCompany")
+    private List<Alarm> alarms = new ArrayList<>();
 
     public CustomerCompany(String company_code, String company_name){
         this.company_code = company_code;

@@ -16,35 +16,6 @@ import org.json.JSONArray;
 @Controller
 public class KickboardCompanyApi {
 
-    @RequestMapping(value = "/manage/alarms", method=RequestMethod.GET, produces = "application/json; charset=utf8")
-    @ResponseBody
-    public ResponseEntity<Object> alarms(){
-
-        JSONObject alarm1 = new JSONObject();
-        JSONObject alarm2 = new JSONObject();
-        JSONObject alarm3 = new JSONObject();
-
-        alarm1.put("type", "cost");
-        alarm1.put("value", 100000);
-
-        alarm2.put("type", "cost");
-        alarm2.put("value", 200000);
-
-        alarm3.put("type", "time");
-        alarm3.put("value", 150);
-
-        JSONArray jal = new JSONArray();
-        jal.put(alarm1);
-        jal.put(alarm2);
-        jal.put(alarm3);
-
-        JSONObject alarm = new JSONObject();
-        alarm.put("list", jal);
-
-
-        return ResponseEntity.ok(alarm.toString());
-    }
-
     @RequestMapping(value = "/manage/measuredrate-price", method=RequestMethod.GET, produces = "application/json; charset=utf8")
     @ResponseBody
     public ResponseEntity<Object> price(){
@@ -344,14 +315,6 @@ public class KickboardCompanyApi {
         JSONObject a = new JSONObject();
         a.put("msg", "Success");
         return new ResponseEntity<>(a.toString(), HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarm(){
-
-        JSONObject a = new JSONObject();
-        a.put("msg", "Success");
-        return new ResponseEntity<>(a.toString(), HttpStatus.OK);
     }
 
     @PostMapping("kickboard/usages")

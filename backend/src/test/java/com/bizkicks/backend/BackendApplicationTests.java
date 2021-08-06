@@ -1,16 +1,20 @@
 package com.bizkicks.backend;
 
+import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.ContractRelation;
 import com.bizkicks.backend.entity.CustomerCompany;
+import com.bizkicks.backend.repository.AlarmRepository;
 import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -18,25 +22,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 class BackendApplicationTests {
 
-	private EntityManager em;
+	@Autowired AlarmRepository alarmRepository;
+
+//	@Test
+//	void createAlarmTest() {
+//
+//		Alarm alarm1 = new Alarm("cost", 10000);
+//		Alarm alarm2 = new Alarm("time", 100);
+//
+//		List<Alarm> alarms = new ArrayList<>();
+//		alarms.add(alarm1);
+//		alarms.add(alarm2);
+//
+//		alarmRepository.saveAll(alarms);
+//		Assertions.assertEquals(alarmRepository.findAll(), alarms);
+//
+//	}
 
 	@Test
-	void createContractRelationTest() {
-
-//		CustomerCompany customerCompany1 = new CustomerCompany("123456", "씽씽");
-//		em.persist(customerCompany1);
-//
-//		ContractRelation contractRelation1 = new ContractRelation(LocalDateTime.now(), "measuredRate");
-//		contractRelation1.setRelationWithCustomerCompany(customerCompany1);
-//
-//		em.persist(contractRelation1);
-//
-//		ContractRelation contractRelation2 = new ContractRelation(LocalDateTime.now(), "fixedCharge");
-//		contractRelation2.setRelationWithCustomerCompany(customerCompany1);
-//
-//		em.persist(contractRelation2);
-
+	void findAlarmTest(){
 
 	}
-
 }
