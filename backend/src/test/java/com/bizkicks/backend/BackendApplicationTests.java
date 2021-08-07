@@ -5,7 +5,7 @@ import com.bizkicks.backend.entity.ContractRelation;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.repository.AlarmRepository;
 import lombok.NoArgsConstructor;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Transactional
 @NoArgsConstructor
 class BackendApplicationTests {
 
