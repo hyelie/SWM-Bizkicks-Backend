@@ -23,9 +23,10 @@ public class AlarmService {
     }
 
     @Transactional
-    public void updateAlarms(List<Alarm> alarms){
-        alarmRepository.deleteAll();
+    public void updateAlarms(String customerCompanyName, List<Alarm> alarms){
+        alarmRepository.deleteAllAlarmsInCustomerCompany(customerCompanyName);
         alarmRepository.saveAll(alarms);
+        //service가 dto를 entity로 반환하게 하기.
     }
 
 

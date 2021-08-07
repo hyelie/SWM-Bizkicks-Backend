@@ -1,13 +1,13 @@
 package com.bizkicks.backend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class AlarmDto {
 
     public void AlarmDto(String type, Integer value){
-
         this.type = type;
         this.value = value;
     }

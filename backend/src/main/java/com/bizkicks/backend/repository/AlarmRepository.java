@@ -15,8 +15,9 @@ public class AlarmRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void deleteAll(){
-        em.createQuery("delete * from Alarm");
+    public void deleteAllAlarmsInCustomerCompany(String customerCompanyName){
+        em.createQuery("delete * from Alarm a where a.customerCompany.companyName = :customer_company_name")
+          .setParameter("customer_company_name", customerCompanyName);
     }
 
     public void saveAll(List<Alarm> alarms){
@@ -28,9 +29,9 @@ public class AlarmRepository {
 
     public List<Alarm> findByCustomerCompanyName(String customerCompanyName){
         System.out.println("repository : " + customerCompanyName);
-        String selectCustomerCompanyAlarmsQuery = "select a from Alarm a where a.customerCompany.companyName = :variable";
+        String selectCustomerCompanyAlarmsQuery = "select a from Alarm a where a.customerCompany.companyName = :customer_company_name";
         List<Alarm> alarms = em.createQuery(selectCustomerCompanyAlarmsQuery , Alarm.class)
-                               .setParameter("variable", customerCompanyName)
+                               .setParameter("customer_company_name", customerCompanyName)
                                .getResultList();
         return alarms;
     }
