@@ -21,7 +21,23 @@ import java.util.List;
 @NoArgsConstructor
 class BackendApplicationTests {
 
-	AlarmRepository alarmRepository;
+	@Autowired AlarmRepository alarmRepository;
+
+	@Test
+	void createAlarmTest() {
+
+		CustomerCompany customerCompany1 = new CustomerCompany("asdfg", "씽씽");
+		Alarm alarm1 = new Alarm("cost", 10000);
+		Alarm alarm2 = new Alarm("time", 100);
+
+		List<Alarm> alarms = new ArrayList<>();
+		alarms.add(alarm1);
+		alarms.add(alarm2);
+
+		alarmRepository.saveAll(alarms);
+		Assertions.assertEquals(alarmRepository.findAll(), alarms);
+
+	}
 
 	@Test
 	void findAlarmTest(){
