@@ -5,7 +5,7 @@ import com.bizkicks.backend.entity.ContractRelation;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.repository.AlarmRepository;
 import lombok.NoArgsConstructor;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +18,10 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Transactional
 @NoArgsConstructor
 class BackendApplicationTests {
 
-	@Autowired AlarmRepository alarmRepository;
-
-//	@Test
-//	void createAlarmTest() {
-//
-//		Alarm alarm1 = new Alarm("cost", 10000);
-//		Alarm alarm2 = new Alarm("time", 100);
-//
-//		List<Alarm> alarms = new ArrayList<>();
-//		alarms.add(alarm1);
-//		alarms.add(alarm2);
-//
-//		alarmRepository.saveAll(alarms);
-//		Assertions.assertEquals(alarmRepository.findAll(), alarms);
-//
-//	}
+	AlarmRepository alarmRepository;
 
 	@Test
 	void findAlarmTest(){
