@@ -2,7 +2,7 @@ package com.bizkicks.backend.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class CustomerCompany {
 
 //    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +19,10 @@ public class CustomerCompany {
 
     @Id
     @Column(name = "customer_company_name", length = 45, nullable = false)
-    private String company_name;
+    private String companyName;
 
     @Column(length = 45, nullable = false)
-    private String company_code;
+    private String companyCode;
 
     @OneToMany(mappedBy = "customerCompany")
     private List<ContractRelation> contractRelations = new ArrayList<>();
@@ -29,10 +30,9 @@ public class CustomerCompany {
     @OneToMany(mappedBy = "customerCompany")
     private List<Alarm> alarms = new ArrayList<>();
 
-    public CustomerCompany(String company_code, String company_name){
-        System.out.println("entity contsructor : " + company_name);
-        this.company_code = company_code;
-        this.company_name = company_name;
+    public CustomerCompany(String companyCode, String companyName){
+        this.companyCode = companyCode;
+        this.companyName = companyName;
     }
 
 }

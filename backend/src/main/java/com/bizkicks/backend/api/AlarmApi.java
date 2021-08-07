@@ -24,9 +24,9 @@ public class AlarmApi {
     @Autowired private AlarmService alarmService;
 
     @GetMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarm(@CookieValue(name = "company") String company){
+    public ResponseEntity<Object> updateAlarm(@CookieValue(name = "company") String belongcompany){
 
-        List<AlarmDto> collect = alarmService.findAlarms(company).stream()
+        List<AlarmDto> collect = alarmService.findAlarms(belongcompany).stream()
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
 
