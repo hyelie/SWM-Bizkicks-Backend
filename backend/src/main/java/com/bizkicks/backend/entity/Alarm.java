@@ -32,9 +32,7 @@ public class Alarm {
     }
 
     public Alarm(String type, Integer value){
-
         this.type = type;
         this.value = value;
-
     }
 }

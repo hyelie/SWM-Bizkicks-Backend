@@ -16,6 +16,7 @@ import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.repository.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;

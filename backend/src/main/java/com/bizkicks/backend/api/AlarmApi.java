@@ -1,6 +1,7 @@
 package com.bizkicks.backend.api;
 
 import com.bizkicks.backend.dto.AlarmDto;
+import com.bizkicks.backend.dto.ListDto;
 import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.service.AlarmService;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,7 +28,6 @@ public class AlarmApi {
 
     @GetMapping("/manage/alarms")
     public ResponseEntity<Object> showAlarms(@CookieValue(name = "company") String belongcompany){
-
         List<AlarmDto> collect = alarmService.findAlarms(belongcompany).stream()
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
@@ -36,13 +36,14 @@ public class AlarmApi {
     }
 
     @PostMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarms(@RequestBody Map<String,List<AlarmDto>> alarms, @CookieValue(name = "company") String belongcompany){
-        System.out.println("belong : " + belongcompany);
-        System.out.println("json : " + alarms);
-        System.out.println("list : " + alarms.get("list"));
-        List<AlarmDto> alarmList =  alarms.get("list");
-        alarmService.updateAlarms(belongcompany, alarmList);
-        // service에서 dto 반환.
+    public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company") String belongCompany){
+        List<Alarm> alarms = new ArrayList<>();
+
+        for (AlarmDto alarmDto : alarmsDto.getList()){
+            alarms.add(alarmDto.toEntity());
+        }
+
+        alarmService.updateAlarms(belongCompany, alarms);
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");

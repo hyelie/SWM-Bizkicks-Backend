@@ -35,6 +35,10 @@ public class CustomerCompany {
         this.companyName = companyName;
     }
 
+    public CustomerCompany(String companyName){
+        this.companyName = companyName;
+    }
+
 }
 
 

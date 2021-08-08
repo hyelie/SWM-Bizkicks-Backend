@@ -16,13 +16,16 @@ public class AlarmRepository {
     private EntityManager em;
 
     public void deleteAllAlarmsInCustomerCompany(String customerCompanyName){
-        em.createQuery("delete * from Alarm a where a.customerCompany.companyName = :customer_company_name")
-          .setParameter("customer_company_name", customerCompanyName);
+        String DeleteCustomerCompanyAlarmsQuery = "delete from Alarm a where a.customerCompany.companyName = :customer_company_name";
+        em.createQuery(DeleteCustomerCompanyAlarmsQuery)
+          .setParameter("customer_company_name", customerCompanyName)
+          .executeUpdate();
     }
 
-    public void saveAll(List<Alarm> alarms){
+    public void saveAllAlarmsInCustomerCompany(String customerCompanyName, List<Alarm> alarms){
         // TODO 예외처리
         for (Alarm alarm : alarms) {
+            alarm.setRelationWithCustomerCompany(new CustomerCompany(customerCompanyName));
             em.persist(alarm);
         }
     }
