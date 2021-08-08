@@ -9,12 +9,11 @@ import com.bizkicks.backend.entity.CustomerCompany;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class AlarmDto {
     private String type;
     private Integer value;
     
-    public void AlarmDto(String type, Integer value){
+    public AlarmDto(String type, Integer value){
         this.type = type;
         this.value = value;
     }

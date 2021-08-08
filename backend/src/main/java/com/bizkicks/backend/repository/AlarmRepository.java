@@ -31,7 +31,6 @@ public class AlarmRepository {
     }
 
     public List<Alarm> findByCustomerCompanyName(String customerCompanyName){
-        System.out.println("repository : " + customerCompanyName);
         String selectCustomerCompanyAlarmsQuery = "select a from Alarm a where a.customerCompany.companyName = :customer_company_name";
         List<Alarm> alarms = em.createQuery(selectCustomerCompanyAlarmsQuery , Alarm.class)
                                .setParameter("customer_company_name", customerCompanyName)

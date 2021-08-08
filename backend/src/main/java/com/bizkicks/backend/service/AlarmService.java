@@ -18,7 +18,6 @@ public class AlarmService {
 
     @Transactional
     public List<Alarm> findAlarms(String customerCompanyName){
-        System.out.println("service : " + customerCompanyName);
         return alarmRepository.findByCustomerCompanyName(customerCompanyName);
     }
 

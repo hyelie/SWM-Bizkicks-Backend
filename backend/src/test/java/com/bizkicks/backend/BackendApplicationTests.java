@@ -1,74 +1,310 @@
 package com.bizkicks.backend;
 
+import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.springframework.test.context.ActiveProfiles;
+
+import javax.print.attribute.standard.Media;
+import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
+import com.bizkicks.backend.api.AlarmApi;
+import com.bizkicks.backend.dto.AlarmDto;
+import com.bizkicks.backend.dto.ListDto;
 import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.repository.AlarmRepository;
+import com.bizkicks.backend.service.AlarmService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
+
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-@Transactional
-@ExtendWith(SpringExtension.class)
 @NoArgsConstructor
 class BackendApplicationTests {
 
-	@Autowired AlarmRepository alarmRepository;
+	
 
 	@Test
 	void contextLoads(){}
 
 	@Test
-	void createAlarmTest() {
+	void findAlarmTest(){
 
-		// given - 삼성
-		CustomerCompany samsung = new CustomerCompany("asdfg", "삼성");
-		Alarm samsungAlarm1 = new Alarm("cost", 10000);
-		samsungAlarm1.setRelationWithCustomerCompany(samsung);
-		Alarm samsungAlarm2 = new Alarm("time", 100);
-		samsungAlarm2.setRelationWithCustomerCompany(samsung);
+	}
+}
 
-		List<Alarm> samsungAlarms = new ArrayList<>();
+@SpringBootTest
+@Transactional
+@NoArgsConstructor
+class AlarmRepositoryTest{
+	@Autowired AlarmRepository alarmRepository;
+
+	CustomerCompany samsung;
+	Alarm samsungAlarm1;
+	Alarm samsungAlarm2;
+	List<Alarm> samsungAlarms;
+	CustomerCompany lg;
+	Alarm lgAlarm1;
+	Alarm lgAlarm2;
+	List<Alarm> lgAlarms;
+	List<Alarm> emptyAlarms;
+
+	@BeforeEach
+	void initializeEmpty(){
+		emptyAlarms = new ArrayList<>();
+	}
+
+	// given - 삼성
+	@BeforeEach
+	void initializeSamsung(){
+		samsung = CreateCustomerCompany("asdfg", "삼성");
+		samsungAlarm1 = CreateAlarmInCompany(samsung, "cost", 10000);
+		samsungAlarm2 = CreateAlarmInCompany(samsung, "time", 100);
+
+		samsungAlarms = new ArrayList<>();
 		samsungAlarms.add(samsungAlarm1);
 		samsungAlarms.add(samsungAlarm2);
+	}
 
-		// given - LG
-		CustomerCompany lg = new CustomerCompany("qwerty", "LG");
-		Alarm lgAlarm1 = new Alarm("cost", 15000);
-		lgAlarm1.setRelationWithCustomerCompany(lg);
-		Alarm lgAlarm2 = new Alarm("time", 80);
-		lgAlarm2.setRelationWithCustomerCompany(lg);
+	// given - LG
+	@BeforeEach
+	void initializeLg(){
+		lg = CreateCustomerCompany("qwerty", "삼성");
+		lgAlarm1 = CreateAlarmInCompany(lg, "cost", 15000);
+		lgAlarm2 = CreateAlarmInCompany(lg, "time", 80);
 
-		List<Alarm> lgAlarms = new ArrayList<>();
+		lgAlarms = new ArrayList<>();
 		lgAlarms.add(lgAlarm1);
 		lgAlarms.add(lgAlarm2);
+	}
 
-		alarmRepository.saveAll(samsungAlarms);
-		alarmRepository.saveAll(lgAlarms);
+	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
+		return new CustomerCompany(companyCode, companyName);
+	}
+	
+	public Alarm CreateAlarmInCompany(CustomerCompany customerCompany, String type, Integer value){
+		Alarm alarm = new Alarm(type, value);
+		alarm.setRelationWithCustomerCompany(customerCompany);
+		return alarm;
+	}
 
-		Assertions.assertThat(1).isEqualTo(1);
-		List<Alarm> resultSamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
-		Assertions.assertThat(resultSamsungAlarms).isEqualTo(samsungAlarms);
-		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("LG")).isEqualTo(lgAlarms);
-
+	public void DeepCompareTwoLists(List<Alarm> a, List<Alarm> b){
+		for (Integer i = 0; i<a.size(); i++) {
+            Assertions.assertThat(a.get(i)).isEqualTo(b.get(i));
+        }
 	}
 
 	@Test
-	void findAlarmTest(){
+	void save_and_find() {
+		// when
+		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
 
+		// then
+		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
+		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
+		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
+		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+	}
+
+	@Test
+	void save_delete_and_find() {
+		// when
+		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
+		alarmRepository.deleteAllAlarmsInCustomerCompany("삼성");
+		alarmRepository.deleteAllAlarmsInCustomerCompany("LG");
+
+		// then
+		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("삼성")).isEqualTo(emptyAlarms);
+		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("apple")).isEqualTo(emptyAlarms);
+		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("LG")).isEqualTo(emptyAlarms);
+	}
+}
+
+@SpringBootTest
+@Transactional
+@NoArgsConstructor
+class AlarmServiceTest{
+	@Autowired AlarmService alarmService;
+	@Autowired AlarmRepository alarmRepository;
+
+	CustomerCompany samsung;
+	Alarm samsungAlarm1;
+	Alarm samsungAlarm2;
+	List<Alarm> samsungAlarms;
+	CustomerCompany lg;
+	Alarm lgAlarm1;
+	Alarm lgAlarm2;
+	List<Alarm> lgAlarms;
+	List<Alarm> emptyAlarms;
+
+	@BeforeEach
+	void initializeEmpty(){
+		emptyAlarms = new ArrayList<>();
+	}
+
+	// given - 삼성
+	@BeforeEach
+	void initializeSamsung(){
+		samsung = CreateCustomerCompany("asdfg", "삼성");
+		samsungAlarm1 = CreateAlarmInCompany(samsung, "cost", 10000);
+		samsungAlarm2 = CreateAlarmInCompany(samsung, "time", 100);
+
+		samsungAlarms = new ArrayList<>();
+		samsungAlarms.add(samsungAlarm1);
+		samsungAlarms.add(samsungAlarm2);
+	}
+
+	// given - LG
+	@BeforeEach
+	void initializeLg(){
+		lg = CreateCustomerCompany("qwerty", "삼성");
+		lgAlarm1 = CreateAlarmInCompany(lg, "cost", 15000);
+		lgAlarm2 = CreateAlarmInCompany(lg, "time", 80);
+
+		lgAlarms = new ArrayList<>();
+		lgAlarms.add(lgAlarm1);
+		lgAlarms.add(lgAlarm2);
+	}
+
+	public void DeepCompareTwoLists(List<Alarm> a, List<Alarm> b){
+		for (Integer i = 0; i<a.size(); i++) {
+            Assertions.assertThat(a.get(i)).isEqualTo(b.get(i));
+        }
+	}
+
+	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
+		return new CustomerCompany(companyCode, companyName);
+	}
+	
+	public Alarm CreateAlarmInCompany(CustomerCompany customerCompany, String type, Integer value){
+		Alarm alarm = new Alarm(type, value);
+		alarm.setRelationWithCustomerCompany(customerCompany);
+		return alarm;
+	}
+
+	@Test
+	void find() {
+		// when
+		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
+
+		// then
+		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
+		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
+		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
+		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+	}
+
+	@Test
+	void update() {
+		// when
+		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
+		alarmService.updateAlarms("삼성", samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
+		alarmService.updateAlarms("LG", lgAlarms);
+
+		// then
+		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
+		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
+		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
+		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+	}
+}
+
+@WebMvcTest(AlarmApi.class)
+class AlarmControllerTest{
+	@Autowired
+	MockMvc mockMvc;
+
+	@MockBean
+	AlarmService alarmService;
+
+	@Autowired
+	AlarmApi alarmApi;
+
+	@BeforeEach
+	void setUp(){
+		mockMvc = MockMvcBuilders.standaloneSetup(alarmApi).build();
+	}
+
+	@Test
+	void showAlarms() throws Exception{
+		// given
+		Cookie customerCompanyCookie = new Cookie("company", "삼성");
+
+		JSONArray jal = new JSONArray();
+		JSONObject alarm = new JSONObject();
+        alarm.put("list", jal);
+		String alarmJsonString = alarm.toString();
+
+		// when
+		// then
+		mockMvc.perform(get("/manage/alarms")
+						.cookie(customerCompanyCookie))
+							.andExpect(status().isOk())
+							.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+							.andExpect(content().json(alarmJsonString));
+	}
+
+	@Test
+	void updateAlarms() throws Exception{
+		//given
+		Cookie customerCompanyCookie = new Cookie("company", "삼성");
+
+		JSONObject alarm1 = new JSONObject();
+		alarm1.put("type", "cost");
+        alarm1.put("value", 100000);
+        JSONObject alarm2 = new JSONObject();
+        alarm2.put("type", "time");
+        alarm2.put("value", 80);
+        JSONArray jal = new JSONArray();
+        jal.put(alarm1);
+        jal.put(alarm2);
+        JSONObject alarm = new JSONObject();
+        alarm.put("list", jal);
+		String alarmJsonString = alarm.toString();
+
+		JSONObject okMsg = new JSONObject();
+        okMsg.put("msg", "Success");
+
+		// when
+		mockMvc.perform(post("/manage/alarms")
+						.cookie(customerCompanyCookie)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(alarmJsonString))
+							.andExpect(status().isCreated())
+							.andExpect(content().json(okMsg.toString()));
+
+							
 	}
 }

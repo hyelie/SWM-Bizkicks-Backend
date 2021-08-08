@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Controller
@@ -38,16 +39,16 @@ public class AlarmApi {
     @PostMapping("/manage/alarms")
     public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company") String belongCompany){
         List<Alarm> alarms = new ArrayList<>();
-
         for (AlarmDto alarmDto : alarmsDto.getList()){
             alarms.add(alarmDto.toEntity());
         }
 
         alarmService.updateAlarms(belongCompany, alarms);
 
+
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
-        return new ResponseEntity<>(returnObject.toString(), HttpStatus.CREATED);
+        return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 
     @Data

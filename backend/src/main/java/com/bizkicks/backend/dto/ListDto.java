@@ -12,5 +12,4 @@ public class ListDto<T> {
         this.list = list;
     }
 
-
 }
