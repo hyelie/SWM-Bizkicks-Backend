@@ -2,9 +2,8 @@ package com.bizkicks.backend.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
-import java.util.List;
+
 import com.bizkicks.backend.entity.Alarm;
-import com.bizkicks.backend.entity.CustomerCompany;
 
 
 @Data

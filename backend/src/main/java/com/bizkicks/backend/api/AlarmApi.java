@@ -3,6 +3,8 @@ package com.bizkicks.backend.api;
 import com.bizkicks.backend.dto.AlarmDto;
 import com.bizkicks.backend.dto.ListDto;
 import com.bizkicks.backend.entity.Alarm;
+import com.bizkicks.backend.exception.CustomException;
+import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.AlarmService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Controller
@@ -32,6 +33,9 @@ public class AlarmApi {
         List<AlarmDto> collect = alarmService.findAlarms(belongcompany).stream()
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
+
+        if(true)
+        throw new CustomException(ErrorCode.ID_DUPLICATED);
 
         return new ResponseEntity<>(new ListResult(collect), HttpStatus.OK);
     }
