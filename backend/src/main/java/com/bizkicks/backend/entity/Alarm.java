@@ -1,38 +1,48 @@
 package com.bizkicks.backend.entity;
 
-import lombok.AllArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
 @Entity
-@Getter @Setter
+@Getter
+@IdClass(AlarmId.class)
 @NoArgsConstructor
 public class Alarm {
+    @Id
+    @ManyToOne
+    @JoinColumn(name="customer_company_name")
+    public CustomerCompany customerCompany;
 
-    @Id @GeneratedValue
-    private Long id;
-
-    @Column(nullable = false)
+    @Id
+    @Column(length=45, nullable=false)
     private String type;
 
-    @Column(nullable = false)
+    @Id
+    @Column(nullable=false)
     private Integer value;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_company_name")
-    private CustomerCompany customerCompany;
 
     public void setRelationWithCustomerCompany(CustomerCompany customerCompany){
         this.customerCompany = customerCompany;
-        customerCompany.getAlarms().add(this);
     }
 
     public Alarm(String type, Integer value){
         this.type = type;
         this.value = value;
     }
+
+    public boolean equals(Object obj){
+        if(obj == this) return true;
+        Alarm a = (Alarm) obj;
+        return a.type.equals(this.type)
+                && a.value.equals(this.value)
+                && a.customerCompany.equals(this.customerCompany);
+    }
+
 }

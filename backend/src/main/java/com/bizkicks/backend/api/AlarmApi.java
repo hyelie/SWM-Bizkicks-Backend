@@ -39,11 +39,11 @@ public class AlarmApi {
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(new ListResult(collect), HttpStatus.OK);
+        return new ResponseEntity<Object>(new ListDto<>(collect), HttpStatus.OK);
     }
 
     @PostMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarms(@RequestBody @Valid ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company", required = false) String belongCompany){
+    public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company", required = false) String belongCompany){
         if(belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
 
         List<Alarm> alarms = new ArrayList<>();
@@ -53,31 +53,12 @@ public class AlarmApi {
 
         alarmService.updateAlarms(belongCompany, alarms);
 
-
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
         return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 
-    @Data
-    @AllArgsConstructor
-    class ListResult<T>{
-        private T list;
-    }
 
-    @GetMapping("/profile")
-    public ResponseEntity<Object> test(@CookieValue(name = "company", defaultValue = "비회원") String company){
-        JSONObject test1 = new JSONObject();
-        test1.put("회사이름", company);
-        return ResponseEntity.ok(test1.toString());
-    }
-
-
-//    @GetMapping("/manage/alarms")
-//    public ResponseEntity<Object> alarms(){
-//
-//
-//    }
 
 
 }

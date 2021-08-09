@@ -1,5 +1,13 @@
 package com.bizkicks.backend.exception;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
+import javax.validation.ConstraintViolationException;
+
+import com.fasterxml.jackson.databind.deser.impl.PropertyValue;
+
+import org.hibernate.PropertyValueException;
+import org.hibernate.exception.DataException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHander extends ResponseEntityExceptionHandler {
+
+    // 입력 정보가 다를 때
+    // sql에 중복되어 있을 때
+
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
-    protected ResponseEntity<ErrorResponse> handleConstraintViolateException(){
+    protected ResponseEntity<ErrorResponse> handleIntegrityViolateException(){
         log.error("handleDataException thor Exceptions : {}", ErrorCode.PARAMETER_NOT_VALID);
         return ErrorResponse.toResponseEntity(ErrorCode.PARAMETER_NOT_VALID);
     }
-
-    @ExceptionHandler(value = {DuplicateKeyException.class})
-    protected ResponseEntity<ErrorResponse> handleDuplicateException(){
-        log.error("handleDataException thor Exceptions : {}", ErrorCode.DUPLICATED_RESOURCE);
-        return ErrorResponse.toResponseEntity(ErrorCode.DUPLICATED_RESOURCE);
-    }
-
 
     @ExceptionHandler(value = {CustomException.class})
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e){

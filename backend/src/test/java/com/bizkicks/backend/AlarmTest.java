@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
 import lombok.NoArgsConstructor;
@@ -83,7 +85,7 @@ class AlarmRepositoryTest{
 	}
 
 	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
-		CustomerCompany customerCompany = new CustomerCompany(companyCode, companyName);
+		CustomerCompany customerCompany = new CustomerCompany(companyName, companyCode);
 		return customerCompany;
 	}
 	
@@ -102,29 +104,52 @@ class AlarmRepositoryTest{
 	@Test
 	void save_and_find() {
 		// when
-		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
-		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany(samsung, samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany(lg, lgAlarms);
 
 		// then
-		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
+		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompany(samsung);
 		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
-		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
+		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompany(lg);
 		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
 	}
 
 	@Test
 	void save_delete_and_find() {
+        // given
+        CustomerCompany apple = CreateCustomerCompany("qwer123ty", "apple");
+
 		// when
-		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
-		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
-		alarmRepository.deleteAllAlarmsInCustomerCompany("삼성");
-		alarmRepository.deleteAllAlarmsInCustomerCompany("LG");
+		alarmRepository.saveAllAlarmsInCustomerCompany(samsung, samsungAlarms);
+		alarmRepository.saveAllAlarmsInCustomerCompany(lg, lgAlarms);
+		alarmRepository.deleteAllAlarmsInCustomerCompany(samsung);
+		alarmRepository.deleteAllAlarmsInCustomerCompany(lg);
 
 		// then
-		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("삼성")).isEqualTo(emptyAlarms);
-		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("apple")).isEqualTo(emptyAlarms);
-		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("LG")).isEqualTo(emptyAlarms);
+		Assertions.assertThat(alarmRepository.findByCustomerCompany(samsung)).isEqualTo(emptyAlarms);
+		Assertions.assertThat(alarmRepository.findByCustomerCompany(apple)).isEqualTo(emptyAlarms);
+		Assertions.assertThat(alarmRepository.findByCustomerCompany(lg)).isEqualTo(emptyAlarms);
 	}
+
+    @Test
+    void verify_find_not_exist_company(){
+        // given
+        // when
+        CustomerCompany isExist = alarmRepository.isCustomerCompanyExist("apple");
+        
+        // then
+        Assertions.assertThat(isExist).isEqualTo(null);
+    }
+
+    @Test
+    void verify_find_exist_company(){
+        // given
+        // when
+        CustomerCompany isExist = alarmRepository.isCustomerCompanyExist("samsung");
+        
+        // then
+        Assertions.assertThat(isExist).isNotEqualTo(samsung);
+    }
 
 	
 }
@@ -133,8 +158,9 @@ class AlarmRepositoryTest{
 @Transactional
 @NoArgsConstructor
 class AlarmServiceTest{
+    @PersistenceContext
+    private EntityManager em;
 	@Autowired AlarmService alarmService;
-	@Autowired AlarmRepository alarmRepository;
 
 	CustomerCompany samsung;
 	Alarm samsungAlarm1;
@@ -166,7 +192,7 @@ class AlarmServiceTest{
 	// given - LG
 	@BeforeEach
 	void initializeLg(){
-		lg = CreateCustomerCompany("qwerty", "삼성");
+		lg = CreateCustomerCompany("qwerty", "LG");
 		lgAlarm1 = CreateAlarmInCompany(lg, "cost", 15000);
 		lgAlarm2 = CreateAlarmInCompany(lg, "time", 80);
 
@@ -182,50 +208,43 @@ class AlarmServiceTest{
 	}
 
 	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
-		CustomerCompany customerCompany = new CustomerCompany(companyCode, companyName);
+		CustomerCompany customerCompany = new CustomerCompany(companyName, companyCode);
+        em.persist(customerCompany);
 		return customerCompany;
 	}
 	
 	public Alarm CreateAlarmInCompany(CustomerCompany customerCompany, String type, Integer value){
 		Alarm alarm = new Alarm(type, value);
 		alarm.setRelationWithCustomerCompany(customerCompany);
+        em.persist(alarm);
 		return alarm;
 	}
 
 	@Test
 	void find() {
-		// when
-		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
-		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
+		// given
+        // when
+        List<Alarm> serviceSamsungAlarms = alarmService.findAlarms("삼성");
+        List<Alarm> serviceLgAlarms = alarmService.findAlarms("LG");
+        
+        // then
+        Assertions.assertThat(serviceSamsungAlarms.equals(samsungAlarms)).isTrue();
+        Assertions.assertThat(serviceLgAlarms.equals(lgAlarms)).isTrue();
 
-		// then
-		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
-		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
-		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
-		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
-		
-	}
-
-	@Test
-	void find_not_exist_company(){
-		List<Alarm> repositoryEmptyAlarms = alarmRepository.findByCustomerCompanyName("asdf");
-		DeepCompareTwoLists(repositoryEmptyAlarms, emptyAlarms);
 	}
 
 	@Test
 	void update() {
-		// when
-		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
-		alarmRepository.saveAllAlarmsInCustomerCompany("삼성", samsungAlarms);
-		alarmService.updateAlarms("삼성", samsungAlarms);
-		alarmRepository.saveAllAlarmsInCustomerCompany("LG", lgAlarms);
+		// given
+        // when
+        alarmService.updateAlarms("삼성", samsungAlarms);
 		alarmService.updateAlarms("LG", lgAlarms);
 
 		// then
-		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompanyName("삼성");
-		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
-		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
-		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+        List<Alarm> serviceSamsungAlarms = alarmService.findAlarms("삼성");
+        List<Alarm> serviceLgAlarms = alarmService.findAlarms("LG");
+        Assertions.assertThat(serviceSamsungAlarms.equals(samsungAlarms)).isTrue();
+        Assertions.assertThat(serviceLgAlarms.equals(lgAlarms)).isTrue();
 	}
 }
 
@@ -315,17 +334,17 @@ class AlarmControllerTest{
 							.andExpect(content().json(okMsg.toString()));						
 	}
 
-	@Test
-	void verifyNotExistCookie() throws Exception{
-		//given
-		Cookie notExistCookie = new Cookie("company", "null");
+	// @Test
+	// void verifyNotExistCookie() throws Exception{
+	// 	//given
+	// 	Cookie notExistCookie = new Cookie("company", "null");
 
-		// when
-		// then
-		mockMvc.perform(get("/manage/alarms")
-						.cookie(notExistCookie))
-							.andExpect(status().isBadRequest());
-	}
+	// 	// when
+	// 	// then
+	// 	mockMvc.perform(get("/manage/alarms")
+	// 					.cookie(notExistCookie))
+	// 						.andExpect(status().isBadRequest());
+	// }
 
 	// TODO
 	// cookie 안/잘못 넣었을 때 400번
