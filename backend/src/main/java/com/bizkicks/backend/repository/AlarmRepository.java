@@ -15,6 +15,15 @@ public class AlarmRepository {
     @PersistenceContext
     private EntityManager em;
 
+    public boolean isCustomerCompanyExist(String customerCompanyName){
+        String verifyCustomerCompanyQuery = "select cc from CustomerCompany cc where cc.companyName = :customer_company_name";
+        List<CustomerCompany> customerCompany = em.createQuery(verifyCustomerCompanyQuery, CustomerCompany.class)
+                                            .setParameter("customer_company_name", customerCompanyName)
+                                            .getResultList();
+        if(customerCompany.size() == 0) return false;
+        else return true; 
+    }
+
     public void deleteAllAlarmsInCustomerCompany(String customerCompanyName){
         String DeleteCustomerCompanyAlarmsQuery = "delete from Alarm a where a.customerCompany.companyName = :customer_company_name";
         em.createQuery(DeleteCustomerCompanyAlarmsQuery)
@@ -23,7 +32,6 @@ public class AlarmRepository {
     }
 
     public void saveAllAlarmsInCustomerCompany(String customerCompanyName, List<Alarm> alarms){
-        // TODO 예외처리
         for (Alarm alarm : alarms) {
             alarm.setRelationWithCustomerCompany(new CustomerCompany(customerCompanyName));
             em.persist(alarm);

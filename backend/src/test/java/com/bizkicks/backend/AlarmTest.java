@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +73,7 @@ class AlarmRepositoryTest{
 	// given - LG
 	@BeforeEach
 	void initializeLg(){
-		lg = CreateCustomerCompany("qwerty", "삼성");
+		lg = CreateCustomerCompany("qwerty", "LG");
 		lgAlarm1 = CreateAlarmInCompany(lg, "cost", 15000);
 		lgAlarm2 = CreateAlarmInCompany(lg, "time", 80);
 
@@ -81,7 +83,8 @@ class AlarmRepositoryTest{
 	}
 
 	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
-		return new CustomerCompany(companyCode, companyName);
+		CustomerCompany customerCompany = new CustomerCompany(companyCode, companyName);
+		return customerCompany;
 	}
 	
 	public Alarm CreateAlarmInCompany(CustomerCompany customerCompany, String type, Integer value){
@@ -122,6 +125,8 @@ class AlarmRepositoryTest{
 		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("apple")).isEqualTo(emptyAlarms);
 		Assertions.assertThat(alarmRepository.findByCustomerCompanyName("LG")).isEqualTo(emptyAlarms);
 	}
+
+	
 }
 
 @SpringBootTest
@@ -177,7 +182,8 @@ class AlarmServiceTest{
 	}
 
 	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
-		return new CustomerCompany(companyCode, companyName);
+		CustomerCompany customerCompany = new CustomerCompany(companyCode, companyName);
+		return customerCompany;
 	}
 	
 	public Alarm CreateAlarmInCompany(CustomerCompany customerCompany, String type, Integer value){
@@ -197,6 +203,13 @@ class AlarmServiceTest{
 		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
 		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompanyName("LG");
 		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+		
+	}
+
+	@Test
+	void find_not_exist_company(){
+		List<Alarm> repositoryEmptyAlarms = alarmRepository.findByCustomerCompanyName("asdf");
+		DeepCompareTwoLists(repositoryEmptyAlarms, emptyAlarms);
 	}
 
 	@Test
@@ -227,6 +240,8 @@ class AlarmControllerTest{
 	@Autowired
 	AlarmApi alarmApi;
 
+	private Cookie samsungCookie = new Cookie("company", "삼성");
+
 	@BeforeEach
 	void setUp(){
 		mockMvc = MockMvcBuilders.standaloneSetup(alarmApi).build();
@@ -235,8 +250,6 @@ class AlarmControllerTest{
 	@Test
 	void showAlarms() throws Exception{
 		// given
-		Cookie customerCompanyCookie = new Cookie("company", "삼성");
-
 		JSONArray jal = new JSONArray();
 		JSONObject alarm = new JSONObject();
         alarm.put("list", jal);
@@ -245,7 +258,7 @@ class AlarmControllerTest{
 		// when
 		// then
 		mockMvc.perform(get("/manage/alarms")
-						.cookie(customerCompanyCookie))
+						.cookie(samsungCookie))
 							.andExpect(status().isOk())
 							.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 							.andExpect(content().json(alarmJsonString));
@@ -254,8 +267,6 @@ class AlarmControllerTest{
 	@Test
 	void updateAlarms() throws Exception{
 		//given
-		Cookie customerCompanyCookie = new Cookie("company", "삼성");
-
 		JSONObject alarm1 = new JSONObject();
 		alarm1.put("type", "cost");
         alarm1.put("value", 100000);
@@ -274,7 +285,7 @@ class AlarmControllerTest{
 
 		// when
 		mockMvc.perform(post("/manage/alarms")
-						.cookie(customerCompanyCookie)
+						.cookie(samsungCookie)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(alarmJsonString))
 							.andExpect(status().isCreated())
@@ -282,4 +293,41 @@ class AlarmControllerTest{
 
 							
 	}
+
+	@Test
+	void verifyExistCookie() throws Exception{
+		//given
+        JSONArray jal = new JSONArray();
+        JSONObject alarm = new JSONObject();
+        alarm.put("list", jal);
+		String alarmJsonString = alarm.toString();
+
+		JSONObject okMsg = new JSONObject();
+        okMsg.put("msg", "Success");
+
+		// when
+		// then
+		mockMvc.perform(post("/manage/alarms")
+						.cookie(samsungCookie)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(alarmJsonString))
+							.andExpect(status().isCreated())
+							.andExpect(content().json(okMsg.toString()));						
+	}
+
+	@Test
+	void verifyNotExistCookie() throws Exception{
+		//given
+		Cookie notExistCookie = new Cookie("company", "null");
+
+		// when
+		// then
+		mockMvc.perform(get("/manage/alarms")
+						.cookie(notExistCookie))
+							.andExpect(status().isBadRequest());
+	}
+
+	// TODO
+	// cookie 안/잘못 넣었을 때 400번
+	// 내용 잘못되었을 때 400번
 }

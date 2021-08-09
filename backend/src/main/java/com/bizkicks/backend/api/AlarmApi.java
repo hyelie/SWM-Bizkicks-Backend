@@ -18,9 +18,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 @Controller
 @NoArgsConstructor
@@ -29,19 +32,20 @@ public class AlarmApi {
     @Autowired private AlarmService alarmService;
 
     @GetMapping("/manage/alarms")
-    public ResponseEntity<Object> showAlarms(@CookieValue(name = "company") String belongcompany){
-        List<AlarmDto> collect = alarmService.findAlarms(belongcompany).stream()
+    public ResponseEntity<Object> showAlarms(@CookieValue(name = "company", required = false) String belongCompany){
+        if(belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+
+        List<AlarmDto> collect = alarmService.findAlarms(belongCompany).stream()
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
-
-        if(true)
-        throw new CustomException(ErrorCode.ID_DUPLICATED);
 
         return new ResponseEntity<>(new ListResult(collect), HttpStatus.OK);
     }
 
     @PostMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company") String belongCompany){
+    public ResponseEntity<Object> updateAlarms(@RequestBody @Valid ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company", required = false) String belongCompany){
+        if(belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+
         List<Alarm> alarms = new ArrayList<>();
         for (AlarmDto alarmDto : alarmsDto.getList()){
             alarms.add(alarmDto.toEntity());
