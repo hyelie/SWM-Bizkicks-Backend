@@ -1,39 +1,9 @@
 # 비즈킥스
 ## 법인 타겟 공유킥보드 중개 플랫폼 비즈니스
+<br>
+<br>
 
-## 목차
-<p>
 
-[0. 팀 소개](#0-팀-소개)
-</p>
-<p>
-
-[1. 개요](#1-개요)
-</p>
-<p>
-
-[2. 데이터베이스 스키마](#2-데이터베이스-스키마)
-</p>
-<p>
-
-[3. 구성도](#3-구성도)
-</p>
-<p>
-
-[4. 백엔드 API 명세서](#4-백엔드-api-명세서)
-</p>
-<p>
-
-[5. 동작 구현](#5-동작-구현)
-</p>
-<p>
-
-[6. 실행 화면](#6-실행-화면)
-</p>
-<p>
-
-[7. 바람](#7-바람)
-</p>
 
 
 # 0. 👋팀 소개
@@ -65,6 +35,8 @@
 - 기업은 복수의 퍼스널 모빌리티 사업자를 플랫폼에서 쉽게 탐색, 이용조건 설정 후 계약 가능합니다
 -  기업 임직원은 기업이 계약한 모든 퍼스널 모빌리티를 복지 서비스로써 이용가능합니다.
 
+<br>
+<br>
 
 
 # 1.5. 프로젝트 정보
@@ -78,6 +50,18 @@
 - sonarQube lts
 - mysql 5.6
 
+<br>
+
+## dependency
+- spring boot devtools
+- spring web
+- lombok
+- mysql
+- json
+- spring boot starter-data-jpa
+
+<br>
+
 ## 실행방법
 로컬 환경구성
 ```
@@ -90,15 +74,18 @@ local 에서 빌드 및 실행 시
 gradlew build -x test
 gradlew bootRun --args='--spring.profiles.active=local'
 ```
+<br>
 
 ## 브랜치 정보
+```
 master
-develop
-alarmapi2
-contractapi
-...
+    - develop
+        - alarmapi2
+        - contractapi
+```
+<br>
 
-- **디렉토리 정보**
+## 디렉토리 정보
 ```
 Bizkicks
  - backend
@@ -114,16 +101,19 @@ Bizkicks
        - test\java\com\bizkicks\backend : 테스트 코드들이 있는 폴더
  - dbend : 개발환경 설정을 위한 docker-compose.yml 파일 구성 폴더
 ```
+<br>
+<br>
+
 
 # 2. 📋데이터베이스 스키마
 
 ![dbschema](./images/dbschema.png)
 
+<br>
+<br>
 
 
 # 4. 백엔드 API 명세서
-
-# API 목록
 
 ## 계약관리
 
