@@ -8,7 +8,7 @@
 
 # 0. 👋팀 소개
 
-![image](./image/logos.JPG)
+![logo](./images/logo.png)
 
 
 - #### 팀 이름 : 킥스
