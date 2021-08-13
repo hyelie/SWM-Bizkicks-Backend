@@ -1,5 +1,6 @@
 package com.bizkicks.backend;
 
+import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.Cookie;
@@ -22,19 +24,24 @@ import lombok.NoArgsConstructor;
 import com.bizkicks.backend.api.AlarmApi;
 import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
+import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.repository.AlarmRepository;
+import com.bizkicks.backend.repository.CustomerCompanyRepository;
 import com.bizkicks.backend.service.AlarmService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +50,10 @@ import java.util.List;
 @Transactional
 @NoArgsConstructor
 class AlarmRepositoryTest{
+	@PersistenceContext EntityManager em;
 	@Autowired AlarmRepository alarmRepository;
 
+	List<Alarm> emptyAlarms;
 	CustomerCompany samsung;
 	Alarm samsungAlarm1;
 	Alarm samsungAlarm2;
@@ -53,7 +62,8 @@ class AlarmRepositoryTest{
 	Alarm lgAlarm1;
 	Alarm lgAlarm2;
 	List<Alarm> lgAlarms;
-	List<Alarm> emptyAlarms;
+	CustomerCompany space;
+	
 
 	@BeforeEach
 	void initializeEmpty(){
@@ -84,8 +94,14 @@ class AlarmRepositoryTest{
 		lgAlarms.add(lgAlarm2);
 	}
 
+	// given - No Alarm Company
+	void initializeNoAlarmCompany(){
+		space = CreateCustomerCompany("zxcv", "space");
+	}
+
 	public CustomerCompany CreateCustomerCompany(String companyCode, String companyName){
 		CustomerCompany customerCompany = new CustomerCompany(companyName, companyCode);
+		em.persist(customerCompany);
 		return customerCompany;
 	}
 	
@@ -102,7 +118,36 @@ class AlarmRepositoryTest{
 	}
 
 	@Test
-	void save_and_find() {
+	void find_exist_alarms(){
+		// given
+		for (Alarm alarm : samsungAlarms) {
+            em.persist(alarm);
+        }
+		for (Alarm alarm : lgAlarms) {
+            em.persist(alarm);
+        }
+
+		// when
+		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompany(samsung);
+		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompany(lg);
+
+		// then
+		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
+		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+		
+	}
+
+	@Test
+	void find_not_exist_alarms(){
+		// when
+		List<Alarm> emptyAlarms = alarmRepository.findByCustomerCompany(space);
+
+		// then
+		Assertions.assertThat(emptyAlarms.isEmpty()).isEqualTo(true);
+	}
+
+	@Test
+	void save_and_find_exist_alarm() {
 		// when
 		alarmRepository.saveAllAlarmsInCustomerCompany(samsung, samsungAlarms);
 		alarmRepository.saveAllAlarmsInCustomerCompany(lg, lgAlarms);
@@ -115,43 +160,28 @@ class AlarmRepositoryTest{
 	}
 
 	@Test
-	void save_delete_and_find() {
-        // given
-        CustomerCompany apple = CreateCustomerCompany("qwer123ty", "apple");
+	void save_and_find_not_exist_alarm() {
+		// when
+		alarmRepository.saveAllAlarmsInCustomerCompany(space, emptyAlarms);
 
+		// then
+		Assertions.assertThat(emptyAlarms.isEmpty()).isEqualTo(true);
+	}
+
+	@Test
+	void save_delete_and_find() {
 		// when
 		alarmRepository.saveAllAlarmsInCustomerCompany(samsung, samsungAlarms);
 		alarmRepository.saveAllAlarmsInCustomerCompany(lg, lgAlarms);
 		alarmRepository.deleteAllAlarmsInCustomerCompany(samsung);
 		alarmRepository.deleteAllAlarmsInCustomerCompany(lg);
+		List<Alarm> repositorySamsungAlarms = alarmRepository.findByCustomerCompany(samsung);
+		List<Alarm> repositoryLgAlarms = alarmRepository.findByCustomerCompany(lg);
 
 		// then
-		Assertions.assertThat(alarmRepository.findByCustomerCompany(samsung)).isEqualTo(emptyAlarms);
-		Assertions.assertThat(alarmRepository.findByCustomerCompany(apple)).isEqualTo(emptyAlarms);
-		Assertions.assertThat(alarmRepository.findByCustomerCompany(lg)).isEqualTo(emptyAlarms);
-	}
-
-    @Test
-    void verify_find_not_exist_company(){
-        // given
-        // when
-        CustomerCompany isExist = alarmRepository.isCustomerCompanyExist("apple");
-        
-        // then
-        Assertions.assertThat(isExist).isEqualTo(null);
-    }
-
-    @Test
-    void verify_find_exist_company(){
-        // given
-        // when
-        CustomerCompany isExist = alarmRepository.isCustomerCompanyExist("samsung");
-        
-        // then
-        Assertions.assertThat(isExist).isNotEqualTo(samsung);
-    }
-
-	
+		DeepCompareTwoLists(repositorySamsungAlarms, samsungAlarms);
+		DeepCompareTwoLists(repositoryLgAlarms, lgAlarms);
+	}	
 }
 
 @SpringBootTest
@@ -170,12 +200,8 @@ class AlarmServiceTest{
 	Alarm lgAlarm1;
 	Alarm lgAlarm2;
 	List<Alarm> lgAlarms;
+	CustomerCompany space;
 	List<Alarm> emptyAlarms;
-
-	@BeforeEach
-	void initializeEmpty(){
-		emptyAlarms = new ArrayList<>();
-	}
 
 	// given - 삼성
 	@BeforeEach
@@ -201,6 +227,13 @@ class AlarmServiceTest{
 		lgAlarms.add(lgAlarm2);
 	}
 
+	// given - No Alarm Company
+	@BeforeEach
+	void initializeNoAlarmCompany(){
+		space = CreateCustomerCompany("zxcv", "space");
+		emptyAlarms = new ArrayList<>();
+	}
+
 	public void DeepCompareTwoLists(List<Alarm> a, List<Alarm> b){
 		for (Integer i = 0; i<a.size(); i++) {
             Assertions.assertThat(a.get(i)).isEqualTo(b.get(i));
@@ -216,89 +249,160 @@ class AlarmServiceTest{
 	public Alarm CreateAlarmInCompany(CustomerCompany customerCompany, String type, Integer value){
 		Alarm alarm = new Alarm(type, value);
 		alarm.setRelationWithCustomerCompany(customerCompany);
-        em.persist(alarm);
 		return alarm;
 	}
 
 	@Test
-	void find() {
+	void find_exist_alarms() {
 		// given
+		for (Alarm alarm : samsungAlarms) {
+            em.persist(alarm);
+        }
+		for (Alarm alarm : lgAlarms) {
+            em.persist(alarm);
+        }
+
         // when
         List<Alarm> serviceSamsungAlarms = alarmService.findAlarms("삼성");
         List<Alarm> serviceLgAlarms = alarmService.findAlarms("LG");
+		List<Alarm> serviceSpaceAlarms = alarmService.findAlarms("space");
         
         // then
-        Assertions.assertThat(serviceSamsungAlarms.equals(samsungAlarms)).isTrue();
-        Assertions.assertThat(serviceLgAlarms.equals(lgAlarms)).isTrue();
+		DeepCompareTwoLists(serviceSamsungAlarms, samsungAlarms);
+		DeepCompareTwoLists(serviceLgAlarms, lgAlarms);
+		Assertions.assertThat(serviceSpaceAlarms.isEmpty()).isEqualTo(true);
+	}
 
+	@Test
+	void find_not_exist_company_alarms(){
+		// given
+		CustomerCompany notExistCompany = new CustomerCompany("asv", "uiop");
+
+		// when
+		assertThrows(CustomException.class, () ->{
+			List<Alarm> serviceExceptionAlarms = alarmService.findAlarms("asv");
+		});
 	}
 
 	@Test
 	void update() {
 		// given
+		for (Alarm alarm : samsungAlarms) {
+            em.persist(alarm);
+        }
+		for (Alarm alarm : lgAlarms) {
+            em.persist(alarm);
+        }
+
         // when
         alarmService.updateAlarms("삼성", samsungAlarms);
 		alarmService.updateAlarms("LG", lgAlarms);
-
-		// then
         List<Alarm> serviceSamsungAlarms = alarmService.findAlarms("삼성");
         List<Alarm> serviceLgAlarms = alarmService.findAlarms("LG");
-        Assertions.assertThat(serviceSamsungAlarms.equals(samsungAlarms)).isTrue();
-        Assertions.assertThat(serviceLgAlarms.equals(lgAlarms)).isTrue();
+		alarmService.updateAlarms("space", emptyAlarms);
+
+		// then
+		DeepCompareTwoLists(serviceSamsungAlarms, samsungAlarms);
+		DeepCompareTwoLists(serviceLgAlarms, lgAlarms);
+		Assertions.assertThat(emptyAlarms.isEmpty()).isEqualTo(true);
 	}
 }
 
 @WebMvcTest(AlarmApi.class)
 class AlarmControllerTest{
-	@Autowired
-	MockMvc mockMvc;
+	@Autowired MockMvc mockMvc;
+	@MockBean AlarmService alarmService;
+	@MockBean CustomerCompanyRepository customerCompanyRepository;
+	@Autowired AlarmApi alarmApi;
 
-	@MockBean
-	AlarmService alarmService;
-
-	@Autowired
-	AlarmApi alarmApi;
-
-	private Cookie samsungCookie = new Cookie("company", "삼성");
+	private CustomerCompany samsung;
+	private Cookie samsungCookie;
+	private String existAlarmJsonString;
+	private String emptyAlarmJsonString;
+	private String okMsg;
+	private Alarm samsungAlarm1;
+	private Alarm samsungAlarm2;
+	private List<Alarm> samsungAlarms;
 
 	@BeforeEach
 	void setUp(){
 		mockMvc = MockMvcBuilders.standaloneSetup(alarmApi).build();
+		samsungCookie = new Cookie("company", "삼성");
 	}
 
-	@Test
-	void showAlarms() throws Exception{
-		// given
-		JSONArray jal = new JSONArray();
-		JSONObject alarm = new JSONObject();
-        alarm.put("list", jal);
-		String alarmJsonString = alarm.toString();
+	@BeforeEach
+	void setJson(){
+		JSONArray emptyJA = new JSONArray();
+		JSONObject emptyAlarms = new JSONObject();
+        emptyAlarms.put("list", emptyJA);
+		emptyAlarmJsonString = emptyAlarms.toString();
 
-		// when
-		// then
+		JSONObject existAlarm1 = new JSONObject();
+		existAlarm1.put("type", "cost");
+        existAlarm1.put("value", 10000);
+        JSONObject existAlarm2 = new JSONObject();
+        existAlarm2.put("type", "time");
+        existAlarm2.put("value", 80);
+		JSONArray existJA = new JSONArray();
+        existJA.put(existAlarm1);
+        existJA.put(existAlarm2);
+        JSONObject existAlarms = new JSONObject();
+        existAlarms.put("list", existJA);
+		existAlarmJsonString = existAlarms.toString();
+
+		JSONObject okMsg = new JSONObject();
+        okMsg.put("msg", "Success");
+	}
+
+	@BeforeEach
+	void setCompanyAndAlarms(){
+		samsung = new CustomerCompany("삼성", "asdf");
+		customerCompanyRepository.save(samsung);
+
+		Alarm samsungAlarm1 = new Alarm("cost", 10000);
+		samsungAlarm1.setRelationWithCustomerCompany(samsung);
+		Alarm samsungAlarm2 = new Alarm("time", 80);
+		samsungAlarm2.setRelationWithCustomerCompany(samsung);
+
+		samsungAlarms = new ArrayList<>();
+		samsungAlarms.add(samsungAlarm1);
+		samsungAlarms.add(samsungAlarm2);
+	}
+
+	// 아래 테스트는 쿠키가 없는 상황에서 발생하는 예외인 INVALID_TOKEN 예외를 발생시키려 했으나
+	// mvc 테스트에서는 mvcresult에 결과가 담겨져서 예외 발생을 테스트 할 수 없다.
+	// @Test
+	// void verify_no_cookie() throws Exception{
+	// 		mockMvc.perform(post("/manage/alarms")
+	// 						.contentType(MediaType.APPLICATION_JSON)
+	// 						.content(emptyAlarmJsonString))
+	// 			.andExpect(
+	// 				(rslt) -> Assertions.assertThat(rslt.getResolvedException().getClass().isAssignableFrom(CustomException.class)).isTrue()
+	// 			)
+	// 			.andReturn();
+	// }
+
+	// @Test
+	// void verify_wrong_cookie() throws Exception{
+	// 	mockMvc.perform(post("/manage/alarms")
+	// 					.cookie(new Cookie("company", "삼성1"))
+	// 					.contentType(MediaType.APPLICATION_JSON)
+	// 					.content(emptyAlarmJsonString))
+	// 			.andExpect(status().isNotFound());	
+	// }
+
+	@Test
+	void show_empty_alarms() throws Exception{
 		mockMvc.perform(get("/manage/alarms")
 						.cookie(samsungCookie))
 							.andExpect(status().isOk())
 							.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-							.andExpect(content().json(alarmJsonString));
+				.andExpect(content().json(emptyAlarmJsonString));
 	}
 
 	@Test
-	void updateAlarms() throws Exception{
+	void update_alarms() throws Exception{
 		//given
-		JSONObject alarm1 = new JSONObject();
-		alarm1.put("type", "cost");
-        alarm1.put("value", 100000);
-        JSONObject alarm2 = new JSONObject();
-        alarm2.put("type", "time");
-        alarm2.put("value", 80);
-        JSONArray jal = new JSONArray();
-        jal.put(alarm1);
-        jal.put(alarm2);
-        JSONObject alarm = new JSONObject();
-        alarm.put("list", jal);
-		String alarmJsonString = alarm.toString();
-
 		JSONObject okMsg = new JSONObject();
         okMsg.put("msg", "Success");
 
@@ -306,47 +410,8 @@ class AlarmControllerTest{
 		mockMvc.perform(post("/manage/alarms")
 						.cookie(samsungCookie)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(alarmJsonString))
-							.andExpect(status().isCreated())
-							.andExpect(content().json(okMsg.toString()));
-
-							
+						.content(existAlarmJsonString))
+				.andExpect(status().isCreated())
+				.andExpect(content().json(okMsg.toString()));	
 	}
-
-	@Test
-	void verifyExistCookie() throws Exception{
-		//given
-        JSONArray jal = new JSONArray();
-        JSONObject alarm = new JSONObject();
-        alarm.put("list", jal);
-		String alarmJsonString = alarm.toString();
-
-		JSONObject okMsg = new JSONObject();
-        okMsg.put("msg", "Success");
-
-		// when
-		// then
-		mockMvc.perform(post("/manage/alarms")
-						.cookie(samsungCookie)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(alarmJsonString))
-							.andExpect(status().isCreated())
-							.andExpect(content().json(okMsg.toString()));						
-	}
-
-	// @Test
-	// void verifyNotExistCookie() throws Exception{
-	// 	//given
-	// 	Cookie notExistCookie = new Cookie("company", "null");
-
-	// 	// when
-	// 	// then
-	// 	mockMvc.perform(get("/manage/alarms")
-	// 					.cookie(notExistCookie))
-	// 						.andExpect(status().isBadRequest());
-	// }
-
-	// TODO
-	// cookie 안/잘못 넣었을 때 400번
-	// 내용 잘못되었을 때 400번
 }

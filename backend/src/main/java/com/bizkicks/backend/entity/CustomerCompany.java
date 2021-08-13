@@ -2,6 +2,8 @@ package com.bizkicks.backend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -13,10 +15,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomerCompany {
     @Id
-    @Column(length=45, name="customer_company_name")
+    @Column(name = "customer_company_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(length=45, nullable = false, unique=true)
     private String companyName;
 
-    @Column(length=45, nullable=false)
+    @Column(length=45, nullable=false, unique=true)
     private String companyCode;
 
     public CustomerCompany(String companyName){
@@ -26,5 +32,9 @@ public class CustomerCompany {
     public CustomerCompany(String companyName, String companyCode){
         this.companyName = companyName;
         this.companyCode = companyCode;
+    }
+
+    public void setCompanyName(String companyName){
+        this.companyName = companyName;
     }
 }

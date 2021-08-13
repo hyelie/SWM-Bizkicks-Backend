@@ -2,31 +2,43 @@ package com.bizkicks.backend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@IdClass(AlarmId.class)
 @NoArgsConstructor
+@Table(
+    indexes = @Index(name="customer_company_index", columnList = "customer_company_id"),
+    uniqueConstraints={
+        @UniqueConstraint(columnNames = {"type", "value", "customer_company_id"})
+    }
+)
 public class Alarm {
     @Id
-    @ManyToOne
-    @JoinColumn(name="customer_company_name")
-    public CustomerCompany customerCompany;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Id
-    @Column(length=45, nullable=false)
+    @Column(name="type", length=5, nullable=false)
     private String type;
 
-    @Id
-    @Column(nullable=false)
+    @Column(name="value", nullable=false)
     private Integer value;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customer_company_id")
+    public CustomerCompany customerCompany;
 
     public void setRelationWithCustomerCompany(CustomerCompany customerCompany){
         this.customerCompany = customerCompany;
@@ -36,13 +48,10 @@ public class Alarm {
         this.type = type;
         this.value = value;
     }
-
-    public boolean equals(Object obj){
-        if(obj == this) return true;
-        Alarm a = (Alarm) obj;
-        return a.type.equals(this.type)
-                && a.value.equals(this.value)
-                && a.customerCompany.equals(this.customerCompany);
+    
+    public Alarm(String type, Integer value, CustomerCompany customerCompany){
+        this.type = type;
+        this.value = value;
+        this.customerCompany = customerCompany;
     }
-
 }
