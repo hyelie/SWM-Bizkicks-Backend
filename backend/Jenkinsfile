@@ -20,13 +20,13 @@ pipeline {
             }
         }   // build 시 test 없이 진행하고, test는 추후에 거르기 위해 이렇게 이용함.
         
-        // stage('Gradle Junit Test') {
-        //     steps {
-        //         dir('backend'){
-        //             sh "chmod +x gradlew; ./gradlew test"
-        //         }
-        //     }
-        // }   // test를 이용해서 확인함.
+        stage('Gradle Junit Test') {
+            steps {
+                dir('backend'){
+                    sh "chmod +x gradlew; ./gradlew check"
+                }
+            }
+        }   // test를 이용해서 확인함.
         stage('JUnit Test Publish') {
             steps {
                 dir('backend'){
@@ -69,7 +69,7 @@ pipeline {
         stage('docker build'){
             steps{
                 dir('backend'){
-                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.2 .'
+                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.3 .'
                 }
             }
         }
@@ -77,7 +77,7 @@ pipeline {
             steps{
                 script{
                      docker.withRegistry('https://gcr.io', 'gcr:gcr-credential'){
-                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend:0.0.2' 
+                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend:0.0.3' 
                      }
                 }
             }
