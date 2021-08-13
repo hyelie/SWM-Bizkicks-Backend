@@ -1,8 +1,6 @@
 package com.bizkicks.backend;
 
 import org.assertj.core.api.Assertions;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +17,6 @@ import com.bizkicks.backend.repository.CustomerCompanyRepository;
 import lombok.NoArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 @Transactional
