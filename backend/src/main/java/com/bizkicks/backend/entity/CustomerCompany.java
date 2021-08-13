@@ -1,40 +1,40 @@
 package com.bizkicks.backend.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class CustomerCompany {
-
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "customer_company_id")
-//    private Long id;
-
     @Id
-    @Column(name = "customer_company_name", length = 45, nullable = false)
+    @Column(name = "customer_company_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(length=45, nullable = false, unique=true)
     private String companyName;
 
-    @Column(length = 45, nullable = false)
+    @Column(length=45, nullable=false, unique=true)
     private String companyCode;
 
-    @OneToMany(mappedBy = "customerCompany")
-    private List<ContractRelation> contractRelations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "customerCompany")
-    private List<Alarm> alarms = new ArrayList<>();
-
-    public CustomerCompany(String companyCode, String companyName){
-        this.companyCode = companyCode;
+    public CustomerCompany(String companyName){
         this.companyName = companyName;
     }
 
+    public CustomerCompany(String companyName, String companyCode){
+        this.companyName = companyName;
+        this.companyCode = companyCode;
+    }
+
+    public void setCompanyName(String companyName){
+        this.companyName = companyName;
+    }
 }
-
-

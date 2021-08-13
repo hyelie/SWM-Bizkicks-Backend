@@ -1,7 +1,10 @@
 package com.bizkicks.backend.api;
 
 import com.bizkicks.backend.dto.AlarmDto;
+import com.bizkicks.backend.dto.ListDto;
 import com.bizkicks.backend.entity.Alarm;
+import com.bizkicks.backend.exception.CustomException;
+import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.AlarmService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 @Controller
 @NoArgsConstructor
@@ -24,34 +32,33 @@ public class AlarmApi {
     @Autowired private AlarmService alarmService;
 
     @GetMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarm(@CookieValue(name = "company") String belongcompany){
+    public ResponseEntity<Object> showAlarms(@CookieValue(name = "company", required = false) String belongCompany){
+        if(belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
 
-        List<AlarmDto> collect = alarmService.findAlarms(belongcompany).stream()
+        List<AlarmDto> collect = alarmService.findAlarms(belongCompany).stream()
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(new ListResult(collect), HttpStatus.OK);
+        return new ResponseEntity<Object>(new ListDto<>(collect), HttpStatus.OK);
     }
 
-    @Data
-    @AllArgsConstructor
-    class ListResult<T>{
-        private T list;
+    @PostMapping("/manage/alarms")
+    public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company", required = false) String belongCompany){
+        if(belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+
+        List<Alarm> alarms = new ArrayList<>();
+        for (AlarmDto alarmDto : alarmsDto.getList()){
+            alarms.add(alarmDto.toEntity());
+        }
+
+        alarmService.updateAlarms(belongCompany, alarms);
+
+        JSONObject returnObject = new JSONObject();
+        returnObject.put("msg", "Success");
+        return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<Object> test(@CookieValue(name = "company", defaultValue = "비회원") String company){
-        JSONObject test1 = new JSONObject();
-        test1.put("회사이름", company);
-        return ResponseEntity.ok(test1.toString());
-    }
 
-
-//    @GetMapping("/manage/alarms")
-//    public ResponseEntity<Object> alarms(){
-//
-//
-//    }
 
 
 }

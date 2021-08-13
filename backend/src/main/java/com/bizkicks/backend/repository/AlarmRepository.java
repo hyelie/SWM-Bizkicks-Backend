@@ -15,24 +15,29 @@ public class AlarmRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void deleteAll(){
-        em.createQuery("delete * from Alarm");
+    public void deleteAllAlarmsInCustomerCompany(CustomerCompany customerCompany){
+        String DeleteCustomerCompanyAlarmsQuery = "delete from Alarm a where a.customerCompany = :customer_company";
+        em.createQuery(DeleteCustomerCompanyAlarmsQuery)
+          .setParameter("customer_company", customerCompany)
+          .executeUpdate();
     }
 
-    public void saveAll(List<Alarm> alarms){
-        // TODO 예외처리
+    public void saveAllAlarmsInCustomerCompany(CustomerCompany customerCompany, List<Alarm> alarms){
         for (Alarm alarm : alarms) {
+            alarm.setRelationWithCustomerCompany(customerCompany);
             em.persist(alarm);
         }
     }
 
-    public List<Alarm> findByCustomerCompanyName(String customerCompanyName){
-        System.out.println("repository : " + customerCompanyName);
-        String selectCustomerCompanyAlarmsQuery = "select a from Alarm a where a.customerCompany.companyName = :variable";
+    public List<Alarm> findByCustomerCompany(CustomerCompany customerCompany){
+        String selectCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a WHERE a.customerCompany = :customer_company";
         List<Alarm> alarms = em.createQuery(selectCustomerCompanyAlarmsQuery , Alarm.class)
-                               .setParameter("variable", customerCompanyName)
+                               .setParameter("customer_company", customerCompany)
                                .getResultList();
         return alarms;
     }
-
 }
+
+
+// String findCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a JOIN a.customerCompany acc WHERE acc.companyName= :customer_company_name"; 
+// String findCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a WHERE a.customerCompany.companyName = :customer_company_name";
