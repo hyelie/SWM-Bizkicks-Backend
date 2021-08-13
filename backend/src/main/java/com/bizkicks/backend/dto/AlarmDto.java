@@ -1,5 +1,4 @@
 package com.bizkicks.backend.dto;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

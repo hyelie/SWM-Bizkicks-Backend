@@ -1,17 +1,7 @@
 package com.bizkicks.backend.exception;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-
-import javax.validation.ConstraintViolationException;
-
-import com.fasterxml.jackson.databind.deser.impl.PropertyValue;
-
-import org.hibernate.PropertyValueException;
-import org.hibernate.exception.DataException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
