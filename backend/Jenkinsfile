@@ -27,13 +27,14 @@ pipeline {
         //         }
         //     }
         // }   // test를 이용해서 확인함.
-        // stage('JUnit Test Publish') {
-        //     steps {
-        //         dir('backend'){
-        //             junit '**/build/test-results/test/*.xml'
-        //         }
-        //     }
-        // }   // Junit 테스트 결과를 젠킨스 프로젝트 첫 화면에서 볼 수 있게 결과물을 출력한다. 이렇게 해주면 알아서 결과물을 보여준다.
+        stage('JUnit Test Publish') {
+            steps {
+                dir('backend'){
+                    //junit '**/build/test-results/test/*.xml'
+                    junit 'build/reports/**/*.xml'
+                }
+            }
+        }   // Junit 테스트 결과를 젠킨스 프로젝트 첫 화면에서 볼 수 있게 결과물을 출력한다. 이렇게 해주면 알아서 결과물을 보여준다.
 
         stage('SonarQube Analysis'){
             steps{
