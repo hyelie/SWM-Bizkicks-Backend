@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
     uniqueConstraints={
         @UniqueConstraint(columnNames = {"type", "value", "customer_company_id"})
     }
+
 )
 public class Alarm {
     @Id
