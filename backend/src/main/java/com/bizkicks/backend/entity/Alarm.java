@@ -37,7 +37,7 @@ public class Alarm {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")
-    public CustomerCompany customerCompany;
+    private CustomerCompany customerCompany;
 
     public void setRelationWithCustomerCompany(CustomerCompany customerCompany){
         this.customerCompany = customerCompany;
