@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ public class CustomerCompany {
         this.companyName = companyName;
     }
 
+    @Builder
     public CustomerCompany(String companyName, String companyCode){
         this.companyName = companyName;
         this.companyCode = companyCode;

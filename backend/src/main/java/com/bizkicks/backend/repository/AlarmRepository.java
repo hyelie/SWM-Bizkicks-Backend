@@ -16,7 +16,7 @@ public class AlarmRepository {
     private EntityManager em;
 
     public void deleteAllAlarmsInCustomerCompany(CustomerCompany customerCompany){
-        String DeleteCustomerCompanyAlarmsQuery = "delete from Alarm a where a.customerCompany = :customer_company";
+        String DeleteCustomerCompanyAlarmsQuery = "DELETE from Alarm a where a.customerCompany = :customer_company";
         em.createQuery(DeleteCustomerCompanyAlarmsQuery)
           .setParameter("customer_company", customerCompany)
           .executeUpdate();

@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 )
 public class User {
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
@@ -48,6 +50,7 @@ public class User {
         this.customerCompany = customerCompany;
     }
 
+    @Builder
     public User(String userId, String password, String type, boolean license, String phoneNumber){
         this.userId = userId;
         this.password = password;
