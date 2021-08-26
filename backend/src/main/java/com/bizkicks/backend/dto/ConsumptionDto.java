@@ -81,4 +81,5 @@ service에서 list는 쪼갤 수 있음.
 coordinate의 경우에도 usage_id가 있고 -> 이거는 entity의 id값을 get해와서 toEntity()를 하면 될 것 같다.
 consumption의 경우에도 brand_id가 있음 -> 이거는 brand_name으로 찾아야 하고 찾을 걸 넣어주면 될 것 같다.
 
+g
 */
