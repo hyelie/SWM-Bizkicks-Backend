@@ -10,6 +10,7 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(
-    indexes = @Index(name="coordinate_index", columnList = "usage_id, sequence")
+    indexes = @Index(name="coordinate_index", columnList = "consumption_id, sequence"),
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"consumption_id", "sequence"})
+    }
 )
 public class Coordinate {
     @Id
@@ -30,13 +34,13 @@ public class Coordinate {
     private Double longitude;
 
     @Column(nullable = false)
-    private Double attitude;
+    private Double latitude;
 
     @Column(name = "sequence", nullable = false)
     private Long sequence;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usage_id")
+    @JoinColumn(name = "consumption_id")
     private Consumption consumption;
 
     // this can be removed when not needed.
@@ -45,12 +49,12 @@ public class Coordinate {
     }
 
     @Builder
-    public Coordinate(Double longitude, Double attitude, Long sequence, Consumption consumption){
-        if(longitude == null || attitude == null || sequence == null){
+    public Coordinate(Double longitude, Double latitude, Long sequence, Consumption consumption){
+        if(longitude == null || latitude == null || sequence == null){
             throw new IllegalStateException("Cannot create coordinate due to necessary value is null");
         }
         this.longitude = longitude;
-        this.attitude = attitude;
+        this.latitude = latitude;
         this.sequence = sequence;
         this.consumption = consumption;
     }

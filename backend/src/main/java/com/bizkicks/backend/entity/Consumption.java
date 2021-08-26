@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 )
 public class Consumption{
     @Id
-    @Column(name = "usage_id")
+    @Column(name = "consumption_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
@@ -48,13 +48,13 @@ public class Consumption{
         this.user = user;
     }
 
-    // add below code and index when brand is added.
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "brand_id")
-    // private KickboardBrand KickboardBrand;
-    // public void setRelationWithKickboardBrand(KickboardBrand kickboardBrand){
-    //     this.KickboardBrand = kickboardBrand;
-    // }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id")
+    private KickboardBrand KickboardBrand;
+    
+    public void setRelationWithKickboardBrand(KickboardBrand kickboardBrand){
+        this.KickboardBrand = kickboardBrand;
+    }
 
     @Builder
     public Consumption(LocalDateTime departTime, LocalDateTime arriveTime, Integer cycle, User user){

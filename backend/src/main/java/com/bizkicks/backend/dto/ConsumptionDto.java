@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bizkicks.backend.entity.Consumption;
+import com.bizkicks.backend.entity.Coordinate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,19 +28,30 @@ public class ConsumptionDto {
         private LocalDateTime depart_time;
         private LocalDateTime arrive_time;
         private List<Location> location_list;
-        private Integer interval;
+        private Integer cycle;
 
-        // public List<Coordinate> toCoordinateEntity(){
-        //     List<Coordinate> coordinates = ArrayList<>();
-        //     for(Location location : location_list){
-        //         coordinates.add(new Coordinate(location.getLatitude(), location.getLongitude()));
-        //     }
-        //     return coordinates;
-        // }
+        public List<Coordinate> toCoordinateEntity(){
+            List<Coordinate> coordinates = new ArrayList<>();
+            Long i = Long.valueOf(0);
+            for(Location location : this.location_list){
+                coordinates.add(Coordinate.builder()
+                                            .latitude(location.getLatitude())
+                                            .longitude(location.getLongitude())
+                                            .sequence(i)
+                                            .build()
+                );
+                i++;
+            }
+            return coordinates;
+        }
 
-        // public Consumption toConsumptionEntity(){
-        //     return new Consumption()
-        // }
+        public Consumption toConsumptionEntity(){
+            return Consumption.builder()
+                                .departTime(this.depart_time)
+                                .arriveTime(this.arrive_time)
+                                .cycle(this.cycle)
+                                .build();
+        }
     }
 
     @Getter

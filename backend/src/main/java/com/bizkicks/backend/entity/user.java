@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(
-    indexes = @Index(name="user_index", columnList = "used_set_id")
+    indexes = @Index(name="user_index", columnList = "user_set_id")
 )
 public class User {
     @Id
@@ -27,7 +27,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="used_set_id", length=20, nullable = false, unique = true)
+    @Column(name="user_set_id", length=20, nullable = false, unique = true)
     private String userId;
 
     @Column(length=45, nullable = false)

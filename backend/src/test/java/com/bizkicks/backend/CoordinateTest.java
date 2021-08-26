@@ -67,7 +67,7 @@ class CoordinateRepositoryTest {
 
         this.coordinate1 = Coordinate.builder()
                                 .longitude(1.11)
-                                .attitude(1.11)
+                                .latitude(1.11)
                                 .sequence((long)1)
                                 .consumption(this.consumption)
                                 .build();
@@ -76,7 +76,7 @@ class CoordinateRepositoryTest {
 
         this.coordinate2 = Coordinate.builder()
                                 .longitude(2.22)
-                                .attitude(2.22)
+                                .latitude(2.22)
                                 .sequence((long)2)
                                 .consumption(this.consumption)
                                 .build();
