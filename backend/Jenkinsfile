@@ -82,6 +82,14 @@ pipeline {
                 }
             }
         }     // gcr push
+        stage('Docker unused image remove'){
+            steps{
+                script{
+                    sh 'docker image prune -a'
+                    sh 'y'
+                }
+            }
+        }
         stage('Clean'){
             steps{
                 dir('backend'){
