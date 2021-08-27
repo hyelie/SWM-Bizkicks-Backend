@@ -37,7 +37,7 @@ public class ConsumptionApi {
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
-        return new ResponseEntity<Object>(returnObject, HttpStatus.CREATED);
+        return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 
     @GetMapping("/kickboard/consumption")

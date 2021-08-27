@@ -8,12 +8,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.test.context.ActiveProfiles;
+
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
 import com.bizkicks.backend.entity.User;
+import com.bizkicks.backend.filter.DateFilter;
+import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;
+import com.bizkicks.backend.repository.CoordinateRepository;
 import com.bizkicks.backend.service.AlarmService;
 import com.bizkicks.backend.service.ConsumptionService;
 
@@ -24,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.NoArgsConstructor;
+
 
 @SpringBootTest
 @Transactional
@@ -71,6 +77,8 @@ class ConsumptionRepositoryTest {
         consumption.setRelationWithUser(this.user);
         consumption.setRelationWithKickboardBrand(this.kickboardBrand);
         System.out.println(this.consumption.getDepartTime() + " " + this.consumption.getArriveTime() + " " + this.consumption.getUser().getUserId() + " " + this.consumption.getKickboardBrand().getBrandName());
+
+
     }
 
     @Test
@@ -84,12 +92,16 @@ class ConsumptionRepositoryTest {
         Assertions.assertThat(savedConsumption.getUser().getUserId()).isEqualTo(consumption.getUser().getUserId());
         Assertions.assertThat(savedConsumption.getKickboardBrand().getBrandName()).isEqualTo(consumption.getKickboardBrand().getBrandName());
     }
+
+   
+
+    
 }
 
 @SpringBootTest
 @Transactional
 @NoArgsConstructor
-class ConsumptionServiceTest {
+class ConsumptionTest {
     @PersistenceContext EntityManager em;
     @Autowired ConsumptionService consumptionService;
 
@@ -100,6 +112,8 @@ class ConsumptionServiceTest {
     Coordinate coordinate1;
     Coordinate coordinate2;
     List<Coordinate> coordinates;
+    DateFilter dateFilter;
+    PagingFilter pagingFilter;
 
     @BeforeEach
     void init(){
@@ -147,6 +161,15 @@ class ConsumptionServiceTest {
                                 .consumption(this.consumption)
                                 .build();
         this.coordinates.add(this.coordinate2);
+
+        dateFilter = DateFilter.builder()
+        .startDate(LocalDateTime.of(2021,8,10,03,50,10))
+        .endDate(LocalDateTime.of(2021,8,30,03,50,10))
+        .build();
+        pagingFilter = PagingFilter.builder()
+            .unit(10)
+            .page(1)
+            .build();
     }
 
     // @Test
@@ -175,5 +198,23 @@ class ConsumptionServiceTest {
 
         // then
         // save
+
+        String filterQuery = "SELECT c FROM Consumption c WHERE c.user = :user AND :start_date < c.arriveTime AND c.arriveTime < :end_date ORDER BY c.id ASC";
+        List<Consumption> consumptions = em.createQuery(filterQuery, Consumption.class)
+                                            .setParameter("user", user)
+                                            .setParameter("start_date", dateFilter.getStartDate())
+                                            .setParameter("end_date", dateFilter.getEndDate())
+                                            .setFirstResult(pagingFilter.getPage()-1)
+                                            .setMaxResults(pagingFilter.getUnit())
+                                            .getResultList();
+
+        String selectCoordinateQuery = "SELECT c FROM Coordinate c WHERE c.consumption IN :consumptions ORDER BY c.consumption.id ASC, c.sequence ASC";
+        List<Coordinate> coordinates = em.createQuery(selectCoordinateQuery, Coordinate.class)
+                                            .setParameter("consumptions", consumptions)
+                                            .getResultList();
+
+        System.out.print(coordinates);
     }
+
+    
 }

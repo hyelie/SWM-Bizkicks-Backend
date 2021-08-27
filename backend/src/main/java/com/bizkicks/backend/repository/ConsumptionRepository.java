@@ -7,6 +7,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.bizkicks.backend.entity.Consumption;
+import com.bizkicks.backend.entity.User;
+import com.bizkicks.backend.filter.DateFilter;
+import com.bizkicks.backend.filter.PagingFilter;
 
 import org.springframework.stereotype.Repository;
 
@@ -16,19 +19,17 @@ public class ConsumptionRepository {
     private EntityManager em;
 
 
-    // public List<Object[]> findConsumptionLeftJoinCoordinate(LocalDateTime startDate, LocalDateTime endDate, Integer page, Integer unit){
-    //     String joinQuery = "SELECT con, cor FROM Consumption con LEFT JOIN Coordinate cor" + 
-    //                         "WHERE :start_date < con.arriveTime AND con.arriveTime < :end_date" +
-    //                         "ORDER BY con.arrive_time DESC cor.sequence ASC" + 
-    //                         "LIMIT :page, :unit";
-    //     List<Object[]> result = em.createQuery(joinQuery)
-    //                                 .setParameter("start_date", startDate)
-    //                                 .setParameter("end_date", endDate)
-    //                                 .setParameter("page", unit)
-    //                                 .setParameter("unit", page)
-    //                                 .getResultList();
-    //     return result;
-    // }
+    public List<Consumption> findByFilter(User user, DateFilter dateFilter, PagingFilter pagingFilter){
+        String filterQuery = "SELECT c FROM Consumption c WHERE c.user = :user AND :start_date < c.arriveTime AND c.arriveTime < :end_date ORDER BY c.id ASC";
+        List<Consumption> consumptions = em.createQuery(filterQuery, Consumption.class)
+                                            .setParameter("user", user)
+                                            .setParameter("start_date", dateFilter.getStartDate())
+                                            .setParameter("end_date", dateFilter.getEndDate())
+                                            .setFirstResult(pagingFilter.getPage()-1)
+                                            .setMaxResults(pagingFilter.getUnit())
+                                            .getResultList();
+        return consumptions;
+    }
 
     public Consumption save(Consumption consumption){
         em.persist(consumption);

@@ -31,4 +31,12 @@ public class CoordinateRepository {
                                             .getResultList();
         return coordinates;
     }
+
+    public List<Coordinate> findCoordinatesInConsumptions(List<Consumption> consumptions){
+        String selectCoordinateQuery = "SELECT c FROM Coordinate c WHERE c.consumption IN :consumptions ORDER BY c.consumption.id ASC, c.sequence ASC";
+        List<Coordinate> coordinates = em.createQuery(selectCoordinateQuery, Coordinate.class)
+                                            .setParameter("consumptions", consumptions)
+                                            .getResultList();
+        return coordinates;
+    }
 }

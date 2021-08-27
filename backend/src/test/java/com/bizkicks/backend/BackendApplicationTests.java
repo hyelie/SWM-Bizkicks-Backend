@@ -2,7 +2,10 @@ package com.bizkicks.backend;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import com.bizkicks.backend.entity.Consumption;
@@ -19,10 +22,9 @@ import lombok.NoArgsConstructor;
 @Transactional
 @NoArgsConstructor
 class BackendApplicationTests {
-    @Test
-    void action(){
-        
-    }
+    @PersistenceContext EntityManager em;
+
+    
 
 
 }

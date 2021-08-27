@@ -1,6 +1,7 @@
 package com.bizkicks.backend.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -45,8 +46,18 @@ public class ConsumptionService {
         coordinateRepository.saveAllCoordinatesInConsumption(consumption, coordinates);
     }
 
-    // @Transactional
-    // public void showConsumptionWithCoordinate(DateFilter dateFilter, PagingFilter pagingFilter){
+    @Transactional
+    public void showConsumptionWithCoordinate(Long userId, DateFilter dateFilter, PagingFilter pagingFilter){
+        User user = userRepository.findById(userId);
+        if(user == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        
+        List<Consumption> consumptions = consumptionRepository.findByFilter(user, dateFilter, pagingFilter);
+        List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
 
-    // }
+        Map<Consumption, List<Coordinate>> map;
+
+        
+
+        
+    }
 }
