@@ -69,7 +69,7 @@ pipeline {
         stage('docker build'){
             steps{
                 dir('backend'){
-                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.4 .'
+                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.31 .'
                 }
             }
         }
@@ -77,11 +77,18 @@ pipeline {
             steps{
                 script{
                      docker.withRegistry('https://gcr.io', 'gcr:gcr-credential'){
-                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend:0.0.4' 
+                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend:0.0.31' 
                      }
                 }
             }
         }     // gcr push
+        stage('Docker unused image remove'){
+            steps{
+                script{
+                    sh 'docker image prune -a'
+                }
+            }
+        }
         stage('Clean'){
             steps{
                 dir('backend'){
