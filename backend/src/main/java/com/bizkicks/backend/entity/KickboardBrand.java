@@ -1,5 +1,6 @@
 package com.bizkicks.backend.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,5 +41,17 @@ public class KickboardBrand {
             joinColumns = @JoinColumn(name = "brand_id"))
     @Column(name="DISTRICT")
     private Set<String> districts = new HashSet<>();
+
+    @Builder
+    public KickboardBrand(boolean helmet, boolean insurance, Integer pricePerHour, String image1, String image2, String image3, String Text, String brandName){
+        this.helmet = helmet;
+        this.insurance = insurance;
+        this.pricePerHour = pricePerHour;
+        this.image1 = image1;
+        this.image2 = image2;
+        this.image3 = image3;
+        this.Text = Text;
+        this.brandName = brandName;
+    }
 
 }

@@ -11,6 +11,8 @@ import com.bizkicks.backend.entity.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -21,6 +23,7 @@ public class ConsumptionDto {
     private List<Detail> history;
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class Detail{
@@ -55,6 +58,7 @@ public class ConsumptionDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static class Location{
