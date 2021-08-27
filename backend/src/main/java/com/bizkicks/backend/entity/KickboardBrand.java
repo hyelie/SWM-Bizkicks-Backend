@@ -20,9 +20,9 @@ public class KickboardBrand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean helmet;
+    private Boolean helmet;
 
-    private boolean insurance;
+    private Boolean insurance;
 
     private Integer pricePerHour;
 

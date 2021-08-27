@@ -10,7 +10,7 @@ import com.bizkicks.backend.entity.KickboardBrand;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class KickboardRepository {
+public class KickboardBrandRepository {
     @PersistenceContext
     private EntityManager em;
 

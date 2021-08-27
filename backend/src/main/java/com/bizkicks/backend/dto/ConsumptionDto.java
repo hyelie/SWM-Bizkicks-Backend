@@ -32,7 +32,7 @@ public class ConsumptionDto {
         private LocalDateTime arrive_time;
         private List<Location> location_list;
         private Integer cycle;
-
+        
         public List<Coordinate> toCoordinateEntity(){
             List<Coordinate> coordinates = new ArrayList<>();
             Long i = Long.valueOf(0);
@@ -47,7 +47,6 @@ public class ConsumptionDto {
             }
             return coordinates;
         }
-
         public Consumption toConsumptionEntity(){
             return Consumption.builder()
                                 .departTime(this.depart_time)
@@ -72,9 +71,16 @@ public class ConsumptionDto {
 1. get
 
 1) repository에서
-SELECT con, cor FROM Consumption con LEFT JOIN coordinate cor
-ORDER BY con.arrive_time desc cor.sequence ASC
-LIMIT 0, 10
+
+SELECT * FROM
+  (SELECT * FROM consumption
+    WHERE user_id=1
+    LIMIT 0, 2) con
+  LEFT JOIN
+  coordinate cor
+  ON con.consumption_id=cor.consumption_id
+ORDER BY con.consumption_id ASC, cor.sequence ASC
+
 
 이런식으로 해서 entity 2개를 가져옴. 리턴 형식은 List<Object[]>
 
@@ -90,14 +96,4 @@ service에서 받은 map을 dto 형식으로 변환함.
 
 비록 변환은 2번이지만 entity에만 의존하게 함.
 
-
-2. post
-
-post에서 consumptionDto.Detail을 받음
-service에서 list는 쪼갤 수 있음.
-
-coordinate의 경우에도 usage_id가 있고 -> 이거는 entity의 id값을 get해와서 toEntity()를 하면 될 것 같다.
-consumption의 경우에도 brand_id가 있음 -> 이거는 brand_name으로 찾아야 하고 찾을 걸 넣어주면 될 것 같다.
-
-g
 */

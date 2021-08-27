@@ -14,7 +14,7 @@ import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;
 import com.bizkicks.backend.repository.CoordinateRepository;
-import com.bizkicks.backend.repository.KickboardRepository;
+import com.bizkicks.backend.repository.KickboardBrandRepository;
 import com.bizkicks.backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import lombok.AllArgsConstructor;
 public class ConsumptionService {
     @Autowired ConsumptionRepository consumptionRepository;
     @Autowired CoordinateRepository coordinateRepository;
-    @Autowired KickboardRepository kickboardRepository;
+    @Autowired KickboardBrandRepository kickboardRepository;
     @Autowired UserRepository userRepository;
 
     @Transactional

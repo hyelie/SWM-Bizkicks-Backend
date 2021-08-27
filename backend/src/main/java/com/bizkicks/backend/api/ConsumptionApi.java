@@ -9,6 +9,7 @@ import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.ConsumptionService;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,18 @@ public class ConsumptionApi {
 
         consumptionService.saveConsumptionWithCoordinates(userId, detail.getBrand(), consumption, coordinates);
 
-        return new ResponseEntity<Object>(null, HttpStatus.CREATED);
+        JSONObject returnObject = new JSONObject();
+        returnObject.put("msg", "Success");
+        return new ResponseEntity<Object>(returnObject, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/kickboard/consumption")
+    public ResponseEntity<Object> showConsumption(){
+        // ConsumptionDto.builder()
+        //                 .unit(1)
+        //                 .total_time(total_time)
+
+        JSONObject returnObject = new JSONObject();
+        return new ResponseEntity<Object>(returnObject, HttpStatus.OK);
     }
 }

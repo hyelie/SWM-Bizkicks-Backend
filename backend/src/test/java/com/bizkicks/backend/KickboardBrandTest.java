@@ -5,7 +5,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.repository.KickboardRepository;
+import com.bizkicks.backend.repository.KickboardBrandRepository;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @SpringBootTest
 @Transactional
 @NoArgsConstructor
-class KickboardBrandTest {
+class KickboardBrandRepositoryTest {
     @PersistenceContext EntityManager em;
-    @Autowired KickboardRepository kickboardRepository;
+    @Autowired KickboardBrandRepository kickboardBrandRepository;
 
     KickboardBrand kickboardBrand;
 
@@ -36,7 +36,7 @@ class KickboardBrandTest {
     @Test
     void find_by_brand_name(){
         // when
-        KickboardBrand selectedKickboardBrand = kickboardRepository.findByBrandName("킥고잉");
+        KickboardBrand selectedKickboardBrand = kickboardBrandRepository.findByBrandName("킥고잉");
 
         // then
         Assertions.assertThat(selectedKickboardBrand.getBrandName()).isEqualTo(this.kickboardBrand.getBrandName());
