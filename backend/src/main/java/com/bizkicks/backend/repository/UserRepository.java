@@ -14,7 +14,7 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public User findById(Integer userId){
+    public User findById(Long userId){
         String selectUserQuery = "SELECT u FROM User u WHERE u.id = :user_id";
         List<User> users = em.createQuery(selectUserQuery, User.class)
                                                     .setParameter("user_id", userId)

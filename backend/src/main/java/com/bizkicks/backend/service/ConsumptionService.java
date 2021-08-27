@@ -32,7 +32,7 @@ public class ConsumptionService {
     @Autowired UserRepository userRepository;
 
     @Transactional
-    public void saveConsumptionWithCoordinates(Integer userId, String brandName, Consumption consumption, List<Coordinate> coordinates){
+    public void saveConsumptionWithCoordinates(Long userId, String brandName, Consumption consumption, List<Coordinate> coordinates){
         KickboardBrand kickboardBrand = kickboardRepository.findByBrandName(brandName);
         if(kickboardBrand == null) throw new CustomException(ErrorCode.KICKBOARD_BRAND_NOT_EXIST);
         consumption.setRelationWithKickboardBrand(kickboardBrand);

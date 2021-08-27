@@ -28,7 +28,7 @@ public class Consumption{
     @Id
     @Column(name = "consumption_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDateTime departTime;

@@ -25,7 +25,7 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name="user_set_id", length=20, nullable = false, unique = true)
     private String userId;
@@ -37,7 +37,7 @@ public class User {
     private String type;
 
     @Column
-    private boolean license;
+    private Boolean license;
 
     @Column(length=15)
     private String phoneNumber;
@@ -51,7 +51,7 @@ public class User {
     }
 
     @Builder
-    public User(String userId, String password, String type, boolean license, String phoneNumber){
+    public User(String userId, String password, String type, Boolean license, String phoneNumber){
         this.userId = userId;
         this.password = password;
         this.type = type;

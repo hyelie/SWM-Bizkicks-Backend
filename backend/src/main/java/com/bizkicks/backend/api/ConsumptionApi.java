@@ -1,6 +1,10 @@
 package com.bizkicks.backend.api;
 
+import java.util.List;
+
 import com.bizkicks.backend.dto.ConsumptionDto;
+import com.bizkicks.backend.entity.Consumption;
+import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.ConsumptionService;
@@ -22,10 +26,13 @@ public class ConsumptionApi {
     @Autowired private ConsumptionService consumptionService;
 
     @PostMapping("/kickboard/consumption")
-    public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail, @CookieValue(name = "userid", required = false) String userId){
+    public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail, @CookieValue(name = "userid", required = false) Long userId){
         if(userId == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
 
-        System.out.println(detail);
+        Consumption consumption = detail.toConsumptionEntity();
+        List<Coordinate> coordinates = detail.toCoordinateEntity();
+
+        consumptionService.saveConsumptionWithCoordinates(userId, detail.getBrand(), consumption, coordinates);
 
         return new ResponseEntity<Object>(null, HttpStatus.CREATED);
     }
