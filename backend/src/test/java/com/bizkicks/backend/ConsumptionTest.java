@@ -2,6 +2,7 @@ package com.bizkicks.backend;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -79,6 +80,7 @@ class ConsumptionRepositoryTest {
         System.out.println(this.consumption.getDepartTime() + " " + this.consumption.getArriveTime() + " " + this.consumption.getUser().getUserId() + " " + this.consumption.getKickboardBrand().getBrandName());
 
 
+    
     }
 
     @Test
@@ -163,13 +165,13 @@ class ConsumptionTest {
         this.coordinates.add(this.coordinate2);
 
         dateFilter = DateFilter.builder()
-        .startDate(LocalDateTime.of(2021,8,10,03,50,10))
-        .endDate(LocalDateTime.of(2021,8,30,03,50,10))
-        .build();
+                                .startDate(LocalDateTime.of(2021,8,10,03,50,10))
+                                .endDate(LocalDateTime.of(2021,8,30,03,50,10))
+                                .build();
         pagingFilter = PagingFilter.builder()
-            .unit(10)
-            .page(1)
-            .build();
+                                    .unit(10)
+                                    .page(1)
+                                    .build();
     }
 
     // @Test
@@ -213,8 +215,16 @@ class ConsumptionTest {
                                             .setParameter("consumptions", consumptions)
                                             .getResultList();
 
-        System.out.print(coordinates);
+        System.out.println(coordinates);
     }
 
-    
+    @Test
+    void service(){
+        // when
+        consumptionService.saveConsumptionWithCoordinates(this.user.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
+        
+        HashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.user.getId(), this.dateFilter, this.pagingFilter);
+
+        Assertions.assertThat(result.get(this.consumption)).isEqualTo(this.coordinates);
+    }
 }

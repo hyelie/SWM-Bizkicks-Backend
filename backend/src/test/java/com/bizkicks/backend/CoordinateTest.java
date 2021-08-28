@@ -103,7 +103,9 @@ class CoordinateRepositoryTest {
         coordinateRepository.saveAllCoordinatesInConsumption(this.consumption, this.coordinates);
 
         // when
-        List<Coordinate> repositoryCoordinates = coordinateRepository.findAllCoordinatesInConsumption(this.consumption);
+        List<Consumption> consumptions = new ArrayList<Consumption>();
+        consumptions.add(this.consumption);
+        List<Coordinate> repositoryCoordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
         
         // then
         Assertions.assertThat(repositoryCoordinates.containsAll(this.coordinates)).isTrue();

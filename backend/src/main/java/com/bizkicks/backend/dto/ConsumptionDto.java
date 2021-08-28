@@ -15,14 +15,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ConsumptionDto {
+    private Integer page;
     private Integer unit;
     private LocalTime total_time;
     private List<Detail> history;
 
     @Getter
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -57,6 +61,7 @@ public class ConsumptionDto {
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

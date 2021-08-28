@@ -1,5 +1,7 @@
 package com.bizkicks.backend.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,17 +49,33 @@ public class ConsumptionService {
     }
 
     @Transactional
-    public void showConsumptionWithCoordinate(Long userId, DateFilter dateFilter, PagingFilter pagingFilter){
+    public HashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Long userId, DateFilter dateFilter, PagingFilter pagingFilter){
         User user = userRepository.findById(userId);
         if(user == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
         
         List<Consumption> consumptions = consumptionRepository.findByFilter(user, dateFilter, pagingFilter);
         List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
 
-        Map<Consumption, List<Coordinate>> map;
+        // 찾은 consumptions, coordinate를 삽입
+        HashMap<Long, List<Coordinate>> coordinateMap = new HashMap<Long, List<Coordinate>>();
+        for(Coordinate coordinate : coordinates){
+            Long consumptionId = coordinate.getConsumption().getId();
+            List<Coordinate> coordinateMapList = coordinateMap.get(consumptionId);
+            if(coordinateMapList == null){
+                coordinateMapList = new ArrayList<Coordinate>();
+                coordinateMapList.add(coordinate);
+                coordinateMap.put(consumptionId, coordinateMapList);
+            }
+            else{
+                if(!coordinateMapList.contains(coordinate)) coordinateMapList.add(coordinate);
+            }
+        }
 
-        
+        HashMap<Consumption, List<Coordinate>> mapCoordinateToConsumption = new HashMap<Consumption, List<Coordinate>>();
+        for(Consumption consumption : consumptions){
+            mapCoordinateToConsumption.put(consumption, coordinateMap.get(consumption.getId()));
+        }
 
-        
+        return mapCoordinateToConsumption;
     }
 }
