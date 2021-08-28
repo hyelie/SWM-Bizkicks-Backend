@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 public class AlarmApi {
 
     @Autowired private AlarmService alarmService;
+    
+    // company를 받는 게 아니라, userid를 받으면 해당 user가 속해있는 company에 있는 alarm을 주게 바꿀 것임.
+    // .
 
     @GetMapping("/manage/alarms")
     public ResponseEntity<Object> showAlarms(@CookieValue(name = "company", required = false) String belongCompany){
