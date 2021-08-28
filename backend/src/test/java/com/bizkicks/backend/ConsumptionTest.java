@@ -3,6 +3,7 @@ package com.bizkicks.backend;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -223,7 +224,7 @@ class ConsumptionTest {
         // when
         consumptionService.saveConsumptionWithCoordinates(this.user.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
         
-        HashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.user.getId(), this.dateFilter, this.pagingFilter);
+        LinkedHashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.user.getId(), this.dateFilter, this.pagingFilter);
 
         Assertions.assertThat(result.get(this.consumption)).isEqualTo(this.coordinates);
     }
