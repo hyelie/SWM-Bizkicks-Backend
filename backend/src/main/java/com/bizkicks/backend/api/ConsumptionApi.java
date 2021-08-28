@@ -88,6 +88,7 @@ public class ConsumptionApi {
                 }
             }
 
+            Consumption consumption = entry.getKey();
             ConsumptionDto.Detail detail = ConsumptionDto.Detail.builder()
                                                                 .brand(consumption.getKickboardBrand().getBrandName())
                                                                 .depart_time(consumption.getDepartTime())
