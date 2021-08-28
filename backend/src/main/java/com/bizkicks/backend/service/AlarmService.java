@@ -2,6 +2,7 @@ package com.bizkicks.backend.service;
 
 import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
+import com.bizkicks.backend.entity.User;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.repository.AlarmRepository;
@@ -36,4 +37,8 @@ public class AlarmService {
         alarmRepository.deleteAllAlarmsInCustomerCompany(customerCompany);
         alarmRepository.saveAllAlarmsInCustomerCompany(customerCompany, alarms);
     }
+
+    // findAlarmsInUserCompany(Long userId)
+    // user가 속한 회사 찾고
+    // findAlarms(이름으s findAlarmsInCustomerCompany로 변경) 호출
 }

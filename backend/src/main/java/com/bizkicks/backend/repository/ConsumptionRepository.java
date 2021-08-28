@@ -19,12 +19,12 @@ public class ConsumptionRepository {
     private EntityManager em;
 
     public List<Consumption> findByFilter(User user, DateFilter dateFilter, PagingFilter pagingFilter){
-        String filterQuery = "SELECT c FROM Consumption c WHERE c.user = :user AND :start_date < c.departTime AND c.departTime < :end_date ORDER BY c.id ASC";
+        String filterQuery = "SELECT c FROM Consumption c WHERE c.user = :user AND :start_date < c.arriveTime AND c.arriveTime < :end_date ORDER BY c.arriveTime DESC";
         List<Consumption> consumptions = em.createQuery(filterQuery, Consumption.class)
                                             .setParameter("user", user)
                                             .setParameter("start_date", dateFilter.getStartDate())
                                             .setParameter("end_date", dateFilter.getEndDate())
-                                            .setFirstResult(pagingFilter.getPage()-1)
+                                            .setFirstResult((pagingFilter.getPage()-1) * pagingFilter.getUnit())
                                             .setMaxResults(pagingFilter.getUnit())
                                             .getResultList();
         return consumptions;

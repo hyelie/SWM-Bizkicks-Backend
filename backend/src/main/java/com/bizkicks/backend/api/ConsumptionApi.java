@@ -1,8 +1,11 @@
 package com.bizkicks.backend.api;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.validation.constraints.Null;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.FlashMapManager;
 
+import ch.qos.logback.core.util.Duration;
 import lombok.NoArgsConstructor;
 
 @Controller
@@ -40,7 +44,7 @@ public class ConsumptionApi {
     @PostMapping("/kickboard/consumption")
     public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail,
                                                     @CookieValue(name = "userid", required = false) Long userId){
-        if(userId == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        if(userId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
 
         Consumption consumption = detail.toConsumptionEntity();
         List<Coordinate> coordinates = detail.toCoordinateEntity();
@@ -60,20 +64,22 @@ public class ConsumptionApi {
                                                     @RequestParam(value="page", required = false, defaultValue = "1") Integer page,
                                                     @RequestParam(value = "unit", required = false, defaultValue = "10") Integer unit,
                                                     @CookieValue(name = "userid", required = false) Long userId){
+        if(userId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+        
         if(startDate == null){
             startDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), 1);
         }
 
         DateFilter dateFilter = DateFilter.builder().startDate(startDate.atTime(00, 00, 00)).endDate(endDate.atTime(23, 23, 59)).build();
         PagingFilter pagingFilter = PagingFilter.builder().unit(unit).page(page).build();
-        HashMap<Consumption, List<Coordinate>> mapConsumptionToCoordinate = consumptionService.findConsumptionWithCoordinate(userId, dateFilter, pagingFilter);
+        LinkedHashMap<Consumption, List<Coordinate>> mapConsumptionToCoordinate = consumptionService.findConsumptionWithCoordinate(userId, dateFilter, pagingFilter);
 
         List<ConsumptionDto.Detail> history = new ArrayList<ConsumptionDto.Detail>();
         for(HashMap.Entry<Consumption, List<Coordinate>> entry : mapConsumptionToCoordinate.entrySet()){
             List<Coordinate> coordinates = entry.getValue();
             List<ConsumptionDto.Location> locations = new ArrayList<ConsumptionDto.Location>();
-            if(coordinates != null){
-                for(Coordinate coordinate : coordinates){
+            if(coordinates != null) {
+                for(Coordinate coordinate : coordinates) {
                     locations.add(Location.builder()
                                             .latitude(coordinate.getLatitude())
                                             .longitude(coordinate.getLongitude())
@@ -81,9 +87,7 @@ public class ConsumptionApi {
                     );
                 }
             }
-            
 
-            Consumption consumption = entry.getKey();
             ConsumptionDto.Detail detail = ConsumptionDto.Detail.builder()
                                                                 .brand(consumption.getKickboardBrand().getBrandName())
                                                                 .depart_time(consumption.getDepartTime())
@@ -91,6 +95,8 @@ public class ConsumptionApi {
                                                                 .cycle(consumption.getCycle())
                                                                 .location_list(locations)
                                                                 .build();
+
+            
 
             history.add(detail);
         }
