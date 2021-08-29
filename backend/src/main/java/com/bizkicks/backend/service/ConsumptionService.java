@@ -20,6 +20,7 @@ import com.bizkicks.backend.repository.ConsumptionRepository;
 import com.bizkicks.backend.repository.CoordinateRepository;
 import com.bizkicks.backend.repository.KickboardBrandRepository;
 import com.bizkicks.backend.repository.UserRepository;
+import com.bizkicks.backend.util.GetWithNullCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,15 +35,14 @@ public class ConsumptionService {
     @Autowired CoordinateRepository coordinateRepository;
     @Autowired KickboardBrandRepository kickboardRepository;
     @Autowired UserRepository userRepository;
-    CheckNull getWithNullCheck;
+    @Autowired GetWithNullCheck getWithNullCheck;
 
     @Transactional
     public void saveConsumptionWithCoordinates(Long userId, String brandName, Consumption consumption, List<Coordinate> coordinates){
-        KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrandWithNullCheck(kickboardRepository, brandName);
+        KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrand(kickboardRepository, brandName);
         consumption.setRelationWithKickboardBrand(kickboardBrand);
 
-        User user = userRepository.findById(userId);
-        if(user == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        User user = getWithNullCheck.getUser(userRepository, userId);
         consumption.setRelationWithUser(user);
 
         consumptionRepository.save(consumption);
@@ -51,8 +51,7 @@ public class ConsumptionService {
 
     @Transactional
     public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Long userId, DateFilter dateFilter, PagingFilter pagingFilter){
-        User user = getWithNullCheck.getUserWithNullCheck(userRepository, userId);
-        
+        User user = getWithNullCheck.getUser(userRepository, userId);
         List<Consumption> consumptions = consumptionRepository.findByFilter(user, dateFilter, pagingFilter);
         List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
 
