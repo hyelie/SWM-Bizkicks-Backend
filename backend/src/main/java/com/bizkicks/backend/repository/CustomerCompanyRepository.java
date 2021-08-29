@@ -18,6 +18,7 @@ public class CustomerCompanyRepository {
         em.persist(customerCompany);
     }
 
+
     public CustomerCompany findByCustomerCompanyName(String customerCompanyName){
         String verifyCustomerCompanyQuery = "select cc from CustomerCompany cc where cc.companyName = :customer_company_name";
         List<CustomerCompany> customerCompany = em.createQuery(verifyCustomerCompanyQuery, CustomerCompany.class)

@@ -29,6 +29,7 @@ public class AlarmService {
         return alarmRepository.findByCustomerCompany(customerCompany);
     }
 
+
     @Transactional
     public void updateAlarms(String customerCompanyName, List<Alarm> alarms){
         CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
