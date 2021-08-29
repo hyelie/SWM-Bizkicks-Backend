@@ -10,8 +10,8 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,22 +19,28 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(
-    indexes = @Index(name="customer_company_index", columnList = "customer_company_id"),
-    uniqueConstraints={
-        @UniqueConstraint(columnNames = {"type", "value", "customer_company_id"})
-    }
-
+    indexes = @Index(name="user_index", columnList = "user_set_id")
 )
-public class Alarm {
+public class User {
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="type", length=5, nullable=false)
+    @Column(name="user_set_id", length=20, nullable = false, unique = true)
+    private String userId;
+
+    @Column(length=45, nullable = false)
+    private String password;
+
+    @Column(length=9, nullable = false)
     private String type;
 
-    @Column(name="value", nullable=false)
-    private Integer value;
+    @Column
+    private Boolean license;
+
+    @Column(length=15)
+    private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")
@@ -44,14 +50,12 @@ public class Alarm {
         this.customerCompany = customerCompany;
     }
 
-    public Alarm(String type, Integer value){
+    @Builder
+    public User(String userId, String password, String type, Boolean license, String phoneNumber){
+        this.userId = userId;
+        this.password = password;
         this.type = type;
-        this.value = value;
-    }
-    
-    public Alarm(String type, Integer value, CustomerCompany customerCompany){
-        this.type = type;
-        this.value = value;
-        this.customerCompany = customerCompany;
+        this.license = license;
+        this.phoneNumber = phoneNumber;
     }
 }

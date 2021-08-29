@@ -1,5 +1,7 @@
 package com.bizkicks.backend.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,8 +11,9 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Plan {
 
     @Id
@@ -25,6 +28,8 @@ public class Plan {
     private Integer UsedTime;
 
     private LocalDate startDate;
+
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")
