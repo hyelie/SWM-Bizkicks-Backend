@@ -33,7 +33,7 @@ public class ProductApi {
     public Result allBrand(){
         List<KickboardBrand> kickboardBrands = brandService.findAllBrand();
         List<BrandDto> collect = kickboardBrands.stream()
-                .map(m -> new BrandDto(m.getId(),m.getHelmet(),m.getHelmet(),m.getPricePerHour(),m.getImage1(),m.getImage2(),m.getImage3(),m.getText(),m.getBrandName(),m.getDistricts()))
+                .map(m -> new BrandDto(m.getId(),m.getHelmet(),m.getInsurance(),m.getPricePerHour(),m.getImage1(),m.getImage2(),m.getImage3(),m.getText(),m.getBrandName(),m.getDistricts()))
                 .collect(Collectors.toList());
 
         return new Result(collect);

@@ -8,11 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
 import com.bizkicks.backend.entity.Plan;
-import com.bizkicks.backend.entity.User;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
