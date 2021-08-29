@@ -34,11 +34,11 @@ public class ConsumptionService {
     @Autowired CoordinateRepository coordinateRepository;
     @Autowired KickboardBrandRepository kickboardRepository;
     @Autowired UserRepository userRepository;
+    CheckNull getWithNullCheck;
 
     @Transactional
     public void saveConsumptionWithCoordinates(Long userId, String brandName, Consumption consumption, List<Coordinate> coordinates){
-        KickboardBrand kickboardBrand = kickboardRepository.findByBrandName(brandName);
-        if(kickboardBrand == null) throw new CustomException(ErrorCode.KICKBOARD_BRAND_NOT_EXIST);
+        KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrandWithNullCheck(kickboardRepository, brandName);
         consumption.setRelationWithKickboardBrand(kickboardBrand);
 
         User user = userRepository.findById(userId);
@@ -51,8 +51,7 @@ public class ConsumptionService {
 
     @Transactional
     public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Long userId, DateFilter dateFilter, PagingFilter pagingFilter){
-        User user = userRepository.findById(userId);
-        if(user == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        User user = getWithNullCheck.getUserWithNullCheck(userRepository, userId);
         
         List<Consumption> consumptions = consumptionRepository.findByFilter(user, dateFilter, pagingFilter);
         List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);

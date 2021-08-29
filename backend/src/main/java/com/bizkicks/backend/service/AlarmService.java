@@ -22,18 +22,17 @@ public class AlarmService {
 
     @Autowired AlarmRepository alarmRepository;
     @Autowired CustomerCompanyRepository customerCompanyRepository;
+    CheckNull getWithNullCheck;
 
     @Transactional
     public List<Alarm> findAlarms(String customerCompanyName){
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
-        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+        CustomerCompany customerCompany = getWithNullCheck.getCustomerCompanyWithNullCheck(customerCompanyRepository, customerCompanyName);
         return alarmRepository.findByCustomerCompany(customerCompany);
     }
 
     @Transactional
     public void updateAlarms(String customerCompanyName, List<Alarm> alarms){
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
-        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+        CustomerCompany customerCompany = getWithNullCheck.getCustomerCompanyWithNullCheck(customerCompanyRepository, customerCompanyName);
         alarmRepository.deleteAllAlarmsInCustomerCompany(customerCompany);
         alarmRepository.saveAllAlarmsInCustomerCompany(customerCompany, alarms);
     }
