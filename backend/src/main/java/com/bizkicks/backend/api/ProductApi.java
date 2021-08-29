@@ -50,6 +50,7 @@ public class ProductApi {
         private T list;
     }
 
+
     @Data
     @AllArgsConstructor
     class BrandDto {

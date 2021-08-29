@@ -14,6 +14,7 @@ public class BrandRepository{
 
     private final EntityManager em;
 
+
     public List<KickboardBrand> findAll(){
         return em.createQuery("select k from KickboardBrand k", KickboardBrand.class)
                 .getResultList();

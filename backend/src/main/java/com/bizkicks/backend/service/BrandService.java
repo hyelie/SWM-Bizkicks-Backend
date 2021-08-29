@@ -16,6 +16,7 @@ public class BrandService {
 
     @Autowired final BrandRepository brandRepository;
 
+
     public List<KickboardBrand> findAllBrand(){
         return brandRepository.findAll();
     }
