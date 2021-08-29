@@ -41,6 +41,8 @@ import lombok.NoArgsConstructor;
 public class ConsumptionApi {
     @Autowired private ConsumptionService consumptionService;
 
+    // 해당 사용자의 고객 법인의 시간을 이용가능할 때 save할 수 있도록 save에 검사문 넣기
+
     @PostMapping("/kickboard/consumption")
     public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail,
                                                     @CookieValue(name = "userid", required = false) Long userId){
