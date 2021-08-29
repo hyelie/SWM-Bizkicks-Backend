@@ -30,7 +30,6 @@ public class Plan {
     @JoinColumn(name="customer_company_id")
     public CustomerCompany customerCompany;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
     public KickboardBrand kickboardBrand;

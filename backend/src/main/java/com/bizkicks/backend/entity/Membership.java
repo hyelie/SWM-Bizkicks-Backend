@@ -34,4 +34,5 @@ public class Membership {
     @JoinColumn(name="brand_id")
     public KickboardBrand kickboardBrand;
 
+
 }
