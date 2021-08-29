@@ -37,7 +37,7 @@ public class KickboardBrand {
 
     private String brandName;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "SERVICE_LOCATION",
             joinColumns = @JoinColumn(name = "brand_id"))
     @Column(name="DISTRICT")
