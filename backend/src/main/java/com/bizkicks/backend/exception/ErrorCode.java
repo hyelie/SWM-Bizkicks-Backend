@@ -23,6 +23,7 @@ public enum ErrorCode{
     COMPANY_NOT_EXIST(HttpStatus.NOT_FOUND, "존재하지 않는 법인입니다."),
     KICKBOARD_BRAND_NOT_EXIST(HttpStatus.NOT_FOUND, "존재하지 않는 킥보드 브랜드입니다."),
     PHONE_NUMBER_NOT_EXIST(HttpStatus.NOT_FOUND, "휴대폰 번호가 존재하지 않습니다."),
+    USER_NOT_EXIST(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."),
 
     // 409 CONFLICT
     ID_DUPLICATED(HttpStatus.CONFLICT, "아이디가 중복되었습니다."),
