@@ -19,16 +19,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(
-    indexes = @Index(name="user_index", columnList = "user_set_id")
+    indexes = @Index(name="member_index", columnList = "member_set_id")
 )
-public class User {
+public class Member {
     @Id
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_set_id", length=20, nullable = false, unique = true)
-    private String userId;
+    @Column(name="member_set_id", length=20, nullable = false, unique = true)
+    private String memberId;
 
     @Column(length=45, nullable = false)
     private String password;
@@ -51,8 +51,8 @@ public class User {
     }
 
     @Builder
-    public User(String userId, String password, String type, Boolean license, String phoneNumber){
-        this.userId = userId;
+    public Member(String memberId, String password, String type, Boolean license, String phoneNumber){
+        this.memberId = memberId;
         this.password = password;
         this.type = type;
         this.license = license;

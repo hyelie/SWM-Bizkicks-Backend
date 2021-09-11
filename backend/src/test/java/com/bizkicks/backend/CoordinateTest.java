@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.CustomerCompany;
-import com.bizkicks.backend.entity.User;
+import com.bizkicks.backend.entity.Member;
 import com.bizkicks.backend.repository.CoordinateRepository;
 
 import org.assertj.core.api.Assertions;
@@ -30,7 +30,7 @@ class CoordinateRepositoryTest {
     @Autowired CoordinateRepository coordinateRepository;
 
     CustomerCompany customerCompany;
-    User user;
+    Member member;
     Consumption consumption;
     Coordinate coordinate1;
     Coordinate coordinate2;
@@ -45,21 +45,21 @@ class CoordinateRepositoryTest {
         System.out.println(this.customerCompany.getCompanyName() + this.customerCompany.getCompanyCode());
         em.persist(this.customerCompany);
 
-        this.user = User.builder()
-                        .userId("userId")
+        this.member = Member.builder()
+                        .memberId("memberId")
                         .password("password")
                         .type("manager")
                         .build();
-        this.user.setRelationWithCustomerCompany(this.customerCompany);
-        System.out.println(this.user.getUserId() + this.user.getPassword());
-        em.persist(this.user);
+        this.member.setRelationWithCustomerCompany(this.customerCompany);
+        System.out.println(this.member.getMemberId() + this.member.getPassword());
+        em.persist(this.member);
 
         this.consumption = Consumption.builder()
                                 .departTime(LocalDateTime.of(2021,8,29,03,50,10))
                                 .arriveTime(LocalDateTime.of(2021,8,29,04,10,10))
                                 .cycle(10)
                                 .build();
-        consumption.setRelationWithUser(this.user);
+        consumption.setRelationWithMember(this.member);
         System.out.println(this.consumption.getDepartTime() + " " + this.consumption.getArriveTime());
         em.persist(this.consumption);
 

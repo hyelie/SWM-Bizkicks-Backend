@@ -16,8 +16,12 @@ public class BrandRepository{
 
 
     public List<KickboardBrand> findAll(){
+        
         return em.createQuery("select k from KickboardBrand k", KickboardBrand.class)
                 .getResultList();
+
     }
+
+
 
 }

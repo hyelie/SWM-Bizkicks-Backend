@@ -3,21 +3,21 @@ package com.bizkicks.backend.util;
 
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.entity.User;
+import com.bizkicks.backend.entity.Member;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.repository.CustomerCompanyRepository;
 import com.bizkicks.backend.repository.KickboardBrandRepository;
-import com.bizkicks.backend.repository.UserRepository;
+import com.bizkicks.backend.repository.MemberRepository;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class GetWithNullCheck {
-    public User getUser(UserRepository userRepository, Long userId){
-        User user = userRepository.findById(userId);
-        if(user == null) throw new CustomException(ErrorCode.USER_NOT_EXIST);
-        return user;
+    public Member getMember(MemberRepository memberRepository, Long memberId){
+        Member member = memberRepository.findById(memberId);
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
+        return member;
     }
 
     public KickboardBrand getKickboardBrand(KickboardBrandRepository kickboardBrandRepository, String brandName){
