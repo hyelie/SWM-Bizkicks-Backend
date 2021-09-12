@@ -2,6 +2,8 @@ package com.bizkicks.backend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,8 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.bizkicks.backend.auth.utility.UserRole;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +45,9 @@ public class Member {
 
     @Column(length=15)
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")
