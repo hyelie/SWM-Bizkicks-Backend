@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-=======
 import lombok.*;
->>>>>>> contractAPI
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -34,8 +32,6 @@ public class Plan {
     private String status;
 
     private LocalDate startDate;
-
-    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")

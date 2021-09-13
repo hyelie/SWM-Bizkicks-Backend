@@ -1,17 +1,11 @@
 package com.bizkicks.backend;
 
 
-<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.util.List;
-
-=======
->>>>>>> contractAPI
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-
-<<<<<<< HEAD
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
