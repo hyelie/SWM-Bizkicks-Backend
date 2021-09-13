@@ -42,7 +42,7 @@ public class ConsumptionService {
         KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrand(kickboardRepository, brandName);
         consumption.setRelationWithKickboardBrand(kickboardBrand);
 
-        Member member = getWithNullCheck.getMember(memberRepository, memberId);
+        Member member = getWithNullCheck.getMemberById(memberRepository, memberId);
         consumption.setRelationWithMember(member);
 
         consumptionRepository.save(consumption);
@@ -51,7 +51,7 @@ public class ConsumptionService {
 
     @Transactional
     public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Long memberId, DateFilter dateFilter, PagingFilter pagingFilter){
-        Member member = getWithNullCheck.getMember(memberRepository, memberId);
+        Member member = getWithNullCheck.getMemberById(memberRepository, memberId);
         List<Consumption> consumptions = consumptionRepository.findByFilter(member, dateFilter, pagingFilter);
         List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
 

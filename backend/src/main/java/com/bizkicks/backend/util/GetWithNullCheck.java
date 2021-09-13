@@ -14,8 +14,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GetWithNullCheck {
-    public Member getMember(MemberRepository memberRepository, Long memberId){
+    public Member getMemberById(MemberRepository memberRepository, Long memberId){
         Member member = memberRepository.findById(memberId);
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
+        return member;
+    }
+
+    public Member getMemberByPhoneNumber(MemberRepository memberRepository, String phoneNumber){
+        Member member = memberRepository.findByPhoneNumber(phoneNumber);
         if(member == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
         return member;
     }
