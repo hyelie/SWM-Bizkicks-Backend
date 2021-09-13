@@ -46,7 +46,7 @@ public class ContractApi {
         }
 
         List<ContractDto.PlanGetDto> collect = plans.stream()
-                .map(m -> new ContractDto.PlanGetDto(m.getKickboardBrand().getBrandName(),m.getStartDate(), m.getKickboardBrand().getPricePerHour(), m.getKickboardBrand().getDistricts(), m.getKickboardBrand().isHelmet(), m.getKickboardBrand().isInsurance(), m.getTotalTime(), m.getUsedTime()))
+                .map(m -> new ContractDto.PlanGetDto(m.getKickboardBrand().getBrandName(),m.getStartDate(), m.getKickboardBrand().getPricePerHour(), m.getKickboardBrand().getDistricts(), m.getKickboardBrand().getHelmet(), m.getKickboardBrand().getInsurance(), m.getTotalTime(), m.getUsedTime()))
                 .collect(Collectors.toList());
 
         ContractDto contractDto = ContractDto.<ContractDto.PlanGetDto>builder()
@@ -80,7 +80,7 @@ public class ContractApi {
         LocalDate duedate = memberships.get(0).getDuedate();
 
         List<ContractDto.MembershipGetDto> collect = memberships.stream()
-                .map(m -> new ContractDto.MembershipGetDto(m.getKickboardBrand().getBrandName(), m.getKickboardBrand().getDistricts(), m.getKickboardBrand().isInsurance(), m.getKickboardBrand().isHelmet(), m.getUsedTime()))
+                .map(m -> new ContractDto.MembershipGetDto(m.getKickboardBrand().getBrandName(), m.getKickboardBrand().getDistricts(), m.getKickboardBrand().getInsurance(), m.getKickboardBrand().getHelmet(), m.getUsedTime()))
                 .collect(Collectors.toList());
 
         ContractDto contractDto = ContractDto.<ContractDto.MembershipGetDto>builder()
