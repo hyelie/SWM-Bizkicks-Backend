@@ -1,10 +1,8 @@
 package com.bizkicks.backend.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -12,8 +10,6 @@ import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.KickboardBrand;
 import com.bizkicks.backend.entity.User;
-import com.bizkicks.backend.exception.CustomException;
-import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;

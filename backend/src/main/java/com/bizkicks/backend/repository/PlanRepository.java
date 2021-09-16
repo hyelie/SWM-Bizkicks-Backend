@@ -33,7 +33,6 @@ public class PlanRepository {
     }
 
 
-
     public void saveAllPlan(List<Plan> plans){
         for (Plan plan : plans) {
             em.persist(plan);

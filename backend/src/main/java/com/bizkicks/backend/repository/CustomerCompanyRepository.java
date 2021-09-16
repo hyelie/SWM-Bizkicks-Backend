@@ -27,5 +27,28 @@ public class CustomerCompanyRepository {
         if(customerCompany.isEmpty()) return null;
         else return customerCompany.get(0); 
     }
-    
+
+    public void updateTypeMembership(String companyName) {
+
+        String qlString = "update CustomerCompany c " +
+                "set c.type = :type "+
+                "where c.companyName = :companyName";
+        em.createQuery(qlString)
+                .setParameter("type", "membership")
+                .setParameter("companyName", companyName)
+                .executeUpdate();
+
+    }
+
+    public void updateTypePlan(String companyName) {
+
+        String qlString = "update CustomerCompany c " +
+                "set c.type = :type " +
+                "where c.companyName = :companyName";
+        em.createQuery(qlString)
+                .setParameter("type", "plan")
+                .setParameter("companyName", companyName)
+                .executeUpdate();
+
+    }
 }

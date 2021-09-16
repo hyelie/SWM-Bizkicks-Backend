@@ -26,6 +26,8 @@ public class CustomerCompany {
     @Column(length=45, nullable=false, unique=true)
     private String companyCode;
 
+    private String type;
+
     public CustomerCompany(String companyName){
         this.companyName = companyName;
     }
