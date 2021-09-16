@@ -34,9 +34,11 @@ public class CustomUserDetailService implements UserDetailsService{
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+
         return memberRepository.findByMemberIdWithCustomerCompany(username)
                                     .map(this::createUserDetails)
                                     .orElseThrow(()-> new UsernameNotFoundException(username + " -> db에 없음"));
+                                         
         
     }
 }
