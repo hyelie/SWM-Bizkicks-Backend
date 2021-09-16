@@ -10,11 +10,13 @@ public enum ErrorCode{
     // 400 BAD_REQUEST
     PARAMETER_NOT_VALID(HttpStatus.BAD_REQUEST, "입력 정보가 유효하지 않습니다."),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "사용자 정보가 유효하지 않습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "refresh token이 유효하지 않습니다."),
 
     // 401 UNAUTHORIZED
     MEMBER_STATUS_LOGOUT(HttpStatus.UNAUTHORIZED, "사용자가 로그아웃 상태입니다."),
     ID_NOT_EXIST(HttpStatus.UNAUTHORIZED, "아이디가 존재하지 않습니다."),
     PASSWORD_NOT_VALID(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다."),
+    NO_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "자격 증명에 실패했습니다."),
 
     // 403 FORBIDDEN
     NOT_ALLOWED(HttpStatus.FORBIDDEN, "허가되지 않은 접근입니다."),

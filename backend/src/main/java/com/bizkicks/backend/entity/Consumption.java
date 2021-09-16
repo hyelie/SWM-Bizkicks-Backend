@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.bizkicks.backend.auth.entity.Member;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

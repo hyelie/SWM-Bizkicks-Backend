@@ -8,10 +8,11 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import com.bizkicks.backend.auth.entity.Member;
+import com.bizkicks.backend.auth.repository.MemberRepository;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.entity.Member;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.filter.DateFilter;
@@ -19,7 +20,6 @@ import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;
 import com.bizkicks.backend.repository.CoordinateRepository;
 import com.bizkicks.backend.repository.KickboardBrandRepository;
-import com.bizkicks.backend.repository.MemberRepository;
 import com.bizkicks.backend.util.GetWithNullCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;

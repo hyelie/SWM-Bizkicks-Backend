@@ -8,10 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.CustomerCompany;
-import com.bizkicks.backend.entity.Member;
+import com.bizkicks.backend.entity.UserRole;
 import com.bizkicks.backend.repository.CoordinateRepository;
 
 import org.assertj.core.api.Assertions;
@@ -48,7 +49,7 @@ class CoordinateRepositoryTest {
         this.member = Member.builder()
                         .memberId("memberId")
                         .password("password")
-                        .type("manager")
+                        .userRole(UserRole.ROLE_MANAGER)
                         .build();
         this.member.setRelationWithCustomerCompany(this.customerCompany);
         System.out.println(this.member.getMemberId() + this.member.getPassword());

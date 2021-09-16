@@ -12,11 +12,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.test.context.ActiveProfiles;
 
+import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.entity.Member;
+import com.bizkicks.backend.entity.UserRole;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;
@@ -60,7 +61,7 @@ class ConsumptionRepositoryTest {
         this.member = Member.builder()
                                 .memberId("memberId")
                                 .password("password")
-                                .type("manager")
+                                .userRole(UserRole.ROLE_USER)
                                 .build();
         this.member.setRelationWithCustomerCompany(this.customerCompany);
         System.out.println(this.member.getMemberId() + this.member.getPassword());
@@ -136,7 +137,7 @@ class ConsumptionTest {
         this.member = Member.builder()
                                     .memberId("memberId")
                                     .password("password")
-                                    .type("manager")
+                                    .userRole(UserRole.ROLE_USER)
                                     .build();
         this.member.setRelationWithCustomerCompany(this.customerCompany);
         System.out.println(this.member.getMemberId() + this.member.getPassword());

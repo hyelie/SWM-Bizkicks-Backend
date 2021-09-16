@@ -6,8 +6,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.entity.Consumption;
-import com.bizkicks.backend.entity.Member;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 

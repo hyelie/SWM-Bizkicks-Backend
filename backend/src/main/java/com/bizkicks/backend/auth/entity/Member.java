@@ -1,4 +1,7 @@
-package com.bizkicks.backend.entity;
+package com.bizkicks.backend.auth.entity;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.bizkicks.backend.auth.utility.UserRole;
+import com.bizkicks.backend.entity.CustomerCompany;
+import com.bizkicks.backend.entity.UserRole;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -34,11 +43,11 @@ public class Member {
     @Column(name="member_set_id", length=20, nullable = false, unique = true)
     private String memberId;
 
-    @Column(length=45, nullable = false)
+    @Column(length=100, nullable = false)
     private String password;
 
-    @Column(length=9, nullable = false)
-    private String type;
+    @Column(length=30)
+    private String name;
 
     @Column
     private Boolean license;
@@ -58,11 +67,16 @@ public class Member {
     }
 
     @Builder
-    public Member(String memberId, String password, String type, Boolean license, String phoneNumber){
+    public Member(String memberId, String password, Boolean license, String phoneNumber, UserRole userRole, String name){
         this.memberId = memberId;
         this.password = password;
-        this.type = type;
         this.license = license;
         this.phoneNumber = phoneNumber;
+        this.userRole = userRole;
+        this.name = name;
+    }
+
+    public UsernamePasswordAuthenticationToken toAuthentication(){
+        return new UsernamePasswordAuthenticationToken(memberId, password);
     }
 }
