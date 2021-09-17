@@ -34,14 +34,15 @@ public class AuthService {
 
     @Transactional
     public void signup(MemberDto memberDto){
-        if(memberDto.getId() == null || memberDto.getPassword() == null || memberDto.getCompany_code() == null){
+        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyCode(memberDto.getCompany_code());
+        if(memberDto.getId() == null || memberDto.getPassword() == null || memberDto.getCompany_code() == null || customerCompany == null){
             throw new CustomException(ErrorCode.PARAMETER_NOT_VALID);
         }
         if(memberRepository.existsByMemberId(memberDto.getId())){
             throw new CustomException(ErrorCode.ID_DUPLICATED);
         }
         Member member = memberDto.toEntity(passwordEncoder);
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyCode(memberDto.getCompany_code());
+        
         member.setRelationWithCustomerCompany(customerCompany);
 
         memberRepository.save(member);
