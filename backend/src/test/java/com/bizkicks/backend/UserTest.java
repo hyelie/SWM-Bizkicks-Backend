@@ -1,11 +1,14 @@
 package com.bizkicks.backend;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import com.bizkicks.backend.entity.User;
-import com.bizkicks.backend.repository.UserRepository;
+import com.bizkicks.backend.auth.entity.Member;
+import com.bizkicks.backend.auth.entity.UserRole;
+import com.bizkicks.backend.auth.repository.MemberRepository;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,28 +23,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 class UserRepositoryTest {
     @PersistenceContext EntityManager em;
-    @Autowired UserRepository userRepository;
+    @Autowired MemberRepository userRepository;
 
-    User user;
+    Member member;
 
     @BeforeEach
     void init(){
-        this.user = User.builder()
-                        .userId("userId")
+        this.member = Member.builder()
+                        .memberId("userId")
                         .password("password")
-                        .type("manager")
+                        .userRole(UserRole.ROLE_MANAGER)
                         .build();
-        em.persist(this.user);
+        em.persist(this.member);
     }
 
     @Test
-    void find_by_userid(){
+    void find_by_memberid(){
         // when
-        User selectedUser = userRepository.findById(user.getId());
+        Member selectedUser = userRepository.findById(member.getId()).get();
 
         // then
-        Assertions.assertThat(selectedUser.getUserId()).isEqualTo(user.getUserId());
-        Assertions.assertThat(selectedUser.getPassword()).isEqualTo(user.getPassword());
-        Assertions.assertThat(selectedUser.getType()).isEqualTo(user.getType());
+        Assertions.assertThat(selectedUser.getMemberId()).isEqualTo(member.getMemberId());
+        Assertions.assertThat(selectedUser.getPassword()).isEqualTo(member.getPassword());
+        Assertions.assertThat(selectedUser.getUserRole()).isEqualTo(member.getUserRole());
     }
 }

@@ -25,6 +25,8 @@ public class AlarmApi {
 
     @Autowired private AlarmService alarmService;
 
+    // 사용자 정보를 security로 해결하면 그 정보로 조회할 수 있게 하기.
+
     @GetMapping("/manage/alarms")
     public ResponseEntity<Object> showAlarms(@CookieValue(name = "company", required = false) String belongCompany){
         if(belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);

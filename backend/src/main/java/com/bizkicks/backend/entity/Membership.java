@@ -1,15 +1,14 @@
 package com.bizkicks.backend.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Membership {
 
@@ -26,6 +25,8 @@ public class Membership {
 
     private Integer usedTime;
 
+    private String status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")
     public CustomerCompany customerCompany;
@@ -33,6 +34,5 @@ public class Membership {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
     public KickboardBrand kickboardBrand;
-
 
 }

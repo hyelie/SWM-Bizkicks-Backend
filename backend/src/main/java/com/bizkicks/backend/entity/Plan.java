@@ -1,10 +1,10 @@
 package com.bizkicks.backend.entity;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Plan {
 
     @Id
@@ -23,13 +23,13 @@ public class Plan {
 
     private String type;
 
-    private Integer TotalTime;
+    private Integer totalTime;
 
-    private Integer UsedTime;
-
-    private LocalDate startDate;
+    private Integer usedTime;
 
     private String status;
+
+    private LocalDate startDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_company_id")
@@ -38,4 +38,13 @@ public class Plan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
     public KickboardBrand kickboardBrand;
+
+    public void setRelationWithCustomerCompany(CustomerCompany customerCompany){
+        this.customerCompany = customerCompany;
+    }
+
+    public void setRelationWithKickboardBrand(KickboardBrand kickboardBrand){
+        this.kickboardBrand = kickboardBrand;
+    }
+
 }

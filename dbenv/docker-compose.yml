@@ -15,7 +15,13 @@ services:
             - 3306:3306
         command:  --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
         container_name: local-mysql
-
+    
+    redis:
+        image: redis:alpine
+        hostname: redis-local
+        ports:
+            - 6379:6379
+        container_name: local-redis
 
 volumes:
     local-mysqlvol:
