@@ -22,6 +22,7 @@ services:
         ports:
             - 6379:6379
         container_name: local-redis
+        
 
 volumes:
     local-mysqlvol:
