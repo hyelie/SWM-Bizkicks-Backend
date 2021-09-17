@@ -19,16 +19,16 @@ public class BrandRepository {
 
 
     public List<KickboardBrand> findAll() {
+
         return em.createQuery("select k from KickboardBrand k", KickboardBrand.class)
                 .getResultList();
+
     }
 
     public List<KickboardBrand> findAllBrandName(){
         return em.createQuery("select k.brandName from KickboardBrand k", KickboardBrand.class)
                 .getResultList();
     }
-
-
 
     public KickboardBrand findByBrandName(String brandName) {
         String verifyCustomerCompanyQuery = "select kb from KickboardBrand kb where kb.brandName = :brandName";

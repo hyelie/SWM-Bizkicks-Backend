@@ -12,11 +12,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.test.context.ActiveProfiles;
 
+import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.entity.User;
+import com.bizkicks.backend.entity.UserRole;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;
@@ -41,7 +42,7 @@ class ConsumptionRepositoryTest {
     @Autowired ConsumptionRepository consumptionRepository;
 
     CustomerCompany customerCompany;
-    User user;
+    Member member;
     Consumption consumption;
     Coordinate coordinate1;
     Coordinate coordinate2;
@@ -57,14 +58,14 @@ class ConsumptionRepositoryTest {
         System.out.println(this.customerCompany.getCompanyName() + this.customerCompany.getCompanyCode());
         em.persist(this.customerCompany);
 
-        this.user = User.builder()
-                        .userId("userId")
-                        .password("password")
-                        .type("manager")
-                        .build();
-        this.user.setRelationWithCustomerCompany(this.customerCompany);
-        System.out.println(this.user.getUserId() + this.user.getPassword());
-        em.persist(this.user);
+        this.member = Member.builder()
+                                .memberId("memberId")
+                                .password("password")
+                                .userRole(UserRole.ROLE_USER)
+                                .build();
+        this.member.setRelationWithCustomerCompany(this.customerCompany);
+        System.out.println(this.member.getMemberId() + this.member.getPassword());
+        em.persist(this.member);
 
         this.kickboardBrand = KickboardBrand.builder()
                                             .brandName("킥고잉")
@@ -76,9 +77,9 @@ class ConsumptionRepositoryTest {
                                 .arriveTime(LocalDateTime.of(2021,8,29,04,10,10))
                                 .cycle(10)
                                 .build();
-        consumption.setRelationWithUser(this.user);
+        consumption.setRelationWithMember(this.member);
         consumption.setRelationWithKickboardBrand(this.kickboardBrand);
-        System.out.println(this.consumption.getDepartTime() + " " + this.consumption.getArriveTime() + " " + this.consumption.getUser().getUserId() + " " + this.consumption.getKickboardBrand().getBrandName());
+        System.out.println(this.consumption.getDepartTime() + " " + this.consumption.getArriveTime() + " " + this.consumption.getMember().getMemberId() + " " + this.consumption.getKickboardBrand().getBrandName());
 
 
     
@@ -92,7 +93,7 @@ class ConsumptionRepositoryTest {
         // then
         Assertions.assertThat(savedConsumption.getArriveTime()).isEqualTo(consumption.getArriveTime());
         Assertions.assertThat(savedConsumption.getDepartTime()).isEqualTo(consumption.getDepartTime());
-        Assertions.assertThat(savedConsumption.getUser().getUserId()).isEqualTo(consumption.getUser().getUserId());
+        Assertions.assertThat(savedConsumption.getMember().getMemberId()).isEqualTo(consumption.getMember().getMemberId());
         Assertions.assertThat(savedConsumption.getKickboardBrand().getBrandName()).isEqualTo(consumption.getKickboardBrand().getBrandName());
     }
 
@@ -107,10 +108,11 @@ class ConsumptionRepositoryTest {
 class ConsumptionTest {
     @PersistenceContext EntityManager em;
     @Autowired ConsumptionService consumptionService;
+    
 
     CustomerCompany customerCompany;
     KickboardBrand kickboardBrand;
-    User user;
+    Member member;
     Consumption consumption;
     Coordinate coordinate1;
     Coordinate coordinate2;
@@ -132,14 +134,14 @@ class ConsumptionTest {
                                             .build();
         em.persist(this.kickboardBrand);
 
-        this.user = User.builder()
-                        .userId("userId")
-                        .password("password")
-                        .type("manager")
-                        .build();
-        this.user.setRelationWithCustomerCompany(this.customerCompany);
-        System.out.println(this.user.getUserId() + this.user.getPassword());
-        em.persist(this.user);
+        this.member = Member.builder()
+                                    .memberId("memberId")
+                                    .password("password")
+                                    .userRole(UserRole.ROLE_USER)
+                                    .build();
+        this.member.setRelationWithCustomerCompany(this.customerCompany);
+        System.out.println(this.member.getMemberId() + this.member.getPassword());
+        em.persist(this.member);
 
         this.consumption = Consumption.builder()
                                 .departTime(LocalDateTime.of(2021,8,29,03,50,10))
@@ -196,15 +198,15 @@ class ConsumptionTest {
     @Test
     void save(){
         // when
-        consumptionService.saveConsumptionWithCoordinates(this.user.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
+        consumptionService.saveConsumptionWithCoordinates(this.member.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
         // service.find
 
         // then
         // save
 
-        String filterQuery = "SELECT c FROM Consumption c WHERE c.user = :user AND :start_date < c.arriveTime AND c.arriveTime < :end_date ORDER BY c.id ASC";
+        String filterQuery = "SELECT c FROM Consumption c WHERE c.member = :member AND :start_date < c.arriveTime AND c.arriveTime < :end_date ORDER BY c.id ASC";
         List<Consumption> consumptions = em.createQuery(filterQuery, Consumption.class)
-                                            .setParameter("user", user)
+                                            .setParameter("member", member)
                                             .setParameter("start_date", dateFilter.getStartDate())
                                             .setParameter("end_date", dateFilter.getEndDate())
                                             .setFirstResult(pagingFilter.getPage()-1)
@@ -222,9 +224,9 @@ class ConsumptionTest {
     @Test
     void service(){
         // when
-        consumptionService.saveConsumptionWithCoordinates(this.user.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
+        consumptionService.saveConsumptionWithCoordinates(this.member.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
         
-        LinkedHashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.user.getId(), this.dateFilter, this.pagingFilter);
+        LinkedHashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.member.getId(), this.dateFilter, this.pagingFilter);
 
         Assertions.assertThat(result.get(this.consumption)).isEqualTo(this.coordinates);
     }

@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.bizkicks.backend.auth.entity.Member;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(
-    indexes = @Index(name="usage_index", columnList = "user_id")
+    indexes = @Index(name="usage_index", columnList = "member_id")
 )
 public class Consumption{
     @Id
@@ -40,12 +42,12 @@ public class Consumption{
     private Integer cycle;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     // this can be removed when not needed.
-    public void setRelationWithUser(User user){
-        this.user = user;
+    public void setRelationWithMember(Member member){
+        this.member = member;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,13 +59,13 @@ public class Consumption{
     }
 
     @Builder
-    public Consumption(LocalDateTime departTime, LocalDateTime arriveTime, Integer cycle, User user){
+    public Consumption(LocalDateTime departTime, LocalDateTime arriveTime, Integer cycle, Member member){
         if(departTime == null || arriveTime == null || cycle == null){
             throw new IllegalStateException("Cannot create consumption due to necessary value is null");
         }
         this.departTime = departTime;
         this.arriveTime = arriveTime;
         this.cycle = cycle;
-        this.user = user;
+        this.member = member;
     }
 }

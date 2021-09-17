@@ -45,13 +45,13 @@ public class ConsumptionApi {
 
     @PostMapping("/kickboard/consumption")
     public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail,
-                                                    @CookieValue(name = "userid", required = false) Long userId){
-        if(userId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+                                                    @CookieValue(name = "memberid", required = false) Long memberId){
+        if(memberId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
 
         Consumption consumption = detail.toConsumptionEntity();
         List<Coordinate> coordinates = detail.toCoordinateEntity();
 
-        consumptionService.saveConsumptionWithCoordinates(userId, detail.getBrand(), consumption, coordinates);
+        consumptionService.saveConsumptionWithCoordinates(memberId, detail.getBrand(), consumption, coordinates);
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
@@ -65,8 +65,8 @@ public class ConsumptionApi {
                                                                     @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
                                                     @RequestParam(value="page", required = false, defaultValue = "1") Integer page,
                                                     @RequestParam(value = "unit", required = false, defaultValue = "10") Integer unit,
-                                                    @CookieValue(name = "userid", required = false) Long userId){
-        if(userId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+                                                    @CookieValue(name = "memberid", required = false) Long memberId){
+        if(memberId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
         
         if(startDate == null){
             startDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), 1);
@@ -74,7 +74,7 @@ public class ConsumptionApi {
 
         DateFilter dateFilter = DateFilter.builder().startDate(startDate.atTime(00, 00, 00)).endDate(endDate.atTime(23, 23, 59)).build();
         PagingFilter pagingFilter = PagingFilter.builder().unit(unit).page(page).build();
-        LinkedHashMap<Consumption, List<Coordinate>> mapConsumptionToCoordinate = consumptionService.findConsumptionWithCoordinate(userId, dateFilter, pagingFilter);
+        LinkedHashMap<Consumption, List<Coordinate>> mapConsumptionToCoordinate = consumptionService.findConsumptionWithCoordinate(memberId, dateFilter, pagingFilter);
 
         List<ConsumptionDto.Detail> history = new ArrayList<ConsumptionDto.Detail>();
         for(HashMap.Entry<Consumption, List<Coordinate>> entry : mapConsumptionToCoordinate.entrySet()){

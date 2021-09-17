@@ -27,8 +27,7 @@ class BrandRepositoryTest {
 
     @Test
     void findAllBrandName(){
-        List<KickboardBrand> resultList = em.createQuery("select k.brandName from KickboardBrand k", KickboardBrand.class)
-                .getResultList();
+        List<KickboardBrand> resultList = em.createQuery("select k from KickboardBrand k", KickboardBrand.class).getResultList();
 
         System.out.println("resultList = " + resultList);
     }

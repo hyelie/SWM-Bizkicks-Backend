@@ -2,6 +2,7 @@ package com.bizkicks.backend.exception;
 
 import java.time.LocalDateTime;
 
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 
 import lombok.Builder;
@@ -25,6 +26,17 @@ public class ErrorResponse {
                                         .msg(errorCode.getMsg())
                                         .build()
                                 );
+    }
+
+    public static JSONObject toJson(ErrorCode errorCode){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("timestamp", LocalDateTime.now());
+        jsonObject.put("status", errorCode.getHttpStatus().value());
+        jsonObject.put("error", errorCode.getHttpStatus().name());
+        jsonObject.put("code", errorCode.name());
+        jsonObject.put("msg", errorCode.getMsg());
+
+        return jsonObject;
     }
 
 }
