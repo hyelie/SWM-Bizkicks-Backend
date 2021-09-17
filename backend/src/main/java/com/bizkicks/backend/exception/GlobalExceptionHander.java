@@ -1,5 +1,7 @@
 package com.bizkicks.backend.exception;
 
+import java.security.SignatureException;
+
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,14 +22,20 @@ public class GlobalExceptionHander extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
     protected ResponseEntity<ErrorResponse> handleIntegrityViolateException(){
-        log.error("handleDataException thorw Exceptions : {}", ErrorCode.PARAMETER_NOT_VALID);
+        log.error("handleDataException throws Exceptions : {}", ErrorCode.PARAMETER_NOT_VALID);
         return ErrorResponse.toResponseEntity(ErrorCode.PARAMETER_NOT_VALID);
     }
 
     @ExceptionHandler(value = {CustomException.class})
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e){
-        log.error("handleDataException thorw Exceptions : {}", e.getErrorCode());
+        log.error("handleDataException throws Exceptions : {}", e.getErrorCode());
         return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(value = {SignatureException.class})
+    protected ResponseEntity<ErrorResponse> handleSignatureException(){
+        log.error("SignatureException throws Exceptions : {}", ErrorCode.INVALID_ACCESS_TOKEN);
+        return ErrorResponse.toResponseEntity(ErrorCode.INVALID_ACCESS_TOKEN);
     }
 
     // @ExceptionHandler(value = {InvalidDefinitionException.class})

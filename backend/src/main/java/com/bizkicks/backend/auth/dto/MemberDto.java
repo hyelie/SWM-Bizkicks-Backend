@@ -20,27 +20,27 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class MemberDto {
-    private String memberId;
+    private String id;
     private String name;
     private String password;
     private Boolean license;
-    private UserRole userRole;
-    private String phoneNumber;
-    private String customerCompanyName;
-    private String customerCompanyCode;
+    private UserRole user_role;
+    private String phone_number;
+    private String company_name;
+    private String company_code;
 
     public Member toEntity(PasswordEncoder passwordEncoder){
         return Member.builder()
-                        .memberId(memberId)
+                        .memberId(id)
                         .password(passwordEncoder.encode(password))
                         .name(name)
                         .license(license)
-                        .phoneNumber(phoneNumber)
-                        .userRole(userRole)
+                        .phoneNumber(phone_number)
+                        .userRole(user_role)
                         .build();
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(memberId, password);
+        return new UsernamePasswordAuthenticationToken(id, password);
     }
 }

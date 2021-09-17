@@ -47,12 +47,12 @@ public class AuthController {
         
         Member member = memberService.getCurrentMemberInfo();
         MemberDto memberDto = MemberDto.builder()
-                                        .memberId(member.getMemberId())
+                                        .id(member.getMemberId())
                                         .name(member.getName())
                                         .license(member.getLicense())
-                                        .userRole(member.getUserRole())
-                                        .phoneNumber(member.getPhoneNumber())
-                                        .customerCompanyName(member.getCustomerCompany().getCompanyName())
+                                        .user_role(member.getUserRole())
+                                        .phone_number(member.getPhoneNumber())
+                                        .company_name(member.getCustomerCompany().getCompanyName())
                                         .build();
                                         
         return new ResponseEntity<Object>(memberDto, HttpStatus.OK);

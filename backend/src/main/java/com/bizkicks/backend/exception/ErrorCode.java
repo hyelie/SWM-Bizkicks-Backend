@@ -9,8 +9,9 @@ import lombok.Getter;
 public enum ErrorCode{
     // 400 BAD_REQUEST
     PARAMETER_NOT_VALID(HttpStatus.BAD_REQUEST, "입력 정보가 유효하지 않습니다."),
-    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "사용자 정보가 유효하지 않습니다."),
-    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "refresh token이 유효하지 않습니다."),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "올바르지 않은 토큰입니다."),
+    INVALID_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "사용자 정보가 유효하지 않습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "사용자 정보가 유효하지 않습니다."),
 
     // 401 UNAUTHORIZED
     MEMBER_STATUS_LOGOUT(HttpStatus.UNAUTHORIZED, "사용자가 로그아웃 상태입니다."),

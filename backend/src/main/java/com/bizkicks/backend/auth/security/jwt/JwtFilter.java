@@ -7,6 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bizkicks.backend.exception.CustomException;
+import com.bizkicks.backend.exception.ErrorCode;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -33,6 +36,7 @@ public class JwtFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                                     throws IOException, ServletException{
         String bearerToken = this.resolveToken(request);
+
         if(StringUtils.hasText(bearerToken) && jwtUtil.validateToken(bearerToken)){
             Authentication authentication = jwtUtil.getAuthentication(bearerToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -27,7 +27,7 @@ public class CustomerCompanyRepository {
         else return customerCompany.get(0); 
     }
 
-    public CustomerCompany findByCustomerCompanyCoode(String customerCompanyCode){
+    public CustomerCompany findByCustomerCompanyCode(String customerCompanyCode){
         String verifyCustomerCompanyQuery = "select cc from CustomerCompany cc where cc.companyCode = :customer_company_code";
         List<CustomerCompany> customerCompany = em.createQuery(verifyCustomerCompanyQuery, CustomerCompany.class)
                                             .setParameter("customer_company_code", customerCompanyCode)

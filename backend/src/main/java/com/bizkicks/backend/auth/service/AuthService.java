@@ -34,11 +34,14 @@ public class AuthService {
 
     @Transactional
     public void signup(MemberDto memberDto){
-        if(memberRepository.existsByMemberId(memberDto.getMemberId())){
+        if(memberDto.getId() == null || memberDto.getPassword() == null || memberDto.getCompany_code() == null){
+            throw new CustomException(ErrorCode.PARAMETER_NOT_VALID);
+        }
+        if(memberRepository.existsByMemberId(memberDto.getId())){
             throw new CustomException(ErrorCode.ID_DUPLICATED);
         }
         Member member = memberDto.toEntity(passwordEncoder);
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyCoode(memberDto.getCustomerCompanyCode());
+        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyCode(memberDto.getCompany_code());
         member.setRelationWithCustomerCompany(customerCompany);
 
         memberRepository.save(member);
@@ -62,8 +65,6 @@ public class AuthService {
         }
 
         Authentication authentication = jwtUtil.getAuthentication(tokenDto.getAccessToken());
-
-        //String refreshToken = redisUtil.getData(authentication.getName());
 
         String refreshToken = redisUtil.get(authentication.getName());
         if(refreshToken == null){
