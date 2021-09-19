@@ -38,6 +38,7 @@ public class AlarmApi {
         List<AlarmDto> collect = alarmService.findAlarms(customerCompany).stream()
                 .map(m -> new AlarmDto(m.getType(), m.getValue()))
                 .collect(Collectors.toList());
+                
 
         return new ResponseEntity<Object>(new ListDto<>(collect), HttpStatus.OK);
     }
