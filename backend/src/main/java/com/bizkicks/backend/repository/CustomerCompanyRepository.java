@@ -27,6 +27,7 @@ public class CustomerCompanyRepository {
         else return customerCompany.get(0); 
     }
 
+<<<<<<< HEAD
     public CustomerCompany findByCustomerCompanyCode(String customerCompanyCode){
         String verifyCustomerCompanyQuery = "select cc from CustomerCompany cc where cc.companyCode = :customer_company_code";
         List<CustomerCompany> customerCompany = em.createQuery(verifyCustomerCompanyQuery, CustomerCompany.class)
@@ -36,4 +37,29 @@ public class CustomerCompanyRepository {
         else return customerCompany.get(0); 
     }
     
+=======
+    public void updateTypeMembership(String companyName) {
+
+        String qlString = "update CustomerCompany c " +
+                "set c.type = :type "+
+                "where c.companyName = :companyName";
+        em.createQuery(qlString)
+                .setParameter("type", "membership")
+                .setParameter("companyName", companyName)
+                .executeUpdate();
+
+    }
+
+    public void updateTypePlan(String companyName) {
+
+        String qlString = "update CustomerCompany c " +
+                "set c.type = :type " +
+                "where c.companyName = :companyName";
+        em.createQuery(qlString)
+                .setParameter("type", "plan")
+                .setParameter("companyName", companyName)
+                .executeUpdate();
+
+    }
+>>>>>>> kickboardAPI
 }

@@ -4,8 +4,8 @@ import com.bizkicks.backend.dto.ContractDto;
 import com.bizkicks.backend.entity.*;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
-import com.bizkicks.backend.repository.BrandRepository;
 import com.bizkicks.backend.repository.CustomerCompanyRepository;
+import com.bizkicks.backend.repository.KickboardBrandRepository;
 import com.bizkicks.backend.repository.MembershipRepository;
 import com.bizkicks.backend.repository.PlanRepository;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class PlanService {
 
     @Autowired CustomerCompanyRepository customerCompanyRepository;
     @Autowired PlanRepository planRepository;
-    @Autowired BrandRepository brandRepository;
+    @Autowired KickboardBrandRepository kickboardBrandRepository;
     @Autowired MembershipRepository membershipRepository;
 
     @Transactional
@@ -40,9 +40,11 @@ public class PlanService {
         CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(companyName);
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
+        customerCompanyRepository.updateTypePlan(customerCompany.getCompanyName());
+
         List<Plan> plans = new ArrayList<>();
         for (ContractDto.PlanPostDto planPostDto: planDto.getList()) {
-            KickboardBrand kickboardBrand = brandRepository.findByBrandName(planPostDto.getBrandname());
+            KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(planPostDto.getBrandname());
             Plan plan = Plan.builder()
                     .type(planDto.getType())
                     .totalTime(planPostDto.getTotaltime())
@@ -68,7 +70,7 @@ public class PlanService {
         for (ContractDto.PlanPostDto planPutDto: planDto.getList()) {
 
             String brandname = planPutDto.getBrandname();
-            KickboardBrand kickboardBrand = brandRepository.findByBrandName(brandname);
+            KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
             planRepository.updatePlan(customerCompany, kickboardBrand,planPutDto.getTotaltime());
 
 
@@ -85,7 +87,7 @@ public class PlanService {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         for (Object companyName : list) {
-            KickboardBrand kickboardBrand = brandRepository.findByBrandName((String) companyName);
+            KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName((String) companyName);
             planRepository.delete(customerCompany ,kickboardBrand);
 
         }
