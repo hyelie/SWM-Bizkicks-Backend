@@ -45,7 +45,7 @@ public class AlarmApi {
     }
 
     @PostMapping("/manage/alarms")
-    public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company", required = false) String belongCompany){
+    public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto){
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
         CustomerCompany customerCompany = member.getCustomerCompany();
