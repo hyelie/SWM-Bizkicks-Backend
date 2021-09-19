@@ -1,5 +1,6 @@
 package com.bizkicks.backend.api;
 
+import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.auth.service.MemberService;
 import com.bizkicks.backend.dto.AlarmDto;
 import com.bizkicks.backend.dto.ListDto;
@@ -45,14 +46,15 @@ public class AlarmApi {
 
     @PostMapping("/manage/alarms")
     public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto, @CookieValue(name = "company", required = false) String belongCompany){
-        CustomerCompany customerCompany = memberService.getCurrentMemberInfo().getCustomerCompany();
-        if(customerCompany == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         List<Alarm> alarms = new ArrayList<>();
         for (AlarmDto alarmDto : alarmsDto.getList()){
             alarms.add(alarmDto.toEntity());
         }
-
         alarmService.updateAlarms(customerCompany, alarms);
 
         JSONObject returnObject = new JSONObject();
