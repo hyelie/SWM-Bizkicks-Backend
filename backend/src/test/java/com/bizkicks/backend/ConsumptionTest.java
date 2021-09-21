@@ -198,7 +198,7 @@ class ConsumptionTest {
     @Test
     void save(){
         // when
-        consumptionService.saveConsumptionWithCoordinates(this.member.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
+        consumptionService.saveConsumptionWithCoordinates(this.member, this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
         // service.find
 
         // then
@@ -224,9 +224,9 @@ class ConsumptionTest {
     @Test
     void service(){
         // when
-        consumptionService.saveConsumptionWithCoordinates(this.member.getId(), this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
+        consumptionService.saveConsumptionWithCoordinates(this.member, this.kickboardBrand.getBrandName(), this.consumption, this.coordinates);
         
-        LinkedHashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.member.getId(), this.dateFilter, this.pagingFilter);
+        LinkedHashMap<Consumption, List<Coordinate>> result = consumptionService.findConsumptionWithCoordinate(this.member, this.dateFilter, this.pagingFilter);
 
         Assertions.assertThat(result.get(this.consumption)).isEqualTo(this.coordinates);
     }

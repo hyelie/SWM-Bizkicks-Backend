@@ -257,25 +257,14 @@ class AlarmServiceTest{
         }
 
         // when
-        List<Alarm> serviceSamsungAlarms = alarmService.findAlarms("삼성");
-        List<Alarm> serviceLgAlarms = alarmService.findAlarms("LG");
-		List<Alarm> serviceSpaceAlarms = alarmService.findAlarms("space");
+        List<Alarm> serviceSamsungAlarms = alarmService.findAlarms(samsung);
+        List<Alarm> serviceLgAlarms = alarmService.findAlarms(lg);
+		List<Alarm> serviceSpaceAlarms = alarmService.findAlarms(space);
         
         // then
 		DeepCompareTwoLists(serviceSamsungAlarms, samsungAlarms);
 		DeepCompareTwoLists(serviceLgAlarms, lgAlarms);
 		Assertions.assertThat(serviceSpaceAlarms.isEmpty()).isEqualTo(true);
-	}
-
-	@Test
-	void find_not_exist_company_alarms(){
-		// given
-		CustomerCompany notExistCompany = new CustomerCompany("asv", "uiop");
-
-		// when
-		assertThrows(CustomException.class, () ->{
-			List<Alarm> serviceExceptionAlarms = alarmService.findAlarms("asv");
-		});
 	}
 
 	@Test
@@ -289,11 +278,11 @@ class AlarmServiceTest{
         }
 
         // when
-        alarmService.updateAlarms("삼성", samsungAlarms);
-		alarmService.updateAlarms("LG", lgAlarms);
-        List<Alarm> serviceSamsungAlarms = alarmService.findAlarms("삼성");
-        List<Alarm> serviceLgAlarms = alarmService.findAlarms("LG");
-		alarmService.updateAlarms("space", emptyAlarms);
+        alarmService.updateAlarms(samsung, samsungAlarms);
+		alarmService.updateAlarms(lg, lgAlarms);
+        List<Alarm> serviceSamsungAlarms = alarmService.findAlarms(samsung);
+        List<Alarm> serviceLgAlarms = alarmService.findAlarms(lg);
+		alarmService.updateAlarms(space, emptyAlarms);
 
 		// then
 		DeepCompareTwoLists(serviceSamsungAlarms, samsungAlarms);

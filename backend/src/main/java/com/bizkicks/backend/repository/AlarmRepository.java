@@ -31,6 +31,7 @@ public class AlarmRepository {
 
     public List<Alarm> findByCustomerCompany(CustomerCompany customerCompany){
         String selectCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a WHERE a.customerCompany = :customer_company";
+        // FETCH JOIN으로 바꾸어야 할 듯.
         List<Alarm> alarms = em.createQuery(selectCustomerCompanyAlarmsQuery , Alarm.class)
                                .setParameter("customer_company", customerCompany)
                                .getResultList();

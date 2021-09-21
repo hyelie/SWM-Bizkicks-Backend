@@ -10,10 +10,13 @@ import java.util.List;
 
 import javax.validation.constraints.Null;
 
+import com.bizkicks.backend.auth.entity.Member;
+import com.bizkicks.backend.auth.service.MemberService;
 import com.bizkicks.backend.dto.ConsumptionDto;
 import com.bizkicks.backend.dto.ConsumptionDto.Location;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
+import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.filter.DateFilter;
@@ -26,7 +29,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,18 +42,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConsumptionApi {
     @Autowired private ConsumptionService consumptionService;
+    @Autowired private MemberService memberService;
 
     // 해당 사용자의 고객 법인의 시간을 이용가능할 때 save할 수 있도록 save에 검사문 넣기
 
     @PostMapping("/kickboard/consumption")
-    public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail,
-                                                    @CookieValue(name = "memberid", required = false) Long memberId){
-        if(memberId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+    public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail){
+
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         Consumption consumption = detail.toConsumptionEntity();
         List<Coordinate> coordinates = detail.toCoordinateEntity();
 
-        consumptionService.saveConsumptionWithCoordinates(memberId, detail.getBrand(), consumption, coordinates);
+        consumptionService.saveConsumptionWithCoordinates(member, detail.getBrand(), consumption, coordinates);
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
@@ -64,9 +70,11 @@ public class ConsumptionApi {
                                                     @RequestParam(value="to", required = false, defaultValue = "#{T(java.time.LocalDate).now()}")
                                                                     @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
                                                     @RequestParam(value="page", required = false, defaultValue = "1") Integer page,
-                                                    @RequestParam(value = "unit", required = false, defaultValue = "10") Integer unit,
-                                                    @CookieValue(name = "memberid", required = false) Long memberId){
-        if(memberId == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+                                                    @RequestParam(value = "unit", required = false, defaultValue = "10") Integer unit){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         
         if(startDate == null){
             startDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), 1);
@@ -74,7 +82,7 @@ public class ConsumptionApi {
 
         DateFilter dateFilter = DateFilter.builder().startDate(startDate.atTime(00, 00, 00)).endDate(endDate.atTime(23, 23, 59)).build();
         PagingFilter pagingFilter = PagingFilter.builder().unit(unit).page(page).build();
-        LinkedHashMap<Consumption, List<Coordinate>> mapConsumptionToCoordinate = consumptionService.findConsumptionWithCoordinate(memberId, dateFilter, pagingFilter);
+        LinkedHashMap<Consumption, List<Coordinate>> mapConsumptionToCoordinate = consumptionService.findConsumptionWithCoordinate(member, dateFilter, pagingFilter);
 
         List<ConsumptionDto.Detail> history = new ArrayList<ConsumptionDto.Detail>();
         for(HashMap.Entry<Consumption, List<Coordinate>> entry : mapConsumptionToCoordinate.entrySet()){
