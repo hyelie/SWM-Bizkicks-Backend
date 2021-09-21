@@ -47,7 +47,7 @@ public class AlarmApi {
     @PostMapping("/manage/alarms")
     public ResponseEntity<Object> updateAlarms(@RequestBody ListDto<AlarmDto> alarmsDto){
         Member member = memberService.getCurrentMemberInfo();
-        if(member == null) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 

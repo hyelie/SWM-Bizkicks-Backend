@@ -31,9 +31,7 @@ public class MembershipService {
     @Autowired MembershipRepository membershipRepository;
 
     @Transactional
-    public void saveMembership(String companyName, ContractDto contractMembership){
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(companyName);
+    public void saveMembership(CustomerCompany customerCompany, ContractDto contractMembership){
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         List<KickboardBrand> all = brandRepository.findAll();
 
@@ -57,29 +55,21 @@ public class MembershipService {
     }
 
     @Transactional
-    public void updateMembership(String belongCompany, ContractDto contractMembership) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(belongCompany);
+    public void updateMembership(CustomerCompany customerCompany, ContractDto contractMembership) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         membershipRepository.update(customerCompany, contractMembership.getStartdate(), contractMembership.getDuedate());
-
-        }
+    }
 
     @Transactional
-    public void delete(String belongCompany) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(belongCompany);
+    public void delete(CustomerCompany customerCompany) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         membershipRepository.delete(customerCompany);
     }
 
     @Transactional
-    public List<Membership> findMembership(String customerCompanyName) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
+    public List<Membership> findMembership(CustomerCompany customerCompany) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         return membershipRepository.membershipFindByCustomerCompany(customerCompany);
-
     }
 }
 
