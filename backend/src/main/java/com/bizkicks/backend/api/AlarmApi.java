@@ -29,7 +29,7 @@ public class AlarmApi {
     @Autowired private AlarmService alarmService;
     @Autowired private MemberService memberService;
 
-    // 사용자 정보를 security로 해결하면 그 정보로 조회할 수 있게 하기.
+    // 알림은 각 계약으로 들어가야 하는 것 아닌감??
 
     @GetMapping("/manage/alarms")
     public ResponseEntity<Object> showAlarms(){
