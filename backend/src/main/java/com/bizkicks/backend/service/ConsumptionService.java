@@ -38,11 +38,10 @@ public class ConsumptionService {
     @Autowired GetWithNullCheck getWithNullCheck;
 
     @Transactional
-    public void saveConsumptionWithCoordinates(Long memberId, String brandName, Consumption consumption, List<Coordinate> coordinates){
+    public void saveConsumptionWithCoordinates(Member member, String brandName, Consumption consumption, List<Coordinate> coordinates){
         KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrand(kickboardRepository, brandName);
         consumption.setRelationWithKickboardBrand(kickboardBrand);
 
-        Member member = getWithNullCheck.getMemberById(memberRepository, memberId);
         consumption.setRelationWithMember(member);
 
         consumptionRepository.save(consumption);
@@ -50,8 +49,7 @@ public class ConsumptionService {
     }
 
     @Transactional
-    public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Long memberId, DateFilter dateFilter, PagingFilter pagingFilter){
-        Member member = getWithNullCheck.getMemberById(memberRepository, memberId);
+    public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Member member, DateFilter dateFilter, PagingFilter pagingFilter){
         List<Consumption> consumptions = consumptionRepository.findByFilter(member, dateFilter, pagingFilter);
         List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
 

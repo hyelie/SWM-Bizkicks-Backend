@@ -1,8 +1,11 @@
 package com.bizkicks.backend.api;
 
+import com.bizkicks.backend.auth.entity.Member;
+import com.bizkicks.backend.auth.service.MemberService;
 import com.bizkicks.backend.dto.ContractDto;
 import com.bizkicks.backend.dto.ListDto;
 import com.bizkicks.backend.dto.PlanDto;
+import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Membership;
 import com.bizkicks.backend.entity.Plan;
 import com.bizkicks.backend.exception.CustomException;
@@ -12,6 +15,8 @@ import com.bizkicks.backend.service.PlanService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +33,17 @@ public class ContractApi {
 
     private final PlanService planService;
     private final MembershipService membershipService;
+    @Autowired private MemberService memberService;
 
     @GetMapping("/manage/contracts/plan")
-    public ResponseEntity<Object> showPlans(@CookieValue(name = "company", required = false) String belongCompany){
-        if (belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+    public ResponseEntity<Object> showPlans(){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
-        List<Plan> plans = planService.findPlan(belongCompany);
+        List<Plan> plans = planService.findPlan(customerCompany);
         if(plans.isEmpty()){
-
             List<ContractDto.PlanGetDto> collect = new ArrayList<>();
 
             ContractDto contractDto = ContractDto.<ContractDto.PlanGetDto>builder()
@@ -58,10 +66,13 @@ public class ContractApi {
     }
 
     @GetMapping("manage/contracts/membership")
-    public ResponseEntity<Object> showMemberships(@CookieValue(name = "company", required = false) String belongCompany){
-        if (belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+    public ResponseEntity<Object> showMemberships(){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
-        List<Membership> memberships = membershipService.findMembership(belongCompany);
+        List<Membership> memberships = membershipService.findMembership(customerCompany);
         if (memberships.isEmpty()){
 
             List<ContractDto.MembershipGetDto> collect = new ArrayList<>();
@@ -97,54 +108,73 @@ public class ContractApi {
 
 
     @PostMapping("manage/contracts/plan")
-    public ResponseEntity<Object> savePlan(@RequestBody ContractDto<ContractDto.PlanPostDto> planDto,
-                                           @CookieValue(name = "company", required = false) String belongCompany){
-        if (belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
-        planService.savePlan(belongCompany, planDto);
+    public ResponseEntity<Object> savePlan(@RequestBody ContractDto<ContractDto.PlanPostDto> planDto){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+        
+        planService.savePlan(customerCompany, planDto);
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
 
     @PostMapping("manage/contracts/membership")
-    public ResponseEntity<Object> saveMembership(@RequestBody ContractDto contractMembership,
-                                                 @CookieValue(name = "company", required = false) String belongCompany){
-        if (belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
-        membershipService.saveMembership(belongCompany, contractMembership);
+    public ResponseEntity<Object> saveMembership(@RequestBody ContractDto contractMembership){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+
+        membershipService.saveMembership(customerCompany, contractMembership);
         return new ResponseEntity<Object>(HttpStatus.OK);
 
     }
 
-
     @PutMapping("/manage/contracts/membership")
-    public ResponseEntity<Object> updateMembership(@RequestBody ContractDto contractMembership,
-                                                   @CookieValue(name = "company", required = false) String belongCompany){
-        if (belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
-        membershipService.updateMembership(belongCompany, contractMembership);
+    public ResponseEntity<Object> updateMembership(@RequestBody ContractDto contractMembership){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+
+        membershipService.updateMembership(customerCompany, contractMembership);
         return new ResponseEntity<Object>(HttpStatus.OK);
 
     }
 
     @PutMapping("/manage/contracts/plan")
-    public ResponseEntity<Object> updatePlan(@RequestBody ContractDto<ContractDto.PlanPostDto> planDto,
-                                                   @CookieValue(name = "company", required = false) String belongCompany){
+    public ResponseEntity<Object> updatePlan(@RequestBody ContractDto<ContractDto.PlanPostDto> planDto){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
-        planService.updatePlan(belongCompany, planDto);
+        planService.updatePlan(customerCompany, planDto);
         return new ResponseEntity<Object>(HttpStatus.OK);
 
     }
 
     @DeleteMapping("/manage/contracts/membership")
-    public ResponseEntity<Object> deleteMembership(@CookieValue(name = "company", required = false) String belongCompany){
+    public ResponseEntity<Object> deleteMembership(){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
-        membershipService.delete(belongCompany);
+        membershipService.delete(customerCompany);
 
         return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/manage/contracts/plan")
-    public ResponseEntity<Object> deletePlan(@RequestBody ListDto listDto,
-                                                 @CookieValue(name = "company", required = false) String belongCompany){
+    public ResponseEntity<Object> deletePlan(@RequestBody ListDto listDto){
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+                                                     
 
-        planService.delete(belongCompany, listDto.getList());
+        planService.delete(customerCompany, listDto.getList());
 
         return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
     }

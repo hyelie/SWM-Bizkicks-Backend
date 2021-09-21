@@ -28,16 +28,13 @@ public class PlanService {
     @Autowired MembershipRepository membershipRepository;
 
     @Transactional
-    public List<Plan> findPlan(String customerCompanyName){
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
+    public List<Plan> findPlan(CustomerCompany customerCompany){
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         return planRepository.planfindByCustomerCompany(customerCompany);
     }
 
     @Transactional
-    public void savePlan(String companyName, ContractDto<ContractDto.PlanPostDto> planDto){
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(companyName);
+    public void savePlan(CustomerCompany customerCompany, ContractDto<ContractDto.PlanPostDto> planDto){
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         List<Plan> plans = new ArrayList<>();
@@ -60,28 +57,19 @@ public class PlanService {
 
 
     @Transactional
-    public void updatePlan(String belongCompany, ContractDto<ContractDto.PlanPostDto> planDto) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(belongCompany);
+    public void updatePlan(CustomerCompany customerCompany, ContractDto<ContractDto.PlanPostDto> planDto) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         for (ContractDto.PlanPostDto planPutDto: planDto.getList()) {
-
             String brandname = planPutDto.getBrandname();
             KickboardBrand kickboardBrand = brandRepository.findByBrandName(brandname);
             planRepository.updatePlan(customerCompany, kickboardBrand,planPutDto.getTotaltime());
-
-
-
-
         }
 
     }
 
     @Transactional
-    public void delete(String belongCompany, List list) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(belongCompany);
+    public void delete(CustomerCompany customerCompany, List list) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         for (Object companyName : list) {

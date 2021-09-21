@@ -12,6 +12,7 @@ import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.repository.CustomerCompanyRepository;
+import com.bizkicks.backend.util.GetWithNullCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,11 +31,15 @@ public class AuthService {
     @Autowired private CustomerCompanyRepository customerCompanyRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
-    @Autowired private final RedisUtil redisUtil;
+    @Autowired private GetWithNullCheck getWithNullCheck;
+    //@Autowired private final RedisUtil redisUtil;
+    @Autowired private RedisUtil redisUtil;
+
 
     @Transactional
     public void signup(MemberDto memberDto){
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyCode(memberDto.getCompany_code());
+        
+        CustomerCompany customerCompany = getWithNullCheck.getCustomerCompanyWithCode(customerCompanyRepository, memberDto.getCompany_code());
         if(memberDto.getId() == null || memberDto.getPassword() == null || memberDto.getCompany_code() == null || customerCompany == null){
             throw new CustomException(ErrorCode.PARAMETER_NOT_VALID);
         }

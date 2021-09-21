@@ -15,7 +15,6 @@ public class SecurityUtil {
 
         if(authentication == null || authentication.getName() == null){
             throw new CustomException(ErrorCode.NO_UNAUTHORIZED);
-            throw new RuntimeException("security context에 인증 정보 없음");
         }
         return authentication.getName();
     }
