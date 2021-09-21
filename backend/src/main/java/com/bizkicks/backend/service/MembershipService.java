@@ -7,10 +7,7 @@ import com.bizkicks.backend.entity.Membership;
 import com.bizkicks.backend.entity.Plan;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
-import com.bizkicks.backend.repository.BrandRepository;
-import com.bizkicks.backend.repository.CustomerCompanyRepository;
-import com.bizkicks.backend.repository.MembershipRepository;
-import com.bizkicks.backend.repository.PlanRepository;
+import com.bizkicks.backend.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +24,15 @@ public class MembershipService {
 
     @Autowired CustomerCompanyRepository customerCompanyRepository;
     @Autowired PlanRepository planRepository;
-    @Autowired BrandRepository brandRepository;
+    @Autowired KickboardBrandRepository kickboardBrandRepository;
     @Autowired MembershipRepository membershipRepository;
 
     @Transactional
     public void saveMembership(CustomerCompany customerCompany, ContractDto contractMembership){
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
-        List<KickboardBrand> all = brandRepository.findAll();
+        List<KickboardBrand> all = kickboardBrandRepository.findAll();
+
+        customerCompanyRepository.updateTypeMembership(customerCompany.getCompanyName());
 
         List<Membership> memberships = new ArrayList<>();
         for (KickboardBrand kickboardBrand : all) {

@@ -1,7 +1,7 @@
 package com.bizkicks.backend.service;
 
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.repository.BrandRepository;
+import com.bizkicks.backend.repository.KickboardBrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BrandService {
 
-    @Autowired final BrandRepository brandRepository;
-
+    @Autowired
+    final KickboardBrandRepository kickboardBrandRepository;
 
     public List<KickboardBrand> findAllBrand(){
-        return brandRepository.findAll();
+        return kickboardBrandRepository.findAll();
     }
 }
