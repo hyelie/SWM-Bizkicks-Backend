@@ -81,4 +81,12 @@ public class PlanService {
         }
 
     }
+
+    @Transactional
+    public void addUsedTime(CustomerCompany customerCompany, String brandname, Long betweenTime) {
+
+        KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
+        int betweenTimetoInt = betweenTime.intValue();
+        planRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);
+    }
 }

@@ -70,5 +70,14 @@ public class MembershipService {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         return membershipRepository.membershipFindByCustomerCompany(customerCompany);
     }
+
+    @Transactional
+    public void addUsedTime(CustomerCompany customerCompany, String brandname, Long betweenTime) {
+
+        KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
+        int betweenTimetoInt = betweenTime.intValue();
+        membershipRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);
+
+    }
 }
 
