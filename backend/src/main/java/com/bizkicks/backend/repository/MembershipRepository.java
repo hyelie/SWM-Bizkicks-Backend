@@ -84,4 +84,20 @@ public class MembershipRepository {
                 .getResultList();
         return resultList;
     }
+
+    public void addUsedTime(CustomerCompany customerCompany, KickboardBrand kickboardBrand, int betweenTime) {
+
+        String qlString1 = "update Membership m " +
+                "set m.usedTime = m.usedTime + :betweenTime " +
+                "where m.customerCompany = :customerCompany and " +
+                "m.kickboardBrand = :kickboardBrand and " +
+                "m.status = :status";
+
+        em.createQuery(qlString1)
+                .setParameter("betweenTime", betweenTime)
+                .setParameter("customerCompany", customerCompany)
+                .setParameter("kickboardBrand", kickboardBrand)
+                .setParameter("status", "Active")
+                .executeUpdate();
+    }
 }
