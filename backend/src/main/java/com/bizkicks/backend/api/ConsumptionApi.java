@@ -3,6 +3,7 @@ package com.bizkicks.backend.api;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,6 +24,8 @@ import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.service.ConsumptionService;
 
+import com.bizkicks.backend.service.MembershipService;
+import com.bizkicks.backend.service.PlanService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,6 +46,8 @@ import lombok.NoArgsConstructor;
 public class ConsumptionApi {
     @Autowired private ConsumptionService consumptionService;
     @Autowired private MemberService memberService;
+    @Autowired private PlanService planService;
+    @Autowired private MembershipService membershipService;
 
     // 해당 사용자의 고객 법인의 시간을 이용가능할 때 save할 수 있도록 save에 검사문 넣기
 
@@ -53,6 +58,14 @@ public class ConsumptionApi {
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+
+        Long betweenTime = ChronoUnit.MINUTES.between(detail.getDepart_time(), detail.getArrive_time());
+        if (customerCompany.getType().equals("plan")) {
+            planService.addUsedTime(customerCompany, detail.getBrand(), betweenTime);
+        }
+        else if (customerCompany.getType().equals("membership")){
+            membershipService.addUsedTime(customerCompany, detail.getBrand(), betweenTime);
+        }
 
         Consumption consumption = detail.toConsumptionEntity();
         List<Coordinate> coordinates = detail.toCoordinateEntity();

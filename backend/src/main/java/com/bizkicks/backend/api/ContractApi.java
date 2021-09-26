@@ -38,6 +38,8 @@ public class ContractApi {
 
     private final CustomerCompanyService customerCompanyService;
 
+    // 명세 수정
+
     @GetMapping("manage/contracts")
     public ResponseEntity<Object> showContracts() {
         Member member = memberService.getCurrentMemberInfo();

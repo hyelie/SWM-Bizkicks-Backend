@@ -70,4 +70,31 @@ public class PlanRepository {
                 .executeUpdate();
 
     }
+
+    public void addUsedTime(CustomerCompany customerCompany, KickboardBrand kickboardBrand, Integer betweenTime) {
+
+        String qlString1 = "update Plan p " +
+                "set p.usedTime = p.usedTime + :betweenTime " +
+                "where p.customerCompany = :customerCompany and " +
+                "p.kickboardBrand = :kickboardBrand and " +
+                "p.status = :status";
+
+        em.createQuery(qlString1)
+                .setParameter("betweenTime", betweenTime)
+                .setParameter("customerCompany", customerCompany)
+                .setParameter("kickboardBrand", kickboardBrand)
+                .setParameter("status", "Active")
+                .executeUpdate();
+
+        String qlString2 = "update Plan p " +
+                "set p.totalTime = p.totalTime + :betweenTime " +
+                "where p.customerCompany = :customerCompany and " +
+                "p.status = :status";
+
+        em.createQuery(qlString2)
+                .setParameter("betweenTime", betweenTime)
+                .setParameter("customerCompany", customerCompany)
+                .setParameter("status", "Active")
+                .executeUpdate();
+    }
 }
