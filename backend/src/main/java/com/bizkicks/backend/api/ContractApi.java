@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -120,11 +121,19 @@ public class ContractApi {
 
         if (planDto.getType().equals("membership")){
             membershipService.saveMembership(customerCompany, planDto);
-            return new ResponseEntity<Object>(HttpStatus.OK);
+
+            JSONObject returnObject = new JSONObject();
+            returnObject.put("msg", "Success");
+
+            return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.CREATED);
         }
         else if (planDto.getType().equals("plan")){
             planService.savePlan(customerCompany, planDto);
-            return new ResponseEntity<Object>(HttpStatus.OK);
+
+            JSONObject returnObject = new JSONObject();
+            returnObject.put("msg", "Success");
+
+            return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.CREATED);
         }
         return new ResponseEntity<Object>(HttpStatus.OK); // 수정해야함
         // 에러코드로 수정
@@ -139,11 +148,20 @@ public class ContractApi {
 
         if(planDto.getType().equals("membership")){
             membershipService.updateMembership(customerCompany, planDto);
-            return new ResponseEntity<Object>(HttpStatus.OK);
+
+            JSONObject returnObject = new JSONObject();
+            returnObject.put("msg", "Success");
+
+            return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.OK);
+
         }
         else if(planDto.getType().equals("plan")){
             planService.updatePlan(customerCompany, planDto);
-            return new ResponseEntity<Object>(HttpStatus.OK);
+
+            JSONObject returnObject = new JSONObject();
+            returnObject.put("msg", "Success");
+
+            return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.OK);
         }
         return new ResponseEntity<Object>(HttpStatus.OK); // todo
         //에러코드로 변경
