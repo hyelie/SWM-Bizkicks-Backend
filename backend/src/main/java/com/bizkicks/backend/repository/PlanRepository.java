@@ -87,13 +87,15 @@ public class PlanRepository {
                 .executeUpdate();
 
         String qlString2 = "update Plan p " +
-                "set p.totalTime = p.totalTime + :betweenTime " +
+                "set p.totalTime = p.totalTime - :betweenTime " +
                 "where p.customerCompany = :customerCompany and " +
+                "p.kickboardBrand = :kickboardBrand and " +
                 "p.status = :status";
 
         em.createQuery(qlString2)
                 .setParameter("betweenTime", betweenTime)
                 .setParameter("customerCompany", customerCompany)
+                .setParameter("kickboardBrand", kickboardBrand)
                 .setParameter("status", "Active")
                 .executeUpdate();
     }
