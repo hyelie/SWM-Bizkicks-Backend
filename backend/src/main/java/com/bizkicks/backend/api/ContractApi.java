@@ -47,6 +47,8 @@ public class ContractApi {
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+
+        // type 대신 contractType으로 바꾸면 좀 더 직관적이지 않을까 싶음.
         String type = customerCompany.getType();
         if (type == null){
             throw new CustomException(ErrorCode.COMPANY_NOT_EXIST); // 수정해야함
@@ -137,6 +139,9 @@ public class ContractApi {
         }
         return new ResponseEntity<Object>(HttpStatus.OK); // 수정해야함
         // 에러코드로 수정
+
+        // JSON에 msg, success를 넣는 것은 중복되어 보이고 responseEntity 리턴하는 것도 중복되어 보여서
+        // 굳이 if문 안에 똑같은 코드를 넣을 필요 없을 듯.
     }
     
     @PutMapping("manage/contracts")
@@ -165,6 +170,9 @@ public class ContractApi {
         }
         return new ResponseEntity<Object>(HttpStatus.OK); // todo
         //에러코드로 변경
+
+        // JSON에 msg, success를 넣는 것은 중복되어 보이고 responseEntity 리턴하는 것도 중복되어 보여서
+        // 굳이 if문 안에 똑같은 코드를 넣을 필요 없을 듯.
     }
 
     @DeleteMapping("manage/contracts")
@@ -186,6 +194,9 @@ public class ContractApi {
         }
 
         return new ResponseEntity<Object>(HttpStatus.NO_CONTENT); // todo
+
+        // responseEntity 리턴하는 것도 중복되어 보여서
+        // 굳이 if문 안에 똑같은 코드를 넣을 필요 없을 듯.
     }
 
 }

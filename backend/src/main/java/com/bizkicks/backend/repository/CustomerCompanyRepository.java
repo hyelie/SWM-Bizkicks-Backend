@@ -36,6 +36,7 @@ public class CustomerCompanyRepository {
         else return customerCompany.get(0); 
     }
     
+    // TypeMembership보다는 updateCompanyTypeToMembership 이게 더 나은듯?
     public void updateTypeMembership(String companyName) {
 
         // 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
@@ -49,6 +50,7 @@ public class CustomerCompanyRepository {
 
     }
 
+    // 마찬가지, updateCompanyTypeToPlan 이러헥?
     public void updateTypePlan(String companyName) {
 
         // 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.

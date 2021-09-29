@@ -19,7 +19,6 @@ import java.util.List;
 public class AlarmService {
     @Autowired AlarmRepository alarmRepository;
     @Autowired CustomerCompanyRepository customerCompanyRepository;
-    @Autowired GetWithNullCheck getWithNullCheck;
 
     @Transactional
     public List<Alarm> findAlarms(CustomerCompany customerCompany){
@@ -32,8 +31,4 @@ public class AlarmService {
         alarmRepository.deleteAllAlarmsInCustomerCompany(customerCompany);
         alarmRepository.saveAllAlarmsInCustomerCompany(customerCompany, alarms);
     }
-
-    // findAlarmsInUserCompany(Long userId)
-    // user가 속한 회사 찾고
-    // findAlarms(이름으s findAlarmsInCustomerCompany로 변경) 호출
 }

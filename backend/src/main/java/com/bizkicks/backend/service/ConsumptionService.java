@@ -36,8 +36,8 @@ public class ConsumptionService {
     @Transactional
     public void saveConsumptionWithCoordinates(Member member, String brandName, Consumption consumption, List<Coordinate> coordinates){
         KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrand(kickboardRepository, brandName);
+        
         consumption.setRelationWithKickboardBrand(kickboardBrand);
-
         consumption.setRelationWithMember(member);
 
         consumptionRepository.save(consumption);

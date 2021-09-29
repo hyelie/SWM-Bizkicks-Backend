@@ -30,6 +30,7 @@ public class KickboardApi {
     private final MembershipService membershipService;
     private final KickboardService kickboardService;
 
+    // cookie 대신 getCurrentMemberInfo 사용해서 수정해야 할 듯.
     @GetMapping("kickboard/location")
     public ResponseEntity<Object> showContracts(@CookieValue(name = "company", required = false) String belongCompany) {
         if (belongCompany == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
@@ -67,6 +68,7 @@ public class KickboardApi {
 
             return new ResponseEntity<Object>(kickboardDto, HttpStatus.OK);
         }
+        // 여기도 중복되는 코드 있는데 굳이 넣을 필요 없을 듯. 
         
         return new ResponseEntity<Object>(HttpStatus.OK);
     }

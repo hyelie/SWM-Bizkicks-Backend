@@ -73,7 +73,7 @@ public class MembershipService {
 
     @Transactional
     public void addUsedTime(CustomerCompany customerCompany, String brandname, Long betweenTime) {
-
+        // 여기도 예외처리(company 없는경우)
         KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
         int betweenTimetoInt = betweenTime.intValue();
         membershipRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);

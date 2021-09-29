@@ -70,6 +70,7 @@ public class PlanService {
 
     }
 
+    // list가 어떤 것의 list인지 있었으면 좋을 듯.
     @Transactional
     public void delete(CustomerCompany customerCompany, List list) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
@@ -84,7 +85,7 @@ public class PlanService {
 
     @Transactional
     public void addUsedTime(CustomerCompany customerCompany, String brandname, Long betweenTime) {
-
+        // 여기도 예외처리(company 없는경우)
         KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
         int betweenTimetoInt = betweenTime.intValue();
         planRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);
