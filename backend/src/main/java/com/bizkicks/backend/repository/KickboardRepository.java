@@ -17,7 +17,7 @@ public class KickboardRepository {
     private EntityManager em;
 
     public List<Kickboard> findByBrand(KickboardBrand kickboardBrand){
-
+// 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
         String query = "select k from Kickboard k where k.kickboardBrand = :kickboardBrand";
         List<Kickboard> kickboards = em.createQuery(query, Kickboard.class)
                 .setParameter("kickboardBrand", kickboardBrand)
@@ -29,7 +29,7 @@ public class KickboardRepository {
 
     public List<Kickboard> findKickboardByCustomerCompany(CustomerCompany customerCompany) {
 
-
+// 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
         String query = "select kb from KickboardBrand kb " +
                 "join Plan p " +
                 "on p.kickboardBrand = kb where " +
@@ -48,6 +48,7 @@ public class KickboardRepository {
 
     public List<Kickboard> findAllKickboards() {
 
+        // 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
         String query = "select k from Kickboard k";
         List<Kickboard> resultList = em.createQuery(query, Kickboard.class)
                 .getResultList();

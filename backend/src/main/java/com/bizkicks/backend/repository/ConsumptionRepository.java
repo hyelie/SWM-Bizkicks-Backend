@@ -1,6 +1,5 @@
 package com.bizkicks.backend.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
