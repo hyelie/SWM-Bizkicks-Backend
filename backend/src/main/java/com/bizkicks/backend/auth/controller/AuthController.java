@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -29,6 +31,7 @@ public class AuthController {
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
+        log.info("새로운 회원가입");
         return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 

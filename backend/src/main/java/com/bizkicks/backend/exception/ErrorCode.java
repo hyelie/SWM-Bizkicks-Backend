@@ -32,6 +32,10 @@ public enum ErrorCode{
     ID_DUPLICATED(HttpStatus.CONFLICT, "아이디가 중복되었습니다."),
     DUPLICATED_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다."),
 
+    // 502 BAD GATEWAY
+    DATABASE_CONNECTION_ERROR(HttpStatus.BAD_GATEWAY, "서버 데이터베이스 연결에 실패했습니다"),
+    REDIS_CONNECTION_ERROR(HttpStatus.BAD_GATEWAY, "서버 메모리 데이터베이스 연결에 실패했습니다"),
+
     ;
 
     private final HttpStatus httpStatus;
