@@ -31,6 +31,7 @@ public class AuthController {
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
+        log.info("새로운 회원가입");
         return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 

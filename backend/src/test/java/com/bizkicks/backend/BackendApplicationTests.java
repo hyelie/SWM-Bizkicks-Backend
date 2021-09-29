@@ -17,16 +17,6 @@ import javax.transaction.Transactional;
 @Transactional
 @NoArgsConstructor
 class BackendApplicationTests {
-
-    @Test
-    void asdf(){
-		LOG.debug( "#ex1 - debug log" );
-		LOG.info( "#ex1 - info log" );
-		LOG.warn( "#ex1 - warn log" );
-		LOG.error( "#ex1 - error log" );
-		
-		return "콘솔 또는 파일경로 확인";
-    }
 }
 
 
