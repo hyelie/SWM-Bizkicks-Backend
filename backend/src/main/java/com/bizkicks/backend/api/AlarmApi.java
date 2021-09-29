@@ -10,6 +10,8 @@ import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.AlarmService;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @NoArgsConstructor
 public class AlarmApi {
@@ -59,6 +62,10 @@ public class AlarmApi {
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
+        log.info("{} 회사에서 알림 추가", customerCompany.getCompanyName());
+        for(AlarmDto alarmDto : alarmsDto.getList()){
+            log.info(" - type : {}, value : {}", alarmDto.getType(), alarmDto.getValue());
+        }
         return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 

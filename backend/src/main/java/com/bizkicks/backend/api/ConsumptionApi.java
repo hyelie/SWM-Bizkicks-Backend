@@ -40,7 +40,9 @@ import org.springframework.web.servlet.FlashMapManager;
 
 import ch.qos.logback.core.util.Duration;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @NoArgsConstructor
 public class ConsumptionApi {
@@ -74,6 +76,7 @@ public class ConsumptionApi {
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
+        log.info("킥보드 사용됨 - 고객 법인 : {}, 킥보드 브랜드 : {}, 출발 시간 : {}, 도착 시간 : {}", customerCompany.getCompanyName(), detail.getBrand(), consumption.getDepartTime(), consumption.getArriveTime());
         return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
     }
 
