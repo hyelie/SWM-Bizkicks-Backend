@@ -46,7 +46,13 @@ public class GetWithNullCheck {
         return kickboardBrand;
     }
 
-    public CustomerCompany getCustomerCompany(CustomerCompanyRepository customerCompanyRepository, String customerCompanyName){
+    public CustomerCompany getCustomerCompanyWithCode(CustomerCompanyRepository customerCompanyRepository, String customerCompanyCode){
+        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyCode(customerCompanyCode);
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+        return customerCompany;
+    }
+
+    public CustomerCompany getCustomerCompanyWithName(CustomerCompanyRepository customerCompanyRepository, String customerCompanyName){
         CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         return customerCompany;

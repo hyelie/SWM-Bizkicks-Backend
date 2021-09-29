@@ -1,10 +1,8 @@
 package com.bizkicks.backend.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -13,8 +11,6 @@ import com.bizkicks.backend.auth.repository.MemberRepository;
 import com.bizkicks.backend.entity.Consumption;
 import com.bizkicks.backend.entity.Coordinate;
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.exception.CustomException;
-import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.repository.ConsumptionRepository;
@@ -38,11 +34,10 @@ public class ConsumptionService {
     @Autowired GetWithNullCheck getWithNullCheck;
 
     @Transactional
-    public void saveConsumptionWithCoordinates(Long memberId, String brandName, Consumption consumption, List<Coordinate> coordinates){
+    public void saveConsumptionWithCoordinates(Member member, String brandName, Consumption consumption, List<Coordinate> coordinates){
         KickboardBrand kickboardBrand = getWithNullCheck.getKickboardBrand(kickboardRepository, brandName);
+        
         consumption.setRelationWithKickboardBrand(kickboardBrand);
-
-        Member member = getWithNullCheck.getMemberById(memberRepository, memberId);
         consumption.setRelationWithMember(member);
 
         consumptionRepository.save(consumption);
@@ -50,8 +45,7 @@ public class ConsumptionService {
     }
 
     @Transactional
-    public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Long memberId, DateFilter dateFilter, PagingFilter pagingFilter){
-        Member member = getWithNullCheck.getMemberById(memberRepository, memberId);
+    public LinkedHashMap<Consumption, List<Coordinate>> findConsumptionWithCoordinate(Member member, DateFilter dateFilter, PagingFilter pagingFilter){
         List<Consumption> consumptions = consumptionRepository.findByFilter(member, dateFilter, pagingFilter);
         List<Coordinate> coordinates = coordinateRepository.findCoordinatesInConsumptions(consumptions);
 

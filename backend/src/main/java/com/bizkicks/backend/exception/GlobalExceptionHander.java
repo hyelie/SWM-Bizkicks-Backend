@@ -4,13 +4,14 @@ import java.security.SignatureException;
 
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
+import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-
+import io.lettuce.core.RedisConnectionException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,14 +29,26 @@ public class GlobalExceptionHander extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {CustomException.class})
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e){
-        log.error("handleDataException throws Exceptions : {}", e.getErrorCode());
+        log.error("custom exception throws Exceptions : {}", e.getErrorCode().getMsg());
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
     @ExceptionHandler(value = {SignatureException.class})
     protected ResponseEntity<ErrorResponse> handleSignatureException(){
-        log.error("SignatureException throws Exceptions : {}", ErrorCode.INVALID_ACCESS_TOKEN);
+        log.error("SignatureException throws Exceptions : {}", ErrorCode.INVALID_REFRESH_TOKEN);
         return ErrorResponse.toResponseEntity(ErrorCode.INVALID_ACCESS_TOKEN);
+    }
+
+    @ExceptionHandler(value = {JDBCConnectionException.class})
+    protected ResponseEntity<ErrorResponse> handleDBConnectionException(){
+        log.error("handleDBConnectionException throws Exceptions : {}", ErrorCode.DATABASE_CONNECTION_ERROR);
+        return ErrorResponse.toResponseEntity(ErrorCode.DATABASE_CONNECTION_ERROR);
+    }
+
+    @ExceptionHandler(value = {RedisConnectionException.class})
+    protected ResponseEntity<ErrorResponse> handleRedisConnectionException(){
+        log.error("handleDBConnectionException throws Exceptions : {}", ErrorCode.REDIS_CONNECTION_ERROR);
+        return ErrorResponse.toResponseEntity(ErrorCode.REDIS_CONNECTION_ERROR);
     }
 
     // @ExceptionHandler(value = {InvalidDefinitionException.class})

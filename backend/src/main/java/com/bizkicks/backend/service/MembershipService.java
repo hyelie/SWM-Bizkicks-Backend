@@ -7,10 +7,7 @@ import com.bizkicks.backend.entity.Membership;
 import com.bizkicks.backend.entity.Plan;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
-import com.bizkicks.backend.repository.BrandRepository;
-import com.bizkicks.backend.repository.CustomerCompanyRepository;
-import com.bizkicks.backend.repository.MembershipRepository;
-import com.bizkicks.backend.repository.PlanRepository;
+import com.bizkicks.backend.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,15 +24,15 @@ public class MembershipService {
 
     @Autowired CustomerCompanyRepository customerCompanyRepository;
     @Autowired PlanRepository planRepository;
-    @Autowired BrandRepository brandRepository;
+    @Autowired KickboardBrandRepository kickboardBrandRepository;
     @Autowired MembershipRepository membershipRepository;
 
     @Transactional
-    public void saveMembership(String companyName, ContractDto contractMembership){
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(companyName);
+    public void saveMembership(CustomerCompany customerCompany, ContractDto contractMembership){
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
-        List<KickboardBrand> all = brandRepository.findAll();
+        List<KickboardBrand> all = kickboardBrandRepository.findAll();
+
+        customerCompanyRepository.updateTypeMembership(customerCompany.getCompanyName());
 
         List<Membership> memberships = new ArrayList<>();
         for (KickboardBrand kickboardBrand : all) {
@@ -57,28 +54,29 @@ public class MembershipService {
     }
 
     @Transactional
-    public void updateMembership(String belongCompany, ContractDto contractMembership) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(belongCompany);
+    public void updateMembership(CustomerCompany customerCompany, ContractDto contractMembership) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         membershipRepository.update(customerCompany, contractMembership.getStartdate(), contractMembership.getDuedate());
-
-        }
+    }
 
     @Transactional
-    public void delete(String belongCompany) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(belongCompany);
+    public void delete(CustomerCompany customerCompany) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         membershipRepository.delete(customerCompany);
     }
 
     @Transactional
-    public List<Membership> findMembership(String customerCompanyName) {
-
-        CustomerCompany customerCompany = customerCompanyRepository.findByCustomerCompanyName(customerCompanyName);
+    public List<Membership> findMembership(CustomerCompany customerCompany) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         return membershipRepository.membershipFindByCustomerCompany(customerCompany);
+    }
+
+    @Transactional
+    public void addUsedTime(CustomerCompany customerCompany, String brandname, Long betweenTime) {
+        // 여기도 예외처리(company 없는경우)
+        KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
+        int betweenTimetoInt = betweenTime.intValue();
+        membershipRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);
 
     }
 }

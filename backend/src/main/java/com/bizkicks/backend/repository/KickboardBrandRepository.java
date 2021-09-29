@@ -17,9 +17,21 @@ public class KickboardBrandRepository {
     public KickboardBrand findByBrandName(String brandName){
         String selectBrandNameQuery = "SELECT b FROM KickboardBrand b WHERE b.brandName = :brand_name";
         List<KickboardBrand> kickboardBrands = em.createQuery(selectBrandNameQuery, KickboardBrand.class)
-                                                    .setParameter("brand_name", brandName)
-                                                    .getResultList();
+                .setParameter("brand_name", brandName)
+                .getResultList();
         if(kickboardBrands.isEmpty()) return null;
         else return kickboardBrands.get(0);
     }
+
+    public List<KickboardBrand> findAll() {
+        return em.createQuery("select k from KickboardBrand k", KickboardBrand.class)
+                .getResultList();
+    }
+
+    public List<KickboardBrand> findAllBrandName(){
+        return em.createQuery("select k.brandName from KickboardBrand k", KickboardBrand.class)
+                .getResultList();
+    }
+
+
 }

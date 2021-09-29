@@ -16,8 +16,8 @@ public class AlarmRepository {
     private EntityManager em;
 
     public void deleteAllAlarmsInCustomerCompany(CustomerCompany customerCompany){
-        String DeleteCustomerCompanyAlarmsQuery = "DELETE from Alarm a where a.customerCompany = :customer_company";
-        em.createQuery(DeleteCustomerCompanyAlarmsQuery)
+        String deleteCustomerCompanyAlarmsQuery = "DELETE from Alarm a where a.customerCompany = :customer_company";
+        em.createQuery(deleteCustomerCompanyAlarmsQuery)
           .setParameter("customer_company", customerCompany)
           .executeUpdate();
     }
@@ -30,14 +30,10 @@ public class AlarmRepository {
     }
 
     public List<Alarm> findByCustomerCompany(CustomerCompany customerCompany){
-        String selectCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a WHERE a.customerCompany = :customer_company";
+        String selectCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a JOIN FETCH a.customerCompany WHERE a.customerCompany = :customer_company";
         List<Alarm> alarms = em.createQuery(selectCustomerCompanyAlarmsQuery , Alarm.class)
                                .setParameter("customer_company", customerCompany)
                                .getResultList();
         return alarms;
     }
 }
-
-
-// String findCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a JOIN a.customerCompany acc WHERE acc.companyName= :customer_company_name"; 
-// String findCustomerCompanyAlarmsQuery = "SELECT a FROM Alarm a WHERE a.customerCompany.companyName = :customer_company_name";

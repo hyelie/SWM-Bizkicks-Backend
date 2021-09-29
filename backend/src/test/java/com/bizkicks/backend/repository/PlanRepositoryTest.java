@@ -1,6 +1,7 @@
 package com.bizkicks.backend.repository;
 
 import com.bizkicks.backend.entity.CustomerCompany;
+import com.bizkicks.backend.entity.Kickboard;
 import com.bizkicks.backend.entity.KickboardBrand;
 import com.bizkicks.backend.entity.Plan;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,31 @@ class PlanRepositoryTest {
         }
 
         System.out.println("resultList = " + resultList);
-        
     }
-}
+
+    @Test
+    void FindKickboardByCustomerCompany(){
+
+        CustomerCompany customerCompany1 = em.find(CustomerCompany.class, 1L);
+
+        String query = "select kb from KickboardBrand kb " +
+                "join Plan p " +
+                "on p.kickboardBrand = kb where " +
+                "p.customerCompany = :customerCompany";
+        List<KickboardBrand> resultList = em.createQuery(query, KickboardBrand.class)
+                .setParameter("customerCompany", customerCompany1)
+                .getResultList();
+
+        System.out.println(resultList);
+
+
+        String query2 = "SELECT k from Kickboard k WHERE k.kickboardBrand IN :brands";
+        List<Kickboard> resultList2 = em.createQuery(query2, Kickboard.class)
+                                            .setParameter("brands", resultList)
+                .getResultList();
+
+        System.out.println(resultList2);
+
+
+        }
+    }
