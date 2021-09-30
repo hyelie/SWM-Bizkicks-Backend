@@ -36,9 +36,15 @@ public class ContractApi {
     private final MembershipService membershipService;
     @Autowired private MemberService memberService;
 
-    private final CustomerCompanyService customerCompanyService;
-
     // 명세 수정
+
+    @GetMapping("/manage/measuredrate-price")
+    public ResponseEntity<Object> showPrice() {
+        JSONObject returnObject = new JSONObject();
+        returnObject.put("price", "30000");
+
+        return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.OK);
+    }
 
     @GetMapping("manage/contracts")
     public ResponseEntity<Object> showContracts() {
