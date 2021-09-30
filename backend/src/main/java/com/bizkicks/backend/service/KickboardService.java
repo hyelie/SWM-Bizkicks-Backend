@@ -48,7 +48,7 @@ public class KickboardService {
         else{
             Date currentDate = new Date();
             SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-            String currentPath = new File("").getAbsolutePath() + "\\" + "/images/kickboard/";
+            String currentPath = "./images/kickboard/";
             File checkPathFile = new File(currentPath);
             if(!checkPathFile.exists()){
                 checkPathFile.mkdirs();

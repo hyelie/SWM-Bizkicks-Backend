@@ -41,7 +41,7 @@ public class BrandService {
     public List<String> findEncodedImages(KickboardBrand kickboardBrand) throws IOException{
         List<String> images = new ArrayList<>();
 
-        String basePath = new File("").getAbsolutePath() + "\\" + "/images/brand/" + kickboardBrand.getBrandName() + "/";
+        String basePath = "./images/brand/" + kickboardBrand.getBrandName() + "/";
         for(int i = 1; i<=3; i++){
             String currentPath = basePath + i +".jpg";
             File savedImage = new File(currentPath);
