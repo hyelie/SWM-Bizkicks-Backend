@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.json:json:20190722'
 	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'com.univocity:univocity-parsers:2.1.1'
 
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
