@@ -16,3 +16,35 @@
 20:29:51.249 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
 20:29:55.626 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.69 seconds (JVM running for 5.261)
 20:29:56.040 [http-nio-8080-exec-1] INFO  c.b.b.a.ConsumptionApi - Å±º¸µå »ç¿ëµÊ - °í°´ ¹ýÀÎ : »ï¼º, Å±º¸µå ºê·£µå : Å±°íÀ×, Ãâ¹ß ½Ã°£ : 2020-10-10T14:20:15, µµÂø ½Ã°£ : 2020-10-10T14:25:40
+20:33:13.992 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 9928 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:33:13.993 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:33:18.247 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.556 seconds (JVM running for 5.08)
+20:34:30.048 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 10976 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:34:30.050 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:34:34.261 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.519 seconds (JVM running for 5.062)
+20:35:07.477 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 20700 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:35:07.480 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:35:11.718 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.552 seconds (JVM running for 5.136)
+20:35:11.883 [http-nio-8080-exec-1] INFO  c.b.b.a.ConsumptionApi - Å±º¸µå »ç¿ëµÊ - °í°´ ¹ýÀÎ : »ï¼º, Å±º¸µå ºê·£µå : Å±°íÀ×, Ãâ¹ß ½Ã°£ : 2020-10-10T14:20:15, µµÂø ½Ã°£ : 2020-10-10T14:25:40
+20:35:52.621 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 20092 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:35:52.624 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:35:57.064 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.758 seconds (JVM running for 5.32)
+20:36:03.959 [http-nio-8080-exec-1] INFO  c.b.b.s.KickboardService - Å±º¸µå »ç¿ë »çÁø ÀúÀå, °æ·Î : null
+20:36:03.965 [http-nio-8080-exec-1] INFO  c.b.b.a.ConsumptionApi - Å±º¸µå »ç¿ëµÊ - °í°´ ¹ýÀÎ : »ï¼º, Å±º¸µå ºê·£µå : Å±°íÀ×, Ãâ¹ß ½Ã°£ : 2020-10-10T14:20:15, µµÂø ½Ã°£ : 2020-10-10T14:25:40
+21:58:30.152 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 23980 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+21:58:30.154 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+21:58:34.450 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.62 seconds (JVM running for 5.148)
+21:58:35.715 [http-nio-8080-exec-1] ERROR c.b.b.a.s.j.JwtUtil - ¸¸·áµÈ JWT ÅäÅ«ÀÔ´Ï´Ù.
+21:58:57.743 [http-nio-8080-exec-7] ERROR c.b.b.a.s.j.JwtUtil - Àß¸øµÈ JWT ¼­¸íÀÔ´Ï´Ù.
+21:59:00.899 [http-nio-8080-exec-2] INFO  c.b.b.s.KickboardService - Å±º¸µå »ç¿ë »çÁø ÀúÀå, °æ·Î : C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\images\kickboard\1_2021-09-30_21-59-00.jpg
+21:59:00.905 [http-nio-8080-exec-2] INFO  c.b.b.a.ConsumptionApi - Å±º¸µå »ç¿ëµÊ - °í°´ ¹ýÀÎ : »ï¼º, Å±º¸µå ºê·£µå : Å±°íÀ×, Ãâ¹ß ½Ã°£ : 2020-10-10T14:20:15, µµÂø ½Ã°£ : 2020-10-10T14:25:40
+22:31:39.071 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 24644 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+22:31:39.073 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+22:31:43.572 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.823 seconds (JVM running for 5.37)
+22:31:43.805 [http-nio-8080-exec-1] ERROR c.b.b.a.s.j.JwtUtil - ¸¸·áµÈ JWT ÅäÅ«ÀÔ´Ï´Ù.
+22:33:14.826 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 24156 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+22:33:14.829 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+22:33:19.186 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.678 seconds (JVM running for 5.221)
+22:37:20.777 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 24140 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+22:37:20.780 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+22:37:25.130 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.654 seconds (JVM running for 5.183)

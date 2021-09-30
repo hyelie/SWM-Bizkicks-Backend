@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +51,6 @@ public class PlanService {
                     .kickboardBrand(kickboardBrand)
                     .build();
             plans.add(plan);
-
         }
         planRepository.saveAllPlan(plans);
     }
@@ -67,7 +65,6 @@ public class PlanService {
             KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
             planRepository.updatePlan(customerCompany, kickboardBrand,planPutDto.getTotaltime());
         }
-
     }
 
     // list가 어떤 것의 list인지 있었으면 좋을 듯.
@@ -78,9 +75,7 @@ public class PlanService {
         for (Object companyName : list) {
             KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName((String) companyName);
             planRepository.delete(customerCompany ,kickboardBrand);
-
         }
-
     }
 
     @Transactional

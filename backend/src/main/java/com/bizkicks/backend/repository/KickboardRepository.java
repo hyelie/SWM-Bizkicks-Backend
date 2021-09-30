@@ -1,6 +1,5 @@
 package com.bizkicks.backend.repository;
 
-import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Kickboard;
 import com.bizkicks.backend.entity.KickboardBrand;

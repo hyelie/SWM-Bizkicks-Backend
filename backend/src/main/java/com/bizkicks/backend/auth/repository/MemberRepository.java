@@ -1,10 +1,6 @@
 package com.bizkicks.backend.auth.repository;
 
-import java.util.List;
 import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import com.bizkicks.backend.auth.entity.Member;
 

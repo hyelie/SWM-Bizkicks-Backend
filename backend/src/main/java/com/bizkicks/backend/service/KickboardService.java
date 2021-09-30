@@ -1,14 +1,14 @@
 package com.bizkicks.backend.service;
 
-import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Kickboard;
-import com.bizkicks.backend.entity.KickboardBrand;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.repository.CustomerCompanyRepository;
 import com.bizkicks.backend.repository.KickboardRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -33,9 +34,7 @@ public class KickboardService {
     }
 
     public List<Kickboard> findAllKickboards() {
-
         return kickboardRepository.findAllKickboards();
-
     }
 
     public void saveKickboardImage(MultipartFile image, Long kickboardId) throws IOException{
@@ -43,7 +42,7 @@ public class KickboardService {
             throw new CustomException(ErrorCode.KICKBOARD_NOT_EXIST);
 
         String savePath;
-        if(image.isEmpty()){
+        if(image == null || image.isEmpty()){
             savePath = null;
         }
         else{
@@ -61,5 +60,6 @@ public class KickboardService {
         }
 
         kickboardRepository.updatePastPicture(kickboardId, savePath);
+        log.info("킥보드 사용 사진 저장, 경로 : {}", savePath);
     }
 }

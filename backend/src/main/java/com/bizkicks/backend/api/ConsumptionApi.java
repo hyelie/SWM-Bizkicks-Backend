@@ -1,19 +1,12 @@
 package com.bizkicks.backend.api;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import javax.validation.constraints.Null;
 
 import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.auth.service.MemberService;
@@ -38,13 +31,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.FlashMapManager;
 
-import ch.qos.logback.core.util.Duration;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,8 +51,8 @@ public class ConsumptionApi {
     // 해당 사용자의 고객 법인의 시간을 이용가능할 때 save할 수 있도록 save에 검사문 넣기
 
     @PostMapping("/kickboard/consumption")
-    public ResponseEntity<Object> saveConsumption(@RequestPart("image") MultipartFile image,
-                                                    @RequestPart("detail") ConsumptionDto.Detail detail) throws IOException{
+    public ResponseEntity<Object> saveConsumption(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                    @RequestPart(value = "detail", required = true) ConsumptionDto.Detail detail) throws IOException{
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
