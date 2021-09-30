@@ -8,13 +8,18 @@ import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.BrandService;
 import lombok.RequiredArgsConstructor;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,5 +71,31 @@ public class ProductApi {
                                     .build();
 
         return new ResponseEntity<Object>(brandDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/manage/products/{brandName}")
+    public ResponseEntity<Object> showBrand(@RequestPart(value="brandName", required = true) String brandName,
+                                                @RequestPart(value = "image", required = true) MultipartFile image1,
+                                                @RequestPart(value = "image", required = true) MultipartFile image2,
+                                                @RequestPart(value = "image", required = true) MultipartFile image3) throws IOException {
+        KickboardBrand kickboardBrand = brandService.findBrand(brandName);
+
+        String basePath = new File("").getAbsolutePath() + "\\" + "/images/brand/" + kickboardBrand.getBrandName() + "/";
+        File checkPathFile = new File(basePath);
+        if(!checkPathFile.exists()){
+            checkPathFile.mkdirs();
+        }
+        File savingImage1 = new File(basePath + "1.jpg");
+        File savingImage2 = new File(basePath + "2.jpg");
+        File savingImage3 = new File(basePath + "3.jpg");
+        image1.transferTo(savingImage1.toPath());
+        image2.transferTo(savingImage2.toPath());
+        image3.transferTo(savingImage3.toPath());
+
+
+
+        JSONObject returnObject = new JSONObject();
+        returnObject.put("msg", "Success");
+        return new ResponseEntity<Object>(returnObject, HttpStatus.OK);
     }
 }
