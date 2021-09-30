@@ -2,8 +2,6 @@ package com.bizkicks.backend.exception;
 
 import java.security.SignatureException;
 
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
-
 import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;

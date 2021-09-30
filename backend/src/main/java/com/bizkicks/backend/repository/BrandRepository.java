@@ -1,14 +1,10 @@
 package com.bizkicks.backend.repository;
 
-import com.bizkicks.backend.entity.Alarm;
-import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
-import com.bizkicks.backend.entity.Plan;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository

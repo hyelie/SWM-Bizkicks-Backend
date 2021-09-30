@@ -6,7 +6,9 @@ build/
 !**/src/test/**/build/
 .idea/
 .DS_Store
-
+*.jpg
+*.log
+*.zip
 
 ### STS ###
 .apt_generated

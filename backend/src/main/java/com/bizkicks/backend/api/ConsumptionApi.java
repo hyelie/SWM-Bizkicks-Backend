@@ -1,15 +1,12 @@
 package com.bizkicks.backend.api;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import javax.validation.constraints.Null;
 
 import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.auth.service.MemberService;
@@ -23,7 +20,7 @@ import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 import com.bizkicks.backend.service.ConsumptionService;
-
+import com.bizkicks.backend.service.KickboardService;
 import com.bizkicks.backend.service.MembershipService;
 import com.bizkicks.backend.service.PlanService;
 import org.json.JSONObject;
@@ -34,11 +31,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.FlashMapManager;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
-import ch.qos.logback.core.util.Duration;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,29 +46,34 @@ public class ConsumptionApi {
     @Autowired private MemberService memberService;
     @Autowired private PlanService planService;
     @Autowired private MembershipService membershipService;
+    @Autowired private KickboardService kickboardService;
 
     // 해당 사용자의 고객 법인의 시간을 이용가능할 때 save할 수 있도록 save에 검사문 넣기
 
     @PostMapping("/kickboard/consumption")
-    public ResponseEntity<Object> saveConsumption(@RequestBody ConsumptionDto.Detail detail){
-
+    public ResponseEntity<Object> saveConsumption(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                    @RequestPart(value = "detail", required = true) ConsumptionDto.Detail detail) throws IOException{
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
         Long betweenTime = ChronoUnit.MINUTES.between(detail.getDepart_time(), detail.getArrive_time());
-        if (customerCompany.getType().equals("plan")) {
-            planService.addUsedTime(customerCompany, detail.getBrand(), betweenTime);
+        if(customerCompany.getType() != null){
+            if (customerCompany.getType().equals("plan")) {
+                planService.addUsedTime(customerCompany, detail.getBrand(), betweenTime);
+            }
+            else if (customerCompany.getType().equals("membership")){
+                membershipService.addUsedTime(customerCompany, detail.getBrand(), betweenTime);
+            }
         }
-        else if (customerCompany.getType().equals("membership")){
-            membershipService.addUsedTime(customerCompany, detail.getBrand(), betweenTime);
-        }
-
+        else throw new CustomException(ErrorCode.CONTRACT_NOT_EXIST);
+        
         Consumption consumption = detail.toConsumptionEntity();
         List<Coordinate> coordinates = detail.toCoordinateEntity();
-
         consumptionService.saveConsumptionWithCoordinates(member, detail.getBrand(), consumption, coordinates);
+
+        kickboardService.saveKickboardImage(image, detail.getKickboard_id());
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");

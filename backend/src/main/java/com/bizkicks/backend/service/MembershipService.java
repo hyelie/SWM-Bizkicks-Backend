@@ -4,7 +4,6 @@ import com.bizkicks.backend.dto.ContractDto;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.KickboardBrand;
 import com.bizkicks.backend.entity.Membership;
-import com.bizkicks.backend.entity.Plan;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.repository.*;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -50,7 +48,6 @@ public class MembershipService {
         }
 
         membershipRepository.saveAll(memberships);
-
     }
 
     @Transactional
@@ -77,7 +74,6 @@ public class MembershipService {
         KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
         int betweenTimetoInt = betweenTime.intValue();
         membershipRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);
-
     }
 }
 

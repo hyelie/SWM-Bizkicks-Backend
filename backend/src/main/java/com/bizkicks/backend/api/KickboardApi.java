@@ -1,17 +1,13 @@
 package com.bizkicks.backend.api;
 
-import com.bizkicks.backend.dto.ContractDto;
 import com.bizkicks.backend.dto.KickboardDto;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Kickboard;
-import com.bizkicks.backend.entity.Membership;
-import com.bizkicks.backend.entity.Plan;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.CustomerCompanyService;
 import com.bizkicks.backend.service.KickboardService;
 import com.bizkicks.backend.service.MembershipService;
-import com.bizkicks.backend.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,5 @@
 package com.bizkicks.backend.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
