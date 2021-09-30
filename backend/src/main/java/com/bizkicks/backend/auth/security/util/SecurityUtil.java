@@ -1,6 +1,5 @@
 package com.bizkicks.backend.auth.security.util;
 
-import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 

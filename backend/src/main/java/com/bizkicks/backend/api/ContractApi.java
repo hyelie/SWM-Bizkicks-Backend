@@ -13,8 +13,6 @@ import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.CustomerCompanyService;
 import com.bizkicks.backend.service.MembershipService;
 import com.bizkicks.backend.service.PlanService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,9 +36,15 @@ public class ContractApi {
     private final MembershipService membershipService;
     @Autowired private MemberService memberService;
 
-    private final CustomerCompanyService customerCompanyService;
-
     // 명세 수정
+
+    @GetMapping("/manage/measuredrate-price")
+    public ResponseEntity<Object> showPrice() {
+        JSONObject returnObject = new JSONObject();
+        returnObject.put("price", "30000");
+
+        return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.OK);
+    }
 
     @GetMapping("manage/contracts")
     public ResponseEntity<Object> showContracts() {

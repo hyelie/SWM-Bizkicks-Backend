@@ -36,6 +36,7 @@ public class ConsumptionDto {
         private LocalDateTime arrive_time;
         private List<Location> location_list;
         private Integer cycle;
+        private Long kickboard_id;
         
         public List<Coordinate> toCoordinateEntity(){
             List<Coordinate> coordinates = new ArrayList<>();

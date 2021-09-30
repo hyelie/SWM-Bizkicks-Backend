@@ -1,13 +1,8 @@
 package com.bizkicks.backend.auth.service;
 
-import java.util.Optional;
-
 import com.bizkicks.backend.auth.entity.Member;
-import com.bizkicks.backend.auth.entity.UserRole;
 import com.bizkicks.backend.auth.repository.MemberRepository;
 import com.bizkicks.backend.auth.security.util.SecurityUtil;
-import com.bizkicks.backend.exception.CustomException;
-import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.util.GetWithNullCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,6 @@ package com.bizkicks.backend.auth.security.jwt;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Collections;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

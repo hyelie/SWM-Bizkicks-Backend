@@ -4,7 +4,6 @@ import com.bizkicks.backend.entity.Alarm;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.repository.AlarmRepository;
 import com.bizkicks.backend.repository.CustomerCompanyRepository;
-import com.bizkicks.backend.util.GetWithNullCheck;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
