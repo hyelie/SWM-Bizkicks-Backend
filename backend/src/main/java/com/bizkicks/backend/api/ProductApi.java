@@ -75,9 +75,9 @@ public class ProductApi {
 
     @PostMapping("/manage/products/{brandName}")
     public ResponseEntity<Object> showBrand(@RequestPart(value="brandName", required = true) String brandName,
-                                                @RequestPart(value = "image", required = true) MultipartFile image1,
-                                                @RequestPart(value = "image", required = true) MultipartFile image2,
-                                                @RequestPart(value = "image", required = true) MultipartFile image3) throws IOException {
+                                                @RequestPart(value = "image1", required = true) MultipartFile image1,
+                                                @RequestPart(value = "image2", required = true) MultipartFile image2,
+                                                @RequestPart(value = "image3", required = true) MultipartFile image3) throws IOException {
         KickboardBrand kickboardBrand = brandService.findBrand(brandName);
 
         String basePath = new File("").getAbsolutePath() + "\\" + "/images/brand/" + kickboardBrand.getBrandName() + "/";
