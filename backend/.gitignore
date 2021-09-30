@@ -38,3 +38,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### cache
+*.jpg
+*.log
+*.zip
