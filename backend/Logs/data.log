@@ -1,0 +1,18 @@
+20:24:08.214 [http-nio-8080-exec-6] INFO  c.b.b.a.c.AuthController - 새로운 회원가입
+20:24:20.175 [http-nio-8080-exec-1] ERROR c.b.b.e.GlobalExceptionHander - custom exception throws Exceptions : 계약이 존재하지 않습니다.
+20:26:43.167 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 5084 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:26:43.169 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:26:47.526 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.682 seconds (JVM running for 5.214)
+20:28:05.540 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 16176 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:28:05.542 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:28:09.864 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.652 seconds (JVM running for 5.216)
+20:28:48.492 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 13872 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:28:48.494 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:28:53.095 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.941 seconds (JVM running for 5.466)
+20:29:11.210 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 19024 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:29:11.213 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:29:15.669 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.781 seconds (JVM running for 5.317)
+20:29:51.247 [restartedMain] INFO  c.b.b.BackendApplication - Starting BackendApplication using Java 11.0.11 on DESKTOP-FU76216 with PID 20088 (C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend\build\classes\java\main started by J Hyel in C:\Users\J Hyel\Desktop\project\Bizkicks\be\backend)
+20:29:51.249 [restartedMain] INFO  c.b.b.BackendApplication - The following profiles are active: local,localdb,common
+20:29:55.626 [restartedMain] INFO  c.b.b.BackendApplication - Started BackendApplication in 4.69 seconds (JVM running for 5.261)
+20:29:56.040 [http-nio-8080-exec-1] INFO  c.b.b.a.ConsumptionApi - 킥보드 사용됨 - 고객 법인 : 삼성, 킥보드 브랜드 : 킥고잉, 출발 시간 : 2020-10-10T14:20:15, 도착 시간 : 2020-10-10T14:25:40
