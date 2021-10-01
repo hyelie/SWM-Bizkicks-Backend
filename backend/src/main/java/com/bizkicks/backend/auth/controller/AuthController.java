@@ -1,6 +1,8 @@
 package com.bizkicks.backend.auth.controller;
 
+import com.bizkicks.backend.auth.dto.EmailDto;
 import com.bizkicks.backend.auth.dto.MemberDto;
+import com.bizkicks.backend.auth.dto.PasswordDto;
 import com.bizkicks.backend.auth.dto.TokenDto;
 import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.auth.service.AuthService;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Slf4j
 @RestController
@@ -60,5 +64,33 @@ public class AuthController {
                                         
         return new ResponseEntity<Object>(memberDto, HttpStatus.OK);
     }
+
+    // todo
+    @PostMapping(value="/member/find/id")
+    public ResponseEntity<Object> findMemberId(@RequestBody EmailDto emailDto) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("msg", "Success");
+
+        return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
+    }
+
+    // todo
+    @PostMapping(value="/member/find/password")
+    public ResponseEntity<Object> findMemberPassword(@RequestBody EmailDto emailDto) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("msg", "Success");
+
+        return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
+    }
+
+    // todo
+    @PostMapping(value="/member/modify/password")
+    public ResponseEntity<Object> changeMemberPassword(@RequestBody PasswordDto passwordDto) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("msg", "Success");
+
+        return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
+    }
+    
 
 }
