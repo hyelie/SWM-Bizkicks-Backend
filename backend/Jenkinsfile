@@ -69,7 +69,7 @@ pipeline {
         stage('docker build'){
             steps{
                 dir('backend'){
-                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.12 .'
+                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.12.2 .'
                 }
             }
         }
@@ -77,7 +77,7 @@ pipeline {
             steps{
                 script{
                      docker.withRegistry('https://gcr.io', 'gcr:gcr-ci-project'){
-                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend:0.0.12'
+                        sh 'docker push gcr.io/temporal-fx-321902/bizkicks-backend:0.0.12.2'
                      }
                 }
             }

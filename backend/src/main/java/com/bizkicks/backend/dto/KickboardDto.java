@@ -19,6 +19,7 @@ public class KickboardDto<T> {
     @AllArgsConstructor
     @Builder
     public static class LocationGetDto{
+        private Long id;
         private String company_name;
         private Double lat;
         private Double lng;
