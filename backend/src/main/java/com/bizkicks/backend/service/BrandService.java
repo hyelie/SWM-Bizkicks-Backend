@@ -45,9 +45,11 @@ public class BrandService {
         for(int i = 1; i<=3; i++){
             String currentPath = basePath + i +".jpg";
             File savedImage = new File(currentPath);
-            byte[] fileContent = FileCopyUtils.copyToByteArray(savedImage);
-            String encodedString = Base64.getEncoder().encodeToString(fileContent);  
-            images.add(encodedString);
+            if(savedImage.exists()) {
+                byte[] fileContent = FileCopyUtils.copyToByteArray(savedImage);
+                String encodedString = Base64.getEncoder().encodeToString(fileContent);  
+                images.add(encodedString);
+            }            
         }
 
         return images;

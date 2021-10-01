@@ -12,6 +12,7 @@ public enum ErrorCode{
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "올바르지 않은 토큰입니다."),
     INVALID_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "사용자 정보가 유효하지 않습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "사용자 정보가 유효하지 않습니다."),
+    MISSING_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 path variable이 있습니다."),
 
     // 401 UNAUTHORIZED
     MEMBER_STATUS_LOGOUT(HttpStatus.UNAUTHORIZED, "사용자가 로그아웃 상태입니다."),
@@ -30,9 +31,15 @@ public enum ErrorCode{
     MEMBER_NOT_EXIST(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."),
     CONTRACT_NOT_EXIST(HttpStatus.NOT_FOUND, "계약이 존재하지 않습니다."),
 
+    // 405 METHOD NOT ALLOWED
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "존재하지 않는 method입니다."),
+
     // 409 CONFLICT
     ID_DUPLICATED(HttpStatus.CONFLICT, "아이디가 중복되었습니다."),
     DUPLICATED_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다."),
+
+    // 415 UNSUPPORTED MEDIA TYPE
+    UNSUPPORTED_MEDIA_TYPE(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "입력 형식이 잘못되었습니다."),
 
     // 502 BAD GATEWAY
     DATABASE_CONNECTION_ERROR(HttpStatus.BAD_GATEWAY, "서버 데이터베이스 연결에 실패했습니다"),
