@@ -46,7 +46,7 @@ public class ContractApi {
         return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.OK);
     }
 
-    @GetMapping("manage/contracts")
+    @GetMapping("/manage/contracts")
     public ResponseEntity<Object> showContracts() {
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
