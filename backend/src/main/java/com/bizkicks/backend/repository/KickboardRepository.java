@@ -25,6 +25,14 @@ public class KickboardRepository {
         else return true;
     }
 
+    public Kickboard findById(Long kickboardId) {
+        String findQuery = "SELECT k FROM Kickboard k WHERE k.id = :kickboard_id";
+        Kickboard kickboard = em.createQuery(findQuery, Kickboard.class)
+                .setParameter("kickboard_id", kickboardId)
+                .getSingleResult();
+        return kickboard;
+    }
+
     public List<Kickboard> findByBrand(KickboardBrand kickboardBrand) {
 // 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
         String query = "select k from Kickboard k where k.kickboardBrand = :kickboardBrand";

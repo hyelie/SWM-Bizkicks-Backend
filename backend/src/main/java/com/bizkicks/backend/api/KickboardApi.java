@@ -1,6 +1,7 @@
 package com.bizkicks.backend.api;
 
 import com.bizkicks.backend.dto.KickboardDto;
+import com.bizkicks.backend.dto.ResourceDto;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Kickboard;
 import com.bizkicks.backend.exception.CustomException;
@@ -9,14 +10,27 @@ import com.bizkicks.backend.service.CustomerCompanyService;
 import com.bizkicks.backend.service.KickboardService;
 import com.bizkicks.backend.service.MembershipService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
 
 @RestController
 @RequiredArgsConstructor
@@ -68,4 +82,11 @@ public class KickboardApi {
         
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
+
+    @GetMapping("/kickboard/location/{kickboardId}")
+    public ResponseEntity<Resource> showLastParkedKickboardImage(@PathVariable(value="kickboardId", required = true) Long kickboardId) throws IOException{
+        ResourceDto resourceDto = kickboardService.getKickboardImage(kickboardId);
+        return new ResponseEntity<Resource>(resourceDto.getResource(), resourceDto.getHttpHeaders(), resourceDto.getHttpStatus());
+    }
+
 }
