@@ -46,7 +46,7 @@ public class ContractApi {
         return new ResponseEntity<Object>(returnObject.toString(),HttpStatus.OK);
     }
 
-    @GetMapping("manage/contracts")
+    @GetMapping("/manage/contracts")
     public ResponseEntity<Object> showContracts() {
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
@@ -119,7 +119,7 @@ public class ContractApi {
         // 에러코드로 수정
     }
 
-    @PostMapping("manage/contracts")
+    @PostMapping("/manage/contracts")
     public ResponseEntity<Object> saveContracts(@RequestBody ContractDto<ContractDto.PlanPostDto> planDto) {
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
@@ -149,7 +149,7 @@ public class ContractApi {
         // 굳이 if문 안에 똑같은 코드를 넣을 필요 없을 듯.
     }
     
-    @PutMapping("manage/contracts")
+    @PutMapping("/manage/contracts")
     public ResponseEntity<Object> updateContract(@RequestBody ContractDto<ContractDto.PlanPostDto> planDto){
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
@@ -180,7 +180,7 @@ public class ContractApi {
         // 굳이 if문 안에 똑같은 코드를 넣을 필요 없을 듯.
     }
 
-    @DeleteMapping("manage/contracts")
+    @DeleteMapping("/manage/contracts")
     public ResponseEntity<Object> deleteContracts(@RequestBody ContractDto contractDto){
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
