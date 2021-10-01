@@ -34,8 +34,8 @@ public class GetWithNullCheck {
         return member.get();
     }
 
-    public Member getMemberByPhoneNumber(MemberRepository memberRepository, String phoneNumber){
-        Optional<Member> member = memberRepository.findByPhoneNumber(phoneNumber);
+    public Member getMemberByEmail(MemberRepository memberRepository, String email){
+        Optional<Member> member = memberRepository.findByEmail(email);
         if(!member.isPresent()) throw new CustomException(ErrorCode.MEMBER_NOT_EXIST);
         return member.get();
     }

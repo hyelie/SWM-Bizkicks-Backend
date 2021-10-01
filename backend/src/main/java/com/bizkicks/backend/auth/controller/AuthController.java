@@ -54,7 +54,7 @@ public class AuthController {
                                         .name(member.getName())
                                         .license(member.getLicense())
                                         .user_role(member.getUserRole())
-                                        .phone_number(member.getPhoneNumber())
+                                        .email(member.getEmail())
                                         .company_name(member.getCustomerCompany().getCompanyName())
                                         .build();
                                         

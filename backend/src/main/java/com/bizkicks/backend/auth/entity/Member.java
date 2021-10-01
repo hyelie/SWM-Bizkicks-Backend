@@ -51,8 +51,8 @@ public class Member {
     @Column
     private Boolean license;
 
-    @Column(length=15)
-    private String phoneNumber;
+    @Column(length=40)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
@@ -66,11 +66,11 @@ public class Member {
     }
 
     @Builder
-    public Member(String memberId, String password, Boolean license, String phoneNumber, UserRole userRole, String name){
+    public Member(String memberId, String password, Boolean license, String email, UserRole userRole, String name){
         this.memberId = memberId;
         this.password = password;
         this.license = license;
-        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.userRole = userRole;
         this.name = name;
     }

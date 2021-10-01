@@ -25,7 +25,7 @@ public class MemberDto {
     private String password;
     private Boolean license;
     private UserRole user_role;
-    private String phone_number;
+    private String email;
     private String company_name;
     private String company_code;
 
@@ -35,7 +35,7 @@ public class MemberDto {
                         .password(passwordEncoder.encode(password))
                         .name(name)
                         .license(license)
-                        .phoneNumber(phone_number)
+                        .email(email)
                         .userRole(user_role)
                         .build();
     }
