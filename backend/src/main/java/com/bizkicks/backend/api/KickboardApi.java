@@ -2,8 +2,8 @@ package com.bizkicks.backend.api;
 
 import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.auth.service.MemberService;
+import com.bizkicks.backend.dto.ImageDto;
 import com.bizkicks.backend.dto.KickboardDto;
-import com.bizkicks.backend.dto.ResourceDto;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Kickboard;
 import com.bizkicks.backend.exception.CustomException;
@@ -77,9 +77,14 @@ public class KickboardApi {
     }
 
     @GetMapping("/kickboard/location/{kickboardId}")
-    public ResponseEntity<Resource> showLastParkedKickboardImage(@PathVariable(value="kickboardId", required = true) Long kickboardId) throws IOException{
-        ResourceDto resourceDto = kickboardService.getKickboardImage(kickboardId);
-        return new ResponseEntity<Resource>(resourceDto.getResource(), resourceDto.getHttpHeaders(), resourceDto.getHttpStatus());
+    public ResponseEntity<Object> showLastParkedKickboardImage(@PathVariable(value="kickboardId", required = true) Long kickboardId) throws IOException{
+        String encodedString = kickboardService.getKickboardImage(kickboardId);
+        ImageDto imageDto = ImageDto.builder().image(encodedString).build();
+        HttpStatus httpStatus;
+        if(encodedString == null) httpStatus = HttpStatus.NO_CONTENT;
+        else httpStatus = HttpStatus.OK;
+
+        return new ResponseEntity<Object>(imageDto, httpStatus);
     }
 
 }
