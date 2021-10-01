@@ -77,11 +77,13 @@ public class KickboardService {
         Kickboard kickboard = kickboardRepository.findById(kickboardId);
 
         String savedPath = kickboard.getPastPicture();
+        if(savedPath == null) savedPath = savedPath + ".jpg";
 
         HttpHeaders headers = new HttpHeaders();
         Resource resource;
         HttpStatus httpStatus;
         ResourceDto resourceDto = ResourceDto.builder().build();
+
 
         File file = new File(savedPath);
         if(file.exists()){
