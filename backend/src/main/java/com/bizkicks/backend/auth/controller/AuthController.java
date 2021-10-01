@@ -91,6 +91,5 @@ public class AuthController {
 
         return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
     }
-    
 
 }
