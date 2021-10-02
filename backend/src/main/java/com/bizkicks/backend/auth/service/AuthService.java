@@ -1,11 +1,14 @@
 package com.bizkicks.backend.auth.service;
 
+import java.util.UUID;
+
 import javax.transaction.Transactional;
 
 import com.bizkicks.backend.auth.dto.EmailDto;
 import com.bizkicks.backend.auth.dto.MemberDto;
 import com.bizkicks.backend.auth.dto.TokenDto;
 import com.bizkicks.backend.auth.entity.Member;
+import com.bizkicks.backend.auth.entity.UserRole;
 import com.bizkicks.backend.auth.redis.RedisUtil;
 import com.bizkicks.backend.auth.repository.MemberRepository;
 import com.bizkicks.backend.auth.security.jwt.JwtUtil;
@@ -16,6 +19,7 @@ import com.bizkicks.backend.repository.CustomerCompanyRepository;
 import com.bizkicks.backend.util.GetWithNullCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -36,9 +40,14 @@ public class AuthService {
     @Autowired private RedisUtil redisUtil;
     @Autowired EmailService emailService;
 
+    @Value("${mail.verification.link}")
+    private String VERIFICATION_LINK;
+
+    public static final Long EmailExpireTime = 1000 * 60 * 30L; // 30분
+
 
     @Transactional
-    public void signup(MemberDto memberDto){
+    public Member signup(MemberDto memberDto){
         
         CustomerCompany customerCompany = getWithNullCheck.getCustomerCompanyWithCode(customerCompanyRepository, memberDto.getCompany_code());
         if(memberDto.getId() == null || memberDto.getPassword() == null || memberDto.getCompany_code() == null || customerCompany == null){
@@ -48,10 +57,12 @@ public class AuthService {
             throw new CustomException(ErrorCode.ID_DUPLICATED);
         }
         Member member = memberDto.toEntity(passwordEncoder);
-        
+        member.setUserROle(UserRole.ROLE_NOT_PERMITTED);
         member.setRelationWithCustomerCompany(customerCompany);
 
         memberRepository.save(member);
+
+        return member;
     }
 
     @Transactional
@@ -117,25 +128,35 @@ public class AuthService {
         memberRepository.save(member);
 
         String text = emailService.tempPasswordText(member.getName(), tempPassword);
-        String title = emailService.passwordTItle();
+        String title = emailService.tempPasswordTItle();
         emailService.sendMail(member.getEmail(), title, text);
     }
 
-    // member/signup에 추가 작성할 것
-    // 인증 메일 전송(uuid 작성)
-    // 전송 시 redis에 {uuid, memberId}를 넣고 30분간 유지시킴.
-    // 이 떄 사용자는 NOT_PERMITTED 상태임.
+    public void sendVerificationEmail(Member member){
+        UUID uuid = UUID.randomUUID();
+        redisUtil.set(uuid.toString(), member.getMemberId(), EmailExpireTime);
 
-    // member/verity/{key}
-    // redis에 key에 해당하는 값이 없는 경우 - 만료 / 잘못된 키에 대한 예외처리 해줌
-    // 해줌 경우 - 해당 member를 USER나 MANAGER로 승격시킴.
+        String link = this.VERIFICATION_LINK + uuid.toString();
+        String title = emailService.verifyEmailTitle();
+        String text = emailService.verifyEmailText(link);
+        emailService.sendMail(member.getEmail(), title, text);
+    }
 
-    // 서버에는 관리자 계정 몇개만 넣어주고
-    // 나머지는 무조건 not permitted에서 user로만 승격시켜주면 될 것 같음.
+    public void verifyEmail(String key){
+        if(!redisUtil.hasKey(key)){
+            throw new CustomException(ErrorCode.LINK_NOT_EXIST);
+        }
 
-    
+        String memberId = redisUtil.get(key);
+        Member member = getWithNullCheck.getMemberByMemberId(memberRepository, memberId);
+        modifyUserRole(member, UserRole.ROLE_USER);
+    }
 
-    
+    public void modifyUserRole(Member member, UserRole userRole){
+        member.setUserROle(userRole);
+        memberRepository.save(member);
+        return;
+    }
 
     
 }

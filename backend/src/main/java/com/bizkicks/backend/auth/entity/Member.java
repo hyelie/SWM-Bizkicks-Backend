@@ -65,6 +65,10 @@ public class Member {
         this.password = password;
     }
 
+    public void setUserROle(UserRole userRole){
+        this.userRole = userRole;
+    }
+
     public void setRelationWithCustomerCompany(CustomerCompany customerCompany){
         this.customerCompany = customerCompany;
     }

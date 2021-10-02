@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,8 @@ public class AuthController {
 
     @PostMapping("/member/signup")
     public ResponseEntity<Object> signup(@RequestBody MemberDto memberDto){
-        authService.signup(memberDto);
+        Member member = authService.signup(memberDto);
+        authService.sendVerificationEmail(member);
 
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
@@ -67,7 +69,6 @@ public class AuthController {
         return new ResponseEntity<Object>(memberDto, HttpStatus.OK);
     }
 
-    // todo
     @PostMapping(value="/member/find/id")
     public ResponseEntity<Object> findMemberId(@RequestBody EmailDto emailDto) {
         String email = emailDto.getEmail();
@@ -75,22 +76,22 @@ public class AuthController {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "Success");
+        log.info("아이디 찾기 요청 : " + email);
 
         return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
     }
 
-    // todo
     @PostMapping(value="/member/find/password")
     public ResponseEntity<Object> findMemberPassword(@RequestBody EmailDto emailDto) {
         authService.reissuePassword(emailDto.getEmail());
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "Success");
+        log.info("비밀번호 찾기 요청 : " + emailDto.getEmail());
 
         return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
     }
 
-    // todo
     @PostMapping(value="/member/modify/password")
     public ResponseEntity<Object> changeMemberPassword(@RequestBody PasswordDto passwordDto) {
         Member member = memberService.getCurrentMemberInfo();
@@ -98,10 +99,21 @@ public class AuthController {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "Success");
+        log.info("사용자 {} 비밀번호 수정 요청", member.getMemberId());
 
         return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
     }
 
-    // 이메일 인증
+    @GetMapping(value = "/member/verify/{key}")
+    public ResponseEntity<Object> verifyUserWIthKey(@PathVariable(value = "key", required = true) String key){
+     
+        authService.verifyEmail(key);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("msg", "Success");
+        log.info("이메일 인증 완료");
+
+        return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
+    }
 
 }

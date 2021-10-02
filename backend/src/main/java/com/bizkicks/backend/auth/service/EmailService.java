@@ -26,27 +26,31 @@ public class EmailService{
         return "비즈킥스 아이디 찾기";
     }
 
-    public String passwordTItle(){
-        return "비즈킥스 임시 비밀번호";
-    }
-
     public String idText(String memberId, String name){
         String msg = "";
-        msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
-		msg += "<h3 style='color: blue;'>";
-		msg += name + "님의 아아디는 다음과 같습니다.</h3>";
-		msg += "<p>아이디 : ";
-		msg += memberId + "</p></div>";
+		msg += name + "님의 아아디는 다음과 같습니다.\n";
+		msg += "아이디 : " + memberId;
         return msg;
+    }
+
+    public String tempPasswordTItle(){
+        return "비즈킥스 임시 비밀번호";
     }
 
     public String tempPasswordText(String name, String tempPassword){
         String msg = "";
-        msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
-		msg += "<h3 style='color: blue;'>";
-		msg += name + "님의 임시 비밀번호 입니다. 비밀번호를 변경하여 사용하세요.</h3>";
-		msg += "<p>임시 비밀번호 : ";
-		msg += tempPassword+ "</p></div>";
+		msg += name + "님의 임시 비밀번호입니다. 비밀번호를 변경하여 사용하세요.\n";
+		msg += "임시 비밀번호 : " + tempPassword;
+        return msg;
+    }
+
+    public String verifyEmailTitle(){
+        return "비즈킥스 인증 메일";
+    }
+
+    public String verifyEmailText(String link){
+        String msg = "";
+		msg += "접속 링크 : " + link;
         return msg;
     }
 }
