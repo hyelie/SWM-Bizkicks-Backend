@@ -1,10 +1,14 @@
 package com.bizkicks.backend.auth.service;
 
+import java.util.UUID;
+
 import javax.transaction.Transactional;
 
+import com.bizkicks.backend.auth.dto.EmailDto;
 import com.bizkicks.backend.auth.dto.MemberDto;
 import com.bizkicks.backend.auth.dto.TokenDto;
 import com.bizkicks.backend.auth.entity.Member;
+import com.bizkicks.backend.auth.entity.UserRole;
 import com.bizkicks.backend.auth.redis.RedisUtil;
 import com.bizkicks.backend.auth.repository.MemberRepository;
 import com.bizkicks.backend.auth.security.jwt.JwtUtil;
@@ -15,6 +19,7 @@ import com.bizkicks.backend.repository.CustomerCompanyRepository;
 import com.bizkicks.backend.util.GetWithNullCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -32,12 +37,17 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     @Autowired private GetWithNullCheck getWithNullCheck;
-    //@Autowired private final RedisUtil redisUtil;
     @Autowired private RedisUtil redisUtil;
+    @Autowired EmailService emailService;
+
+    @Value("${mail.verification.link}")
+    private String VERIFICATION_LINK;
+
+    public static final Long EmailExpireTime = 1000 * 60 * 30L; // 30분
 
 
     @Transactional
-    public void signup(MemberDto memberDto){
+    public Member signup(MemberDto memberDto){
         
         CustomerCompany customerCompany = getWithNullCheck.getCustomerCompanyWithCode(customerCompanyRepository, memberDto.getCompany_code());
         if(memberDto.getId() == null || memberDto.getPassword() == null || memberDto.getCompany_code() == null || customerCompany == null){
@@ -47,10 +57,12 @@ public class AuthService {
             throw new CustomException(ErrorCode.ID_DUPLICATED);
         }
         Member member = memberDto.toEntity(passwordEncoder);
-        
+        member.setUserROle(UserRole.ROLE_NOT_PERMITTED);
         member.setRelationWithCustomerCompany(customerCompany);
 
         memberRepository.save(member);
+
+        return member;
     }
 
     @Transactional
@@ -87,4 +99,64 @@ public class AuthService {
 
         return returnTokenDto;
     }
+
+    public void sendIdEmail(String email){
+        Member member = getWithNullCheck.getMemberByEmail(memberRepository, email);
+
+        String text = emailService.idText(member.getMemberId(), member.getName());
+        String title = emailService.idTitle();
+        emailService.sendMail(member.getEmail(), title, text);
+    }
+
+    public void changeMemberPassword(Member member, String oldPassword, String newPassword){
+        if(!this.passwordEncoder.matches(oldPassword, member.getPassword())){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);
+        }
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
+    }
+
+    public void reissuePassword(String email){
+        Member member = getWithNullCheck.getMemberByEmail(memberRepository, email);
+        
+        String tempPassword = "";
+        for (int i = 0; i < 12; i++) {
+			tempPassword += (char) ((Math.random() * 26) + 97);
+		}
+
+        member.setPassword(passwordEncoder.encode(tempPassword));
+        memberRepository.save(member);
+
+        String text = emailService.tempPasswordText(member.getName(), tempPassword);
+        String title = emailService.tempPasswordTItle();
+        emailService.sendMail(member.getEmail(), title, text);
+    }
+
+    public void sendVerificationEmail(Member member){
+        UUID uuid = UUID.randomUUID();
+        redisUtil.set(uuid.toString(), member.getMemberId(), EmailExpireTime);
+
+        String link = this.VERIFICATION_LINK + uuid.toString();
+        String title = emailService.verifyEmailTitle();
+        String text = emailService.verifyEmailText(link);
+        emailService.sendMail(member.getEmail(), title, text);
+    }
+
+    public void verifyEmail(String key){
+        if(!redisUtil.hasKey(key)){
+            throw new CustomException(ErrorCode.LINK_NOT_EXIST);
+        }
+
+        String memberId = redisUtil.get(key);
+        Member member = getWithNullCheck.getMemberByMemberId(memberRepository, memberId);
+        modifyUserRole(member, UserRole.ROLE_USER);
+    }
+
+    public void modifyUserRole(Member member, UserRole userRole){
+        member.setUserROle(userRole);
+        memberRepository.save(member);
+        return;
+    }
+
+    
 }

@@ -30,6 +30,7 @@ public enum ErrorCode{
     PHONE_NUMBER_NOT_EXIST(HttpStatus.NOT_FOUND, "휴대폰 번호가 존재하지 않습니다."),
     MEMBER_NOT_EXIST(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."),
     CONTRACT_NOT_EXIST(HttpStatus.NOT_FOUND, "계약이 존재하지 않습니다."),
+    LINK_NOT_EXIST(HttpStatus.NOT_FOUND, "인증 메일 링크가 존재하지 않습니다."),
 
     // 405 METHOD NOT ALLOWED
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "존재하지 않는 method입니다."),
