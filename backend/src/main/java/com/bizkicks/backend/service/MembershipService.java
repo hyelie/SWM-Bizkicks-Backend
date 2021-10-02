@@ -30,7 +30,7 @@ public class MembershipService {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
         List<KickboardBrand> all = kickboardBrandRepository.findAll();
 
-        customerCompanyRepository.updateTypeMembership(customerCompany.getCompanyName());
+        customerCompanyRepository.updateCompanyTypeToMembership(customerCompany.getCompanyName());
 
         List<Membership> memberships = new ArrayList<>();
         for (KickboardBrand kickboardBrand : all) {
@@ -53,19 +53,19 @@ public class MembershipService {
     @Transactional
     public void updateMembership(CustomerCompany customerCompany, ContractDto contractMembership) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
-        membershipRepository.update(customerCompany, contractMembership.getStartdate(), contractMembership.getDuedate());
+        membershipRepository.updateByCustomerCompany(customerCompany, contractMembership.getStartdate(), contractMembership.getDuedate());
     }
 
     @Transactional
     public void delete(CustomerCompany customerCompany) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
-        membershipRepository.delete(customerCompany);
+        membershipRepository.deleteByCustomerCompany(customerCompany);
     }
 
     @Transactional
     public List<Membership> findMembership(CustomerCompany customerCompany) {
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
-        return membershipRepository.membershipFindByCustomerCompany(customerCompany);
+        return membershipRepository.findMembershipByCustomerCompany(customerCompany);
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class MembershipService {
         // 여기도 예외처리(company 없는경우)
         KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
         int betweenTimetoInt = betweenTime.intValue();
-        membershipRepository.addUsedTime(customerCompany, kickboardBrand, betweenTimetoInt);
+        membershipRepository.addUserTimeInCustomerCompany(customerCompany, kickboardBrand, betweenTimetoInt);
     }
 }
 

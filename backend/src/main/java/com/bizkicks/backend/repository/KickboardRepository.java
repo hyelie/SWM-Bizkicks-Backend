@@ -26,9 +26,9 @@ public class KickboardRepository {
     }
 
     public List<Kickboard> findByBrand(KickboardBrand kickboardBrand) {
-// 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
-        String query = "select k from Kickboard k where k.kickboardBrand = :kickboardBrand";
-        List<Kickboard> kickboards = em.createQuery(query, Kickboard.class)
+
+        String findByBrandQuery = "select k from Kickboard k where k.kickboardBrand = :kickboardBrand";
+        List<Kickboard> kickboards = em.createQuery(findByBrandQuery, Kickboard.class)
                 .setParameter("kickboardBrand", kickboardBrand)
                 .getResultList();
 
@@ -38,17 +38,16 @@ public class KickboardRepository {
 
     public List<Kickboard> findKickboardByCustomerCompany(CustomerCompany customerCompany) {
 
-// 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
-        String query = "select kb from KickboardBrand kb " +
+        String joinQuery = "select kb from KickboardBrand kb " +
                 "join Plan p " +
                 "on p.kickboardBrand = kb where " +
                 "p.customerCompany = :customerCompany";
-        List<KickboardBrand> resultList = em.createQuery(query, KickboardBrand.class)
+        List<KickboardBrand> resultList = em.createQuery(joinQuery, KickboardBrand.class)
                 .setParameter("customerCompany", customerCompany)
                 .getResultList();
 
-        String query2 = "SELECT k from Kickboard k WHERE k.kickboardBrand IN :brands";
-        List<Kickboard> resultList2 = em.createQuery(query2, Kickboard.class)
+        String findByKickboardBrandQuery = "SELECT k from Kickboard k WHERE k.kickboardBrand IN :brands";
+        List<Kickboard> resultList2 = em.createQuery(findByKickboardBrandQuery, Kickboard.class)
                 .setParameter("brands", resultList)
                 .getResultList();
 
@@ -57,9 +56,8 @@ public class KickboardRepository {
 
     public List<Kickboard> findAllKickboards() {
 
-        // 가능하면 query가 어떤 동작을 할 건지 변수명으로 나타내면 좋을 듯.
-        String query = "select k from Kickboard k";
-        List<Kickboard> resultList = em.createQuery(query, Kickboard.class)
+        String findAllQuery = "select k from Kickboard k";
+        List<Kickboard> resultList = em.createQuery(findAllQuery, Kickboard.class)
                 .getResultList();
 
         return resultList;
