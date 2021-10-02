@@ -46,8 +46,8 @@ public class KickboardApi {
         else if(contractType.equals("plan")){
             List<Kickboard> kickboards = kickboardService.findKickboards(customerCompany);
             List<KickboardDto.LocationGetDto> collect = kickboards.stream()
-                    .map(m -> new KickboardDto.LocationGetDto(m.getId(), m.getKickboardBrand().getBrandName(), m.getLng(),
-                            m.getLat(), m.getBattery(), m.getModel(), m.getPastPicture()))
+                    .map(m -> new KickboardDto.LocationGetDto(m.getId(), m.getKickboardBrand().getBrandName(), m.getLat(),
+                            m.getLng(), m.getBattery(), m.getModel(), m.getPastPicture()))
                     .collect(Collectors.toList());
 
             KickboardDto kickboardDto = KickboardDto.<KickboardDto.LocationGetDto>builder()
