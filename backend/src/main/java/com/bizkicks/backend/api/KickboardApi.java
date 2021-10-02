@@ -31,20 +31,21 @@ public class KickboardApi {
     private final KickboardService kickboardService;
     @Autowired private MemberService memberService;
 
-    // cookie 대신 getCurrentMemberInfo 사용해서 수정해야 할 듯.
-    @GetMapping("kickboard/location")
+
+
+    @GetMapping("/kickboard/location")
     public ResponseEntity<Object> showContracts() {
+
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
-
-        String type = customerCompany.getType();
+        String contractType = customerCompany.getType();
         
-        if (type == null){
-            throw new CustomException(ErrorCode.CONTRACT_NOT_EXIST); // 수정 필요  
+        if (contractType == null){
+            throw new CustomException(ErrorCode.COMPANY_NOT_EXIST); // 수정 필요
         }
-        else if(type.equals("plan")){
+        else if(contractType.equals("plan")){
             List<Kickboard> kickboards = kickboardService.findKickboards(customerCompany);
             List<KickboardDto.LocationGetDto> collect = kickboards.stream()
                     .map(m -> new KickboardDto.LocationGetDto(m.getId(), m.getKickboardBrand().getBrandName(), m.getLng(),
@@ -58,7 +59,7 @@ public class KickboardApi {
             return new ResponseEntity<Object>(kickboardDto, HttpStatus.OK);
 
         }
-        else if(type.equals("membership")){
+        else if(contractType.equals("membership")){
             List<Kickboard> kickboards = kickboardService.findAllKickboards();
             List<KickboardDto.LocationGetDto> collect = kickboards.stream()
                     .map(m -> new KickboardDto.LocationGetDto(m.getId(), m.getKickboardBrand().getBrandName(), m.getLng(),
@@ -71,7 +72,6 @@ public class KickboardApi {
 
             return new ResponseEntity<Object>(kickboardDto, HttpStatus.OK);
         }
-        // 여기도 중복되는 코드 있는데 굳이 넣을 필요 없을 듯. 
         
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
