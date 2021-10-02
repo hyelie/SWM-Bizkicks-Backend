@@ -61,6 +61,14 @@ public class Member {
     @JoinColumn(name="customer_company_id")
     private CustomerCompany customerCompany;
 
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setUserROle(UserRole userRole){
+        this.userRole = userRole;
+    }
+
     public void setRelationWithCustomerCompany(CustomerCompany customerCompany){
         this.customerCompany = customerCompany;
     }
