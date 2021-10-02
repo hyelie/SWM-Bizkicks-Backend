@@ -2,6 +2,7 @@ package com.bizkicks.backend.auth.service;
 
 import javax.transaction.Transactional;
 
+import com.bizkicks.backend.auth.dto.EmailDto;
 import com.bizkicks.backend.auth.dto.MemberDto;
 import com.bizkicks.backend.auth.dto.TokenDto;
 import com.bizkicks.backend.auth.entity.Member;
@@ -32,8 +33,8 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     @Autowired private GetWithNullCheck getWithNullCheck;
-    //@Autowired private final RedisUtil redisUtil;
     @Autowired private RedisUtil redisUtil;
+    @Autowired EmailService emailService;
 
 
     @Transactional
@@ -87,18 +88,48 @@ public class AuthService {
 
         return returnTokenDto;
     }
-    // id 찾기
-        // email에 해당하는 사용자 찾기
-        // email을 발송해 주는 로직
-        
-    // pw 변경
-        // 비밀번호를 받아서 기존 비밀번호와 비교해주는 로직
-        // 비밀번호를 업데이트 해주는 로직
 
+    public void sendIdEmail(String email){
+        Member member = getWithNullCheck.getMemberByEmail(memberRepository, email);
+
+        String text = emailService.idText(member.getMemberId(), member.getName());
+        String title = emailService.idTitle();
+        emailService.sendMail(member.getEmail(), title, text);
+    }
+
+    public void changeMemberPassword(Member member, String oldPassword, String newPassword){
+        if(!this.passwordEncoder.matches(oldPassword, member.getPassword())){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);
+        }
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
+    }
+
+    public void reissuePassword(String email){
+        Member member = getWithNullCheck.getMemberByEmail(memberRepository, email);
+        
+        String tempPassword = "";
+        for (int i = 0; i < 12; i++) {
+			tempPassword += (char) ((Math.random() * 26) + 97);
+		}
+
+        member.setPassword(passwordEncoder.encode(tempPassword));
+        memberRepository.save(member);
+
+        String text = emailService.tempPasswordText(member.getName(), tempPassword);
+        String title = emailService.passwordTItle();
+        emailService.sendMail(member.getEmail(), title, text);
+    }
+    
     // pw 재발급
         // 비밀번호를 임시로 발급해 주는 로직
         // 비밀번호를 업데이트 해주는 로직
         // email을 발송해 주는 로직
+
+
+    
+
+    
 
     
 }

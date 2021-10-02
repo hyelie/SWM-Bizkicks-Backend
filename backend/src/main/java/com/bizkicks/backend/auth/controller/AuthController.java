@@ -6,6 +6,7 @@ import com.bizkicks.backend.auth.dto.PasswordDto;
 import com.bizkicks.backend.auth.dto.TokenDto;
 import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.auth.service.AuthService;
+import com.bizkicks.backend.auth.service.EmailService;
 import com.bizkicks.backend.auth.service.MemberService;
 
 import org.json.JSONObject;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthController {
     @Autowired private AuthService authService;
     @Autowired private MemberService memberService;
+    @Autowired private EmailService emailService;
 
     @PostMapping("/member/signup")
     public ResponseEntity<Object> signup(@RequestBody MemberDto memberDto){
@@ -68,28 +70,38 @@ public class AuthController {
     // todo
     @PostMapping(value="/member/find/id")
     public ResponseEntity<Object> findMemberId(@RequestBody EmailDto emailDto) {
+        String email = emailDto.getEmail();
+        authService.sendIdEmail(email);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "Success");
 
-        return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
+        return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
     }
 
     // todo
     @PostMapping(value="/member/find/password")
     public ResponseEntity<Object> findMemberPassword(@RequestBody EmailDto emailDto) {
+        authService.reissuePassword(emailDto.getEmail());
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "Success");
 
-        return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
+        return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
     }
 
     // todo
     @PostMapping(value="/member/modify/password")
     public ResponseEntity<Object> changeMemberPassword(@RequestBody PasswordDto passwordDto) {
+        Member member = memberService.getCurrentMemberInfo();
+        authService.changeMemberPassword(member, passwordDto.getOld_password(), passwordDto.getNew_password());
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("msg", "Success");
 
-        return new ResponseEntity<Object>(jsonObject, HttpStatus.OK);
+        return new ResponseEntity<Object>(jsonObject.toString(), HttpStatus.OK);
     }
+
+    // 이메일 인증
 
 }

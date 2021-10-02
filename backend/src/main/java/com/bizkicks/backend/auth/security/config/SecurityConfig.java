@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
+                    .antMatchers("/member/find/**").hasAnyRole("USER", "MANAGER")
                     .antMatchers("/member/**","/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**", "/admin/upload-csv").permitAll()
                     .antMatchers("/manage/**", "/dashboard/**").hasRole("MANAGER")
                     .antMatchers("/kickboard/**").hasAnyRole("USER", "MANAGER")
