@@ -31,19 +31,17 @@ public class KickboardApi {
     private final KickboardService kickboardService;
     @Autowired private MemberService memberService;
 
-
-
-    @GetMapping("/kickboard/location")
+    @GetMapping("kickboard/location")
     public ResponseEntity<Object> showContracts() {
-
         Member member = memberService.getCurrentMemberInfo();
         if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+
         String contractType = customerCompany.getType();
-        
+
         if (contractType == null){
-            throw new CustomException(ErrorCode.COMPANY_NOT_EXIST); // 수정 필요
+            throw new CustomException(ErrorCode.CONTRACT_NOT_EXIST);
         }
         else if(contractType.equals("plan")){
             List<Kickboard> kickboards = kickboardService.findKickboards(customerCompany);
