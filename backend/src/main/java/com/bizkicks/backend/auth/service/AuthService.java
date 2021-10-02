@@ -120,12 +120,18 @@ public class AuthService {
         String title = emailService.passwordTItle();
         emailService.sendMail(member.getEmail(), title, text);
     }
-    
-    // pw 재발급
-        // 비밀번호를 임시로 발급해 주는 로직
-        // 비밀번호를 업데이트 해주는 로직
-        // email을 발송해 주는 로직
 
+    // member/signup에 추가 작성할 것
+    // 인증 메일 전송(uuid 작성)
+    // 전송 시 redis에 {uuid, memberId}를 넣고 30분간 유지시킴.
+    // 이 떄 사용자는 NOT_PERMITTED 상태임.
+
+    // member/verity/{key}
+    // redis에 key에 해당하는 값이 없는 경우 - 만료 / 잘못된 키에 대한 예외처리 해줌
+    // 해줌 경우 - 해당 member를 USER나 MANAGER로 승격시킴.
+
+    // 서버에는 관리자 계정 몇개만 넣어주고
+    // 나머지는 무조건 not permitted에서 user로만 승격시켜주면 될 것 같음.
 
     
 
