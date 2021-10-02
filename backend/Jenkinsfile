@@ -69,7 +69,7 @@ pipeline {
         stage('docker build'){
             steps{
                 dir('backend'){
-                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.14.0 .'
+                    sh 'docker build -t gcr.io/temporal-fx-321902/bizkicks-backend:0.0.14.1 .'
                 }
             }
         }
