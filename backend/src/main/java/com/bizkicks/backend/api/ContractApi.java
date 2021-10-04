@@ -112,6 +112,8 @@ public class ContractApi {
                     .list(collect)
                     .build();
 
+            return new ResponseEntity<Object>(contractDto,HttpStatus.OK);
+
         }
 
         return new ResponseEntity<Object>(HttpStatus.OK);
