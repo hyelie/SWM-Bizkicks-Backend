@@ -72,7 +72,7 @@ public class ContractApi {
             }
 
             List<ContractDto.PlanGetDto> collect = plans.stream()
-                    .map(m -> new ContractDto.PlanGetDto(m.getKickboardBrand().getBrandName(),m.getStartDate(), m.getKickboardBrand().getPricePerHour(), m.getKickboardBrand().getDistricts(), m.getKickboardBrand().getHelmet(), m.getKickboardBrand().getInsurance(), m.getTotalTime(), m.getUsedTime()))
+                    .map(m -> new ContractDto.PlanGetDto(m.getKickboardBrand().getBrandName(), m.getStartDate(), m.getKickboardBrand().getPricePerHour(), m.getKickboardBrand().getDistricts(),m.getKickboardBrand().getInsurance(), m.getKickboardBrand().getHelmet(), m.getUsedTime(), m.getTotalTime()))
                     .collect(Collectors.toList());
 
             ContractDto contractDto = ContractDto.<ContractDto.PlanGetDto>builder()
@@ -116,7 +116,7 @@ public class ContractApi {
 
         }
 
-        return new ResponseEntity<Object>(HttpStatus.OK);
+        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 
     }
 
@@ -127,21 +127,23 @@ public class ContractApi {
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
+        JSONObject returnObject = new JSONObject();
+        returnObject.put("msg", "Success");
+
         if (planDto.getType().equals("membership")){
             membershipService.saveMembership(customerCompany, planDto);
 
-            JSONObject returnObject = new JSONObject();
-            returnObject.put("msg", "Success");
+            return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
 
         }
         else if (planDto.getType().equals("plan")){
             planService.savePlan(customerCompany, planDto);
 
-            JSONObject returnObject = new JSONObject();
-            returnObject.put("msg", "Success");
+            return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.CREATED);
 
         }
-        return new ResponseEntity<Object>(HttpStatus.CREATED);
+
+        throw new CustomException(ErrorCode.PARAMETER_NOT_VALID);
 
     }
     
@@ -152,17 +154,19 @@ public class ContractApi {
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
-        if(planDto.getType().equals("membership")){
-            membershipService.updateMembership(customerCompany, planDto);
-        }
-        else if(planDto.getType().equals("plan")){
-            planService.updatePlan(customerCompany, planDto);
-        }
-
         JSONObject returnObject = new JSONObject();
         returnObject.put("msg", "Success");
 
-        return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.OK);
+        if(planDto.getType().equals("membership")){
+            membershipService.updateMembership(customerCompany, planDto);
+            return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.OK);
+        }
+        else if(planDto.getType().equals("plan")){
+            planService.updatePlan(customerCompany, planDto);
+            return new ResponseEntity<Object>(returnObject.toString(), HttpStatus.OK);
+        }
+
+        throw new CustomException(ErrorCode.PARAMETER_NOT_VALID);
 
     }
 
@@ -175,13 +179,15 @@ public class ContractApi {
 
         if (contractDto.getType().equals("membership")){
             membershipService.delete(customerCompany);
+            return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 
         }
         else if (contractDto.getType().equals("plan")){
             planService.delete(customerCompany, contractDto.getList());
+            return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 
         }
-        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+        throw new CustomException(ErrorCode.PARAMETER_NOT_VALID);
     }
 
 }
