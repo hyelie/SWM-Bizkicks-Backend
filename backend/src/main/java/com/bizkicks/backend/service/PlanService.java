@@ -4,10 +4,7 @@ import com.bizkicks.backend.dto.ContractDto;
 import com.bizkicks.backend.entity.*;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
-import com.bizkicks.backend.repository.CustomerCompanyRepository;
-import com.bizkicks.backend.repository.KickboardBrandRepository;
-import com.bizkicks.backend.repository.MembershipRepository;
-import com.bizkicks.backend.repository.PlanRepository;
+import com.bizkicks.backend.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +22,7 @@ public class PlanService {
     @Autowired PlanRepository planRepository;
     @Autowired KickboardBrandRepository kickboardBrandRepository;
     @Autowired MembershipRepository membershipRepository;
+    @Autowired KickboardRepository kickboardRepository;
 
     @Transactional
     public List<Plan> findPlan(CustomerCompany customerCompany){
@@ -84,5 +82,16 @@ public class PlanService {
         KickboardBrand kickboardBrand = kickboardBrandRepository.findByBrandName(brandname);
         int betweenTimetoInt = betweenTime.intValue();
         planRepository.addUsedTimeInCustomerCompany(customerCompany, kickboardBrand, betweenTimetoInt);
+    }
+
+
+    public Plan findPlanByBrandAndCompany(CustomerCompany customerCompany, Long kickboardId) {
+
+        Kickboard kickboard = kickboardRepository.findById(kickboardId);
+        KickboardBrand kickboardBrand = kickboard.getKickboardBrand();
+        Plan plan = planRepository.findPlanByBrandAndCompany(customerCompany, kickboardBrand);
+
+        return plan;
+
     }
 }

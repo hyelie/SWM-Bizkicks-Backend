@@ -87,4 +87,21 @@ public class PlanRepository {
                 .executeUpdate();
 
     }
+
+    public Plan findPlanByBrandAndCompany(CustomerCompany customerCompany, KickboardBrand kickboardBrand) {
+
+        String findQuery = "SELECT p FROM Plan p " +
+                "WHERE p.customerCompany = :customerCompany and " +
+                "p.kickboardBrand = :kickboardBrand and " +
+                "p.status = :status";
+
+        Plan plan = em.createQuery(findQuery, Plan.class)
+                .setParameter("customerCompany", customerCompany)
+                .setParameter("kickboardBrand", kickboardBrand)
+                .setParameter("status", "Active")
+                .getSingleResult();
+
+        return plan;
+
+    }
 }

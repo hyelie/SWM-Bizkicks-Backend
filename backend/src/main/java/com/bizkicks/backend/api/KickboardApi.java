@@ -6,9 +6,13 @@ import com.bizkicks.backend.dto.ImageDto;
 import com.bizkicks.backend.dto.KickboardDto;
 import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.entity.Kickboard;
+import com.bizkicks.backend.entity.KickboardBrand;
+import com.bizkicks.backend.entity.Plan;
 import com.bizkicks.backend.exception.CustomException;
 import com.bizkicks.backend.exception.ErrorCode;
 import com.bizkicks.backend.service.KickboardService;
+import com.bizkicks.backend.service.MembershipService;
+import com.bizkicks.backend.service.PlanService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,8 @@ import java.util.stream.Collectors;
 public class KickboardApi {
     private final KickboardService kickboardService;
     @Autowired private MemberService memberService;
+    @Autowired private MembershipService membershipService;
+    @Autowired private PlanService planService;
 
     @GetMapping("kickboard/location")
     public ResponseEntity<Object> showContracts() {
@@ -76,8 +82,30 @@ public class KickboardApi {
 
     @GetMapping("/kickboard/location/{kickboardId}")
     public ResponseEntity<Object> showLastParkedKickboardImage(@PathVariable(value="kickboardId", required = true) Long kickboardId) throws IOException{
+
+        Member member = memberService.getCurrentMemberInfo();
+        if(member == null) throw new CustomException(ErrorCode.MEMBER_STATUS_LOGOUT);
+        CustomerCompany customerCompany = member.getCustomerCompany();
+        if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
+
+        String contractType = customerCompany.getType();
+        Boolean checkAvailable = Boolean.TRUE;
+        if(contractType.equals("plan")){
+
+            Plan plan = planService.findPlanByBrandAndCompany(customerCompany, kickboardId);
+            Integer usedTime = plan.getUsedTime();
+            Integer totalTime = plan.getTotalTime();
+
+            if (usedTime > totalTime){
+                checkAvailable = Boolean.FALSE;
+            }
+        }
+
         String encodedString = kickboardService.getKickboardImage(kickboardId);
-        ImageDto imageDto = ImageDto.builder().image(encodedString).build();
+        ImageDto imageDto = ImageDto.builder()
+                .checkAvailable(checkAvailable)
+                .image(encodedString).build();
+
         HttpStatus httpStatus;
         if(encodedString == null) httpStatus = HttpStatus.NO_CONTENT;
         else httpStatus = HttpStatus.OK;
