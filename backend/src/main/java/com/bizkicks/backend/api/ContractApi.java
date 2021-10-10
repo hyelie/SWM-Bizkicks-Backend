@@ -177,12 +177,12 @@ public class ContractApi {
         CustomerCompany customerCompany = member.getCustomerCompany();
         if(customerCompany == null) throw new CustomException(ErrorCode.COMPANY_NOT_EXIST);
 
-        if (contractDto.getType().equals("membership")){
+        if (customerCompany.getType().equals("membership")){
             membershipService.delete(customerCompany);
             return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 
         }
-        else if (contractDto.getType().equals("plan")){
+        else if (customerCompany.getType().equals("plan")){
             planService.delete(customerCompany, contractDto.getList());
             return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 

@@ -10,5 +10,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ImageDto {
+    Boolean checkAvailable;
     String image;
 }
