@@ -122,6 +122,7 @@ public class ConsumptionApi {
                                                                 .arrive_time(consumption.getArriveTime())
                                                                 .cycle(consumption.getCycle())
                                                                 .location_list(locations)
+                                                                .kickboard_id(consumption.getKickboardBrand().getId())
                                                                 .build();
 
             

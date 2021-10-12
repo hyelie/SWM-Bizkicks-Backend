@@ -11,8 +11,8 @@ public class RedisUtil {
     @Autowired 
 	private StringRedisTemplate redisTemplate;
 
-    public void set(String key, String value, Long minutes){
-        redisTemplate.opsForValue().set(key, value, minutes, TimeUnit.MILLISECONDS);
+    public void set(String key, String value, Long milisecond){
+        redisTemplate.opsForValue().set(key, value, milisecond, TimeUnit.MILLISECONDS);
     }
 
     public String get(String key){
