@@ -148,6 +148,7 @@ public class AuthService {
         }
 
         String memberId = redisUtil.get(key);
+        redisUtil.delete(key);
         Member member = getWithNullCheck.getMemberByMemberId(memberRepository, memberId);
         modifyUserRole(member, UserRole.ROLE_USER);
     }
