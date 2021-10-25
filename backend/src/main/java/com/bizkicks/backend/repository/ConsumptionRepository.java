@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 
 import com.bizkicks.backend.auth.entity.Member;
 import com.bizkicks.backend.entity.Consumption;
+import com.bizkicks.backend.entity.CustomerCompany;
 import com.bizkicks.backend.filter.DateFilter;
 import com.bizkicks.backend.filter.PagingFilter;
 
@@ -33,4 +34,6 @@ public class ConsumptionRepository {
         em.persist(consumption);
         return consumption;
     }
+
+
 }

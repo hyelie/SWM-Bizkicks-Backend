@@ -1,9 +1,11 @@
 package com.bizkicks.backend.auth.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.bizkicks.backend.auth.entity.Member;
 
+import com.bizkicks.backend.entity.CustomerCompany;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,5 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
     Optional<Member> findByEmail(String email);
     @Query("SELECT m FROM Member m JOIN FETCH m.customerCompany WHERE m.memberId = :member_id")
     Optional<Member> findByMemberIdWithCustomerCompany(@Param("member_id") String memberId);
+    List<Member> findByCustomerCompany(CustomerCompany customerCompany);
 }
