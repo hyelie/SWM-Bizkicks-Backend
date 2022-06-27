@@ -49,6 +49,7 @@
 - jenkins lts
 - sonarQube lts
 - mysql 5.6
+- redis
 
 <br>
 
