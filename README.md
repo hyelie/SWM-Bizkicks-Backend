@@ -97,7 +97,7 @@ Bizkicks
              - entity : Entity class가 들어있는 폴더
              - repository : Repository class가 들어있는 폴더
              - service : Service class가 들어있는 폴더
-           - resource : config 파링과 resource 파일이 들어있는 폴더
+           - resource : config 파일과 resource 파일이 들어있는 폴더
        - test\java\com\bizkicks\backend : 테스트 코드들이 있는 폴더
  - dbend : 개발환경 설정을 위한 docker-compose.yml 파일 구성 폴더
 ```
