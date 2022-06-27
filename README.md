@@ -125,3 +125,6 @@ Bizkicks
 MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
 
 [Kubernetes 배포 파일](https://github.com/hyelie/SWM-Bizkicks-Kubernetes)
+
+
+![image](https://user-images.githubusercontent.com/51824413/175840118-9bd5acc3-4ae2-476e-a3ae-db23b26c519a.png)
