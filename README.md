@@ -113,6 +113,14 @@ Bizkicks
 <br>
 
 
-# 4. 백엔드 API 명세서
+# 4. 백엔드 API 명세
 
-[API 명세 링크](https://github.com/hyelie/SWM-Bizkicks-API-specification).
+[API 명세 링크](https://github.com/hyelie/SWM-Bizkicks-API-specification)
+
+<br>
+
+# 5. Kubernetes 배포
+
+MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
+
+[Kubernetes 배포 파일](https://github.com/hyelie/SWM-Bizkicks-Kubernetes)
