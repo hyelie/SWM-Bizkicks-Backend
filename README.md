@@ -28,10 +28,15 @@
 
 <br>
 
-# Branding
+# 브랜딩 (Branding)
 ![](./images/banner.png)
-<img src="./images/leaflet-inside.png" width=500>
-<img src="./images/leaflet-outside.png" width=500>
+
+<table>
+<tr>
+    <td><img src="./images/leaflet-inside.png"/></td>
+    <td><img src="./images/leaflet-inside.png"/> </td>
+</tr>
+</table>
 
 # 기술 스택 (Tech Stacks)
 <img src="./images/techstack.png" width=650>
@@ -117,9 +122,10 @@ MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
 |박창환|백엔드 개발|<a href="https://github.com/korea3611"><img src="http://img.shields.io/badge/korea3611-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
 |정혜일|백엔드 개발 & DevOps 관리|<a href="https://github.com/hyelie"><img src="http://img.shields.io/badge/hyelie-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
 
-![team](./images/team.png)
+<img src="./images/team.png" width=650>
 
 <br>
 
 이 프로젝트는 [소프트웨어 마에스트로](https://www.swmaestro.org/)에서 진행되었습니다.
-![image](https://user-images.githubusercontent.com/51824413/175840118-9bd5acc3-4ae2-476e-a3ae-db23b26c519a.png)
+
+<img src="https://user-images.githubusercontent.com/51824413/175840118-9bd5acc3-4ae2-476e-a3ae-db23b26c519a.png" width=300>
