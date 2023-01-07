@@ -1,28 +1,21 @@
-# 비즈킥스
-## 법인 타겟 공유킥보드 중개 플랫폼 비즈니스
+# 비즈킥스 - 임직원 전용 통합 공유킥보드 중개 플랫폼
+
+<p align="center">
+	<img src="./images/cover.png">
+</p>
+
+<p align="center">
+<a href="https://github.com/hyelie/SWM-Bizkicks-Backend/wiki">개발 위키</a> 
+| 
+<a href="">발표 자료</a> 
+| 
+<a href="">시연 영상</a>
+</p>
+
+
 <br>
-<br>
 
-
-
-
-# 1. 👋팀 소개
-
-![logo](./images/logo.png)
-
-
-- #### 팀 이름 : 킥스
-- #### 팀장 : 김찬혁
-- #### 팀원 : 박창환, 정혜일
-- #### 역할 :
-
-| 프론트 | 백엔드 | DevOps |  
-|---|---|---|
-| - 김찬혁 | - 정혜일 </br> - 박창환| -  정혜일 |
-
-</br></br>
-
-# 2. 📝개요
+# 개요
 현재 퍼스널 모빌리티 산업은 성장하고 있습니다. 공유 킥보드의 월별 이용건수는 꾸준히 증가하고 있고 퍼스널 모빌리티 이용자 중 약 30% 가 출퇴근 목적으로 이용합니다.
 
 현재 퍼스널모빌리티 시장은 개인 결제 중심이며 개인별 사용 시간량에 따른 과금 모델을 적용하고 있습니다. 이로인해 출퇴근시 퍼스널 모빌리티를 자주 이용하는 경우 교통비가 부담됩니다.
@@ -37,6 +30,32 @@
 
 <br>
 <br>
+
+# Branding
+
+![](./images/banner.png)
+![](./images/leaflet-inside.png)
+![](./images/leaflet-outside.png)
+
+# Tech Stacks
+![](./images/techstack.png)
+
+### Backend
+- Spring Boot - 자바 플랫폼을 위한 오픈 소스 애플리케이션 프레임워크
+- JPA - 자바 ORM 기술 표준
+- MySQL - 관계형 데이터베이스 관리 시스템
+
+### Design & Collaboration 
+- Figma - 온라인 UI 디자인 협업 툴
+- Notion - 온라인 문서화 협업 툴
+
+### DevOps
+- Gitlab - 웹 기반의 데브옵스 플랫폼
+- SonarQube - 자동 리뷰를 수행하기 위한 지속적인 코드 품질 검사용 오픈 소스 플랫폼
+- Jenkins - 지속적 통합 서비스를 제공하는 툴
+- Docker - 리눅스의 응용 프로그램들을 프로세스 격리 기술들을 사용해 컨테이너로 실행하고 관리하는 오픈 소스 프로젝트
+- Kubernetes - 쿠버네티스는 컨테이너화된 애플리케이션의 자동 배포, 스케일링 등을 제공하는 관리시스템
+- Google Cloud Platform - 구글의 클라우드 컴퓨팅 서비스
 
 
 # 2. 프로젝트 정보
@@ -125,6 +144,25 @@ Bizkicks
 MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
 
 [Kubernetes 배포 파일](https://github.com/hyelie/SWM-Bizkicks-Kubernetes)
+
+
+
+
+# 1. 👋팀 소개
+
+![logo](./images/logo.png)
+
+
+- #### 팀 이름 : 킥스
+- #### 팀장 : 김찬혁
+- #### 팀원 : 박창환, 정혜일
+- #### 역할 :
+
+| 프론트 | 백엔드 | DevOps |  
+|---|---|---|
+| - 김찬혁 | - 정혜일 </br> - 박창환| -  정혜일 |
+
+</br></br>
 
 
 ![image](https://user-images.githubusercontent.com/51824413/175840118-9bd5acc3-4ae2-476e-a3ae-db23b26c519a.png)
