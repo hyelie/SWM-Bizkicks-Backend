@@ -124,7 +124,7 @@ MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
 |박창환|백엔드 개발|<a href="https://github.com/korea3611"><img src="http://img.shields.io/badge/korea3611-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
 |정혜일|백엔드 개발 & DevOps 관리|<a href="https://github.com/hyelie"><img src="http://img.shields.io/badge/hyelie-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
 
-<img src="./images/team.png" width=650>
+![](./images/team.png)
 
 <br>
 
