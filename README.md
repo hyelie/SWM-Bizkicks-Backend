@@ -38,6 +38,8 @@
 </tr>
 </table>
 
+<br>
+
 # 기술 스택 (Tech Stacks)
 <img src="./images/techstack.png" width=650>
 
@@ -58,6 +60,7 @@
 - Kubernetes - 쿠버네티스는 컨테이너화된 애플리케이션의 자동 배포, 스케일링 등을 제공하는 관리시스템
 - Google Cloud Platform - 구글의 클라우드 컴퓨팅 서비스
 
+<br>
 
 # 시작하기 (Getting Started)
 ## 전제 조건 (Prerequisite)
@@ -113,7 +116,6 @@ MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
 [Kubernetes 배포 파일](https://github.com/hyelie/SWM-Bizkicks-Kubernetes)
 
 <br>
-
 
 # 킥스 팀 소개 (Kicks Team Information)
 |이름|역할|Github|Contact|
