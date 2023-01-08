@@ -111,20 +111,19 @@ Bizkicks
 
 ## 배포 (Deployment)
 
-MySQL, Spring Boot, Redis 배포에 대한 yml 파일입니다.
-
-[Kubernetes 배포 파일](https://github.com/hyelie/SWM-Bizkicks-Kubernetes)
+배포는 Kubernetes를 이용했으며, [비즈킥스 배포 레포지토리](https://github.com/hyelie/SWM-Bizkicks-Kubernetes)에 배포 파일이 있습니다.
 
 <br>
 
 # 킥스 팀 소개 (Kicks Team Information)
 |이름|역할|Github|Contact|
 |:---|----|----|----|
-|팀장 김찬혁|기획, 프론트엔드 개발|<a href="https://github.com/Chanhook"><img src="http://img.shields.io/badge/Chanhook-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
-|박창환|백엔드 개발|<a href="https://github.com/korea3611"><img src="http://img.shields.io/badge/korea3611-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
-|정혜일|백엔드 개발 & DevOps 관리|<a href="https://github.com/hyelie"><img src="http://img.shields.io/badge/hyelie-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
+|팀장 김찬혁|기획, 프론트엔드 개발|<a href="https://github.com/Chanhook"><img src="http://img.shields.io/badge/Chanhook-green?style=social&logo=github"/></a>|<a href="mailto:cksgur97@gmail.com"><img src="https://img.shields.io/badge/cksgur97@gmail.com-green?logo=gmail&style=social"/></a>|
+|박창환|백엔드 개발|<a href="https://github.com/korea3611"><img src="http://img.shields.io/badge/korea3611-green?style=social&logo=github"/></a>|<a href="mailto:korea3611@naver.com"><img src="https://img.shields.io/badge/korea3611@naver.com-green?logo=naver&style=social"/></a>|
+|정혜일|백엔드 개발 & DevOps 관리|<a href="mailto:https://github.com/hyelie"><img src="http://img.shields.io/badge/hyelie-green?style=social&logo=github"/></a>|<a href="hyelie@postech.ac.kr"><img src="https://img.shields.io/badge/hyelie@postech.ac.kr-green?logo=microsoft-outlook&style=social"/></a>|
+|유상규|디자인||<a href="mailto:yousangkue@naver.com"><img src="https://img.shields.io/badge/yousangkue@naver.com-green?logo=naver&style=social"/></a>|
 
-![](./images/team.png)
+![](./images/thank.png)
 
 <br>
 
