@@ -7,7 +7,7 @@
 <p align="center">
 <a href="https://github.com/hyelie/SWM-Bizkicks-Backend/wiki">개발 위키</a> 
 | 
-<a href="">발표 자료</a> 
+<a href="https://github.com/hyelie/SWM-Bizkicks-Backend/blob/master/bizkicks_presentation.pdf">발표 자료</a> 
 | 
 <a href="">시연 영상</a>
 </p>
