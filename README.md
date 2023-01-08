@@ -34,7 +34,7 @@
 <table>
 <tr>
     <td><img src="./images/leaflet-inside.png"/></td>
-    <td><img src="./images/leaflet-inside.png"/> </td>
+    <td><img src="./images/leaflet-outside.png"/> </td>
 </tr>
 </table>
 
