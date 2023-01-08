@@ -9,7 +9,7 @@
 | 
 <a href="https://github.com/hyelie/SWM-Bizkicks-Backend/blob/master/bizkicks_presentation.pdf">발표 자료</a> 
 | 
-<a href="">시연 영상</a>
+<a href="https://drive.google.com/file/d/1pOhBv3eOGgNiMYbV4DVqOpi5u0o4OrQK/view?usp=share_link">시연 영상</a>
 </p>
 
 <br>
